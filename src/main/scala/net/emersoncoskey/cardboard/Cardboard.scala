@@ -16,10 +16,10 @@ import org.apache.logging.log4j.LogManager
 object Cardboard {
 	final   val ModId  = "cardboard"
 	// Directly reference a log4j logger.
-	private val LOGGER = LogManager.getLogger
+	private val Logger = LogManager.getLogger
 
 	// Register the setup method for modloading
-	FMLJavaModLoadingContext.get.getModEventBus.addListener(this.setup)
+	/*FMLJavaModLoadingContext.get.getModEventBus.addListener(this.setup)
 	// Register the enqueueIMC method for modloading
 	FMLJavaModLoadingContext.get.getModEventBus.addListener(this.enqueueIMC)
 	// Register the processIMC method for modloading
@@ -63,14 +63,13 @@ object Cardboard {
 	def onServerStarting(event: ServerStartingEvent): Unit = {
 		// do something when the server starts
 		LOGGER.info("HELLO from server starting")
-	}
-
+	}*/
 }
 
 // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
 // Event bus for receiving Registry Events)
 // The object must be at the top-level. Don't forget to fill modid.
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Cardboard.ModId)
+/*@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Cardboard.ModId)
 object RegistryEvents {
 	private val LOGGER = LogManager.getLogger
 
@@ -79,4 +78,4 @@ object RegistryEvents {
 		// register a new block here
 		LOGGER.info("HELLO from Register Block")
 	}
-}
+}*/
