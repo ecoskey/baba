@@ -2,9 +2,8 @@ package net.emersoncoskey.cardboard.item
 
 import cats.Monad
 import net.minecraft.world.item.Item
-import net.minecraftforge.registries.{DeferredRegister, IForgeRegistry, IForgeRegistryEntry}
 
-class ItemAction[+A] private(a: => A) {
+class ItemAction[+A] private (a: => A) {
 	def run: A = a
 }
 

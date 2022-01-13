@@ -9,6 +9,7 @@ import net.minecraftforge.fml.InterModComms
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.{FMLClientSetupEvent, FMLCommonSetupEvent, InterModEnqueueEvent, InterModProcessEvent}
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import net.minecraftforge.registries.DeferredRegister
 import org.apache.logging.log4j.LogManager
 
 // The value here should match an entry in the META-INF/mods.toml file
