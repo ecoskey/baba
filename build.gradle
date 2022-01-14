@@ -162,7 +162,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    implementation('org.typelevel:cats-free_3:2.7.0')
+    //implementation('org.typelevel:cats-free_3:2.7.0')
 
     String scala_version = "2.13.7"
 
