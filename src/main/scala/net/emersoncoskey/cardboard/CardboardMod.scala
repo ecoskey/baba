@@ -4,7 +4,7 @@ import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.registries.DeferredRegister
 import org.apache.logging.log4j.Logger
 
-abstract class Mod {
+abstract class CardboardMod {
 	val ModId   : String
 	val EventBus: IEventBus
 	val Logger  : Logger
