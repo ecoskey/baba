@@ -6,12 +6,12 @@ import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.level.block.Block
 
 
-case class CardboardBlockItem[B <: Block, I <: BlockItem] private(name: String, item: B => I)
+case class CardboardBlockItem[-B <: Block, +I <: BlockItem] private(name: String, item: B => I)
 
 object CardboardBlockItem {
 	def named[B <: Block](name: String): Builder.FirstStep[B] = Builder.FirstStep(name)
 
-	sealed trait Builder[B <: Block, +I <: BlockItem]
+	sealed trait Builder[-B <: Block, +I <: BlockItem]
 
 	object Builder {
 		case class FirstStep[B <: Block] private(private val name: String) extends Builder[B, BlockItem] {

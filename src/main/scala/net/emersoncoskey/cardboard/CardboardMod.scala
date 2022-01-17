@@ -1,18 +1,16 @@
 package net.emersoncoskey.cardboard
 
 import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.registries.DeferredRegister
 import org.apache.logging.log4j.Logger
 
 abstract class CardboardMod {
-	val ModId   : String
+	protected val _modId: String
+
+	final def ModId: String = _modId
+
 	val EventBus: IEventBus
 	val Logger  : Logger
+	val Modules : Seq[CardboardModule]
 
-	val Modules: Seq[Module]
-
-	Modules.foreach(module => {
-		Logger.info(module)
-		EventBus.register(module)
-	})
+	Modules.foreach(EventBus.register(_))
 }

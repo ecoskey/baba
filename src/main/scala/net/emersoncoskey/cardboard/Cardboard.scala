@@ -1,27 +1,18 @@
 package net.emersoncoskey.cardboard
 
-import net.minecraft.world.level.block.{Block, Blocks}
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.RegistryEvent
-import net.minecraftforge.event.server.ServerStartingEvent
-import net.minecraftforge.eventbus.api.{IEventBus, SubscribeEvent}
-import net.minecraftforge.fml.InterModComms
+import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.{FMLClientSetupEvent, FMLCommonSetupEvent, InterModEnqueueEvent, InterModProcessEvent}
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
-import net.minecraftforge.registries.DeferredRegister
 import org.apache.logging.log4j.{LogManager, Logger}
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("cardboard")
+@Mod(Cardboard._modId)
 object Cardboard extends CardboardMod {
-	final override val ModId   : String    = "cardboard"
-	final override val EventBus: IEventBus = FMLJavaModLoadingContext.get.getModEventBus
-	final override val Logger  : Logger    = LogManager.getLogger
+	final val _modId = "cardboard"
 
-	final override val Modules = Seq(new Module(this) {
-		override val Blocks = Seq()
-	})
+	lazy val EventBus: IEventBus            = FMLJavaModLoadingContext.get.getModEventBus
+	lazy val Logger  : Logger               = LogManager.getLogger
+	lazy val Modules : Seq[CardboardModule] = Seq(TestModule)
 
 	// Register the setup method for modloading
 	/*FMLJavaModLoadingContext.get.getModEventBus.addListener(this.setup)
@@ -69,6 +60,7 @@ object Cardboard extends CardboardMod {
 		// do something when the server starts
 		LOGGER.info("HELLO from server starting")
 	}*/
+
 }
 
 // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD

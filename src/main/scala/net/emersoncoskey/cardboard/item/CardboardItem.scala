@@ -5,7 +5,7 @@ import net.minecraft.world.item.Item.Properties
 
 import java.util.function.Supplier
 
-case class CardboardItem[I <: Item] private(name: String, item: () => I)
+case class CardboardItem[+I <: Item] private(name: String, item: () => I)
 
 object CardboardItem {
 	def named(name: String): Builder.FirstStep = Builder.FirstStep(name)
@@ -19,14 +19,14 @@ object CardboardItem {
 			def properties(props: Properties): FinalStep[Item] = FinalStep(name, new Item(_), props)
 		}
 
-		case class SecondStep[I <: Item] private(
+		case class SecondStep[+I <: Item] private(
 			private val name: String,
 			private val ctor: Properties => I,
 		) extends Builder[I] {
 			def properties(props: Properties): FinalStep[I] = FinalStep(name, ctor, props)
 		}
 
-		case class FinalStep[I <: Item] private(
+		case class FinalStep[+I <: Item] private(
 			private val name : String,
 			private val ctor : Properties => I,
 			private val props: Properties
