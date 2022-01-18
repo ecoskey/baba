@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
 
-object TestModule extends CardboardModule(Cardboard) {
+object TestModule extends CardboardModule {
 	lazy val Items : Seq[CardboardItem[Item]]   = Seq(Amongus)
 	lazy val Blocks: Seq[CardboardBlock[Block]] = Seq(AmongusBlock)
 
@@ -17,9 +17,9 @@ object TestModule extends CardboardModule(Cardboard) {
 		              .properties(BlockBehaviour.Properties.of(Material.STONE))
 		              .build
 
-	lazy val Amongus     : CardboardItem[BlockItem]  =
+	lazy val Amongus: CardboardItem[BlockItem] =
 		CardboardItem.named("amongus2")
-		             .custom(new BlockItem(TestModule(AmongusBlock).get, _))
+		             .custom(new BlockItem(Cardboard(AmongusBlock).get, _))
 		             .properties(new Item.Properties().tab(CreativeModeTab.TAB_MISC))
 		             .build
 
