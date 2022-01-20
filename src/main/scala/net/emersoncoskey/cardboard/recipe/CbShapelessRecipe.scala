@@ -1,14 +1,28 @@
 package net.emersoncoskey.cardboard.recipe
 
+import cats.data.NonEmptyList
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
 
-sealed trait CbShapelessRecipe
 
-case class Result(result: Item, count: Int) extends CbShapelessRecipe
-case class ~:(ingredient: (Ingredient, Int), rest: CbShapelessRecipe) extends CbShapelessRecipe
+case class CbShapelessRecipe(ingredients: NonEmptyList[(Ingredient, Int)], result: Item, count: Int)
 
-object test {
-	val test2 =
-		(null, 5) ~: (null, 2) ~: Result(null, 5)
+object CbShapelessRecipe {
+	def apply(firstIngredient: (Ingredient, Int), restIngredients: (Ingredient, Int)*)
+	         (count: Int)(result: Item): CbShapelessRecipe =
+		new CbShapelessRecipe(NonEmptyList.of(firstIngredient, restIngredients:_*), result, count)
+
+	/*def apply(firstIngredient: (Item, Int), restIngredients: (Item, Int)*)
+	         (count: Int)(result: Item): CbShapelessRecipe = {
+		val first = (Ingredient.of(firstIngredient._1), firstIngredient._2)
+		val rest = restIngredients.map(i => (Ingredient.of(i._1), i._2))
+		CbShapelessRecipe(first, rest:_*)(count)(result)
+	}*/
+
+	val test =
+		CbShapelessRecipe(
+			null -> 2,
+			null -> 2,
+			null -> 2,
+		)(2)(null)
 }
