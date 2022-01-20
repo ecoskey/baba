@@ -3,11 +3,9 @@ package net.emersoncoskey.cardboard.item
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
 
-import java.util.function.Supplier
+case class CbItem[+I <: Item] private(name: String, item: () => I)
 
-case class CardboardItem[+I <: Item] private(name: String, item: () => I)
-
-object CardboardItem {
+object CbItem {
 	def named(name: String): Builder.FirstStep = Builder.FirstStep(name)
 
 	sealed trait Builder[+I <: Item]
@@ -30,11 +28,10 @@ object CardboardItem {
 			private val name : String,
 			private val ctor : Properties => I,
 			private val props: Properties
-		)
-		  extends Builder[I] {
+		) extends Builder[I] {
 			//todo: recipe providers, item model providers(generated and custom),
 
-			def build: CardboardItem[I] = CardboardItem(name, () => ctor(props))
+			def build: CbItem[I] = CbItem(name, () => ctor(props))
 		}
 	}
 }

@@ -1,14 +1,14 @@
 package net.emersoncoskey.cardboard.item
 
-import net.emersoncoskey.cardboard.block.CardboardBlock.Builder.FirstStep
+import net.emersoncoskey.cardboard.block.CbBlock.Builder.FirstStep
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.level.block.Block
 
 
-case class CardboardBlockItem[-B <: Block, +I <: BlockItem] private(name: String, item: B => I)
+case class CbBlockItem[-B <: Block, +I <: BlockItem] private(name: String, item: B => I)
 
-object CardboardBlockItem {
+object CbBlockItem {
 	def named[B <: Block](name: String): Builder.FirstStep[B] = Builder.FirstStep(name)
 
 	sealed trait Builder[-B <: Block, +I <: BlockItem]
@@ -34,7 +34,7 @@ object CardboardBlockItem {
 		) extends Builder[B, I] {
 			//todo: recipe providers, item model providers(generated and custom),
 
-			def build: CardboardBlockItem[B, I] = CardboardBlockItem(name, ctor(_, props))
+			def build: CbBlockItem[B, I] = CbBlockItem(name, ctor(_, props))
 		}
 	}
 }

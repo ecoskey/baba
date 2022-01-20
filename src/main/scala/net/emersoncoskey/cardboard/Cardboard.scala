@@ -7,12 +7,12 @@ import org.apache.logging.log4j.{LogManager, Logger}
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Cardboard._modId)
-object Cardboard extends CardboardMod {
+object Cardboard extends CbMod {
 	final val _modId = "cardboard"
 
 	lazy val EventBus: IEventBus            = FMLJavaModLoadingContext.get.getModEventBus
 	lazy val Logger  : Logger               = LogManager.getLogger
-	lazy val Modules : Seq[CardboardModule] = Seq(TestModule)
+	lazy val Modules : Seq[CbModule]        = Seq(TestModule)
 
 	// Register the setup method for modloading
 	/*FMLJavaModLoadingContext.get.getModEventBus.addListener(this.setup)

@@ -1,12 +1,12 @@
 package net.emersoncoskey.cardboard.block
 
-import net.emersoncoskey.cardboard.item.{CardboardBlockItem, CardboardItem}
+import net.emersoncoskey.cardboard.item.{CbBlockItem, CbItem}
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
 
-case class CardboardBlock[+B <: Block/*, +I <: BlockItem*/] private(
+case class CbBlock[+B <: Block/*, +I <: BlockItem*/] private(
 	name      : String,
 	block     : () => B,
 
@@ -14,7 +14,7 @@ case class CardboardBlock[+B <: Block/*, +I <: BlockItem*/] private(
 	renderType: RenderType,
 )
 
-object CardboardBlock {
+object CbBlock {
 	def named(name: String): Builder.FirstStep = Builder.FirstStep(name)
 
 	sealed trait Builder[+B <: Block/*, +I <: BlockItem*/]
@@ -51,8 +51,8 @@ object CardboardBlock {
 			def renderType(renderType: RenderType): FinalStep[B/*, I*/] =
 				copy(renderType = renderType)
 
-			def build: CardboardBlock[B/*, I*/] =
-				CardboardBlock(name, () => ctor(props), /*blockItem, */renderType)
+			def build: CbBlock[B/*, I*/] =
+				CbBlock(name, () => ctor(props), /*blockItem, */ renderType)
 		}
 	}
 }

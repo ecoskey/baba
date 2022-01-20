@@ -1,7 +1,7 @@
 package net.emersoncoskey.cardboard
 
-import net.emersoncoskey.cardboard.block.CardboardBlock
-import net.emersoncoskey.cardboard.item.CardboardItem
+import net.emersoncoskey.cardboard.block.CbBlock
+import net.emersoncoskey.cardboard.item.CbItem
 import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.{BlockItem, Item}
@@ -11,9 +11,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
-trait CardboardModule {
-	val Items : Seq[CardboardItem[Item]]
-	val Blocks: Seq[CardboardBlock[Block]]
+trait CbModule {
+	val Items : Seq[CbItem[Item]]
+	val Blocks: Seq[CbBlock[Block]]
 
 /*	lazy val itemsMap: Map[CardboardItem[Item], RegistryObject[Item]] = Map(
 		Items.map(i =>
