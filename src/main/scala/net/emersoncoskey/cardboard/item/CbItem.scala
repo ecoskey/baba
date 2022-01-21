@@ -1,9 +1,14 @@
 package net.emersoncoskey.cardboard.item
 
+import net.emersoncoskey.cardboard.CbMod
+import net.emersoncoskey.cardboard.Syntax.ItemOps
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
+import net.minecraft.world.item.crafting.Ingredient
 
-case class CbItem[+I <: Item] private(name: String, item: () => I)
+case class CbItem[+I <: Item] private(name: String, item: () => I) {
+	def i(implicit mod: CbMod): Ingredient = mod(this).get.i
+}
 
 object CbItem {
 	def named(name: String): Builder.FirstStep = Builder.FirstStep(name)

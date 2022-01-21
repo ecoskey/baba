@@ -1,14 +1,36 @@
 package net.emersoncoskey.cardboard.recipe
 
+import cats.data.NonEmptyList
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
 
-sealed trait CbShapelessRecipe
+import scala.language.implicitConversions
 
-case class Result(result: Item, count: Int) extends CbShapelessRecipe
-case class ~:(ingredient: (Ingredient, Int), rest: CbShapelessRecipe) extends CbShapelessRecipe
+case class CbShapelessRecipe private(
+	name       : String,
+	ingredients: NonEmptyList[(Ingredient, Int)],
+	result     : Item,
+	count      : Int
+)
 
-object test {
-	val test2 =
-		(null, 5) ~: (null, 2) ~: Result(null, 5)
+object CbShapelessRecipe {
+	implicit def toTuple2[A](a: A): (A, Int) = (a, 1)
+
+	def named(name: String): Builder.FirstStep = Builder.FirstStep(name)
+
+	sealed trait Builder
+
+	object Builder {
+		case class FirstStep private(private val id: String) extends Builder {
+			def ingredients(first: (Ingredient, Int), rest: (Ingredient, Int)*): Builder =
+				Builder.FinalStep(id, NonEmptyList.of(first, rest: _*))
+		}
+
+		case class FinalStep private(
+			private val name       : String,
+			private val ingredients: NonEmptyList[(Ingredient, Int)],
+		) extends Builder {
+			def result(count: Int)(item: Item): CbShapelessRecipe = CbShapelessRecipe(name, ingredients, item, count)
+		}
+	}
 }

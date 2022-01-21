@@ -14,6 +14,8 @@ abstract class CbMod {
 
 	final def ModId: String = _modId
 
+	implicit val mod: CbMod = this
+
 	val EventBus: IEventBus
 	val Logger  : Logger
 	val Modules : Seq[CbModule]
