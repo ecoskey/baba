@@ -2,6 +2,7 @@ package net.emersoncoskey.cardboard
 
 import net.emersoncoskey.cardboard.block.CbBlock
 import net.emersoncoskey.cardboard.item.CbItem
+import net.emersoncoskey.cardboard.recipe.CbShapelessRecipe
 import net.minecraft.world.item.{BlockItem, CreativeModeTab, Item}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
@@ -21,6 +22,21 @@ object TestModule extends CbModule {
 		CbItem.named("amongus2")
 		      .custom(new BlockItem(Cardboard(AmongusBlock).get, _))
 		      .properties(new Item.Properties().tab(CreativeModeTab.TAB_MISC))
+		      .recipes(
+			      CbShapelessRecipe
+			        .named("amongus")
+			        .ingredients(null -> -1)
+			        .result(3),
+
+			      CbShapelessRecipe
+			        .named("among2")
+			        .ingredients(
+				        null -> 2,
+				        null,
+				        null
+			        )
+			        .result(1492)
+		      )
 		      .build
 
 }

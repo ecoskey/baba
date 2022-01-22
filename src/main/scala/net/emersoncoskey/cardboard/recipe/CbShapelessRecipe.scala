@@ -1,6 +1,7 @@
 package net.emersoncoskey.cardboard.recipe
 
 import cats.data.NonEmptyList
+import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
 
@@ -11,7 +12,9 @@ case class CbShapelessRecipe private(
 	ingredients: NonEmptyList[(Ingredient, Int)],
 	result     : Item,
 	count      : Int
-)
+) extends RecipeHaver {
+	override def toFinishedRecipe: FinishedRecipe = ???
+}
 
 object CbShapelessRecipe {
 	implicit def toTuple2[A](a: A): (A, Int) = (a, 1)
@@ -21,9 +24,9 @@ object CbShapelessRecipe {
 	sealed trait Builder
 
 	object Builder {
-		case class FirstStep private(private val id: String) extends Builder {
-			def ingredients(first: (Ingredient, Int), rest: (Ingredient, Int)*): Builder =
-				Builder.FinalStep(id, NonEmptyList.of(first, rest: _*))
+		case class FirstStep private(private val name: String) extends Builder {
+			def ingredients(first: (Ingredient, Int), rest: (Ingredient, Int)*): FinalStep =
+				Builder.FinalStep(name, NonEmptyList.of(first, rest: _*))
 		}
 
 		case class FinalStep private(

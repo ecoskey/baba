@@ -2,6 +2,7 @@ package net.emersoncoskey.cardboard
 
 import net.emersoncoskey.cardboard.block.CbBlock
 import net.emersoncoskey.cardboard.item.CbItem
+import net.emersoncoskey.cardboard.recipe.CbRecipeProvider
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.eventbus.api.{IEventBus, SubscribeEvent}
@@ -19,6 +20,8 @@ abstract class CbMod {
 	val EventBus: IEventBus
 	val Logger  : Logger
 	val Modules : Seq[CbModule]
+
+	/* [REGISTRY STUFF] ----------------------------------------------------------------------------------------------*/
 
 	private val itemReg : DeferredRegister[Item]  = DeferredRegister.create(ForgeRegistries.ITEMS, ModId)
 	private val blockReg: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, ModId)
@@ -44,12 +47,19 @@ abstract class CbMod {
 
 	final def apply(b: CbBlock[Block]): RegistryObject[Block] = blocks(b)
 
+	/* [EVENT BUS THINGS] --------------------------------------------------------------------------------------------*/
+
 	EventBus.register(this)
 
 	@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
 		val generator = event.getGenerator
 
-		//models, recipes, etc...
+		val recipes = for {
+			(i, reg) <- items.toList
+			r <- i.recipes
+		} yield r(reg.get)
+
+		generator.addProvider(CbRecipeProvider(generator, recipes:_*))
 	}
 }
 

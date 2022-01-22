@@ -163,6 +163,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     //implementation('org.typelevel:cats-free_3:2.7.0')
+    //implementation 'com.olegpy:better-monadic-for_2.13:0.3.1'
 
     String scala_version = "2.13.7"
 
