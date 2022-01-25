@@ -2,13 +2,17 @@ package net.emersoncoskey.cardboard
 
 import net.emersoncoskey.cardboard.block.CbBlock
 import net.emersoncoskey.cardboard.item.CbItem
-import net.emersoncoskey.cardboard.recipe.CbRecipeProvider
-import net.minecraft.world.item.Item
+import net.emersoncoskey.cardboard.recipe.{CbRecipeProvider, RecipeHaver}
+import net.minecraft.client.renderer.ItemBlockRenderTypes
+import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.eventbus.api.{IEventBus, SubscribeEvent}
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 import org.apache.logging.log4j.Logger
+
+import scala.collection.immutable
 
 abstract class CbMod {
 	protected val _modId: String
@@ -32,20 +36,20 @@ abstract class CbMod {
 	private val items: Map[CbItem[Item], RegistryObject[Item]] = Map(
 		(for {
 			m <- Modules
-			i <- m.Items
+			i <- m.items
 		} yield i -> itemReg.register(i.name, () => i.item())): _*
 	)
 
 	private val blocks: Map[CbBlock[Block], RegistryObject[Block]] = Map(
 		(for {
 			m <- Modules
-			b <- m.Blocks
+			b <- m.blocks
 		} yield b -> blockReg.register(b.name, () => b.block())): _*
 	)
 
 	final def apply(i: CbItem[Item]): RegistryObject[Item] = items(i)
 
-	final def apply(b: CbBlock[Block]): RegistryObject[Block] = blocks(b)
+	final def apply(b: CbBlock[Block/*, BlockItem*/]): RegistryObject[Block] = blocks(b)
 
 	/* [EVENT BUS THINGS] --------------------------------------------------------------------------------------------*/
 
@@ -54,12 +58,16 @@ abstract class CbMod {
 	@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
 		val generator = event.getGenerator
 
-		val recipes = for {
+		val recipes: List[RecipeHaver] = for {
 			(i, reg) <- items.toList
 			r <- i.recipes
 		} yield r(reg.get)
 
 		generator.addProvider(CbRecipeProvider(generator, recipes:_*))
 	}
+
+	@SubscribeEvent final def commonSetup(event: FMLCommonSetupEvent): Unit =
+		blocks.foreach { case (b, reg) => ItemBlockRenderTypes.setRenderLayer(reg.get, b.renderType) }
+
 }
 

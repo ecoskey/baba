@@ -1,7 +1,10 @@
 package net.emersoncoskey.cardboard.recipe
 
 import net.minecraft.data.recipes.FinishedRecipe
+import net.minecraftforge.fml.common.Mod
 
-trait RecipeHaver {
-	def toFinishedRecipe: FinishedRecipe
+import java.util.function.Consumer
+
+trait CbRecipe {
+	def save(consumer: Consumer[FinishedRecipe], mod: Mod)
 }

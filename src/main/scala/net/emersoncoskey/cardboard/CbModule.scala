@@ -12,8 +12,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
 trait CbModule {
-	val Items : Seq[CbItem[Item]]
-	val Blocks: Seq[CbBlock[Block]]
+	val items : Seq[CbItem[Item]]
+	val blocks: Seq[CbBlock[Block/*, BlockItem*/]]
 
 /*	lazy val itemsMap: Map[CardboardItem[Item], RegistryObject[Item]] = Map(
 		Items.map(i =>

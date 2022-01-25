@@ -1,5 +1,4 @@
-package net.emersoncoskey.cardboard.recipe
-
+package net.emersoncoskey.cardboard.recipe.craftingtable
 
 case class CbShapedRecipe()
 

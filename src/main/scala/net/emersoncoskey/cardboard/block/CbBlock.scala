@@ -10,7 +10,7 @@ case class CbBlock[+B <: Block/*, +I <: BlockItem*/] private(
 	name      : String,
 	block     : () => B,
 
-	/*blockItem : Option[B => CardboardItem[I]],*/
+	/*blockItem : Option[Block => CbItem[I]],*/
 	renderType: RenderType,
 )
 
@@ -41,18 +41,18 @@ object CbBlock {
 			private val ctor : Properties => B,
 			private val props: Properties,
 
-			/*private val blockItem : Option[B => CardboardItem[I]] = None,*/
+			/*private val blockItem : Option[Block => CbItem[I]] = None,*/
 			private val renderType: RenderType = RenderType.solid
 		) extends Builder[B/*, I*/] {
 			//todo: recipe providers, Block model providers(generated and custom),
-			/*def blockItem[U >: I](blockItem: B => CardboardItem[U]): FinalStep[B, U] =
+			/*def blockItem[U <: BlockItem](blockItem: Block => CbItem[U]): FinalStep[B, U] =
 				copy(blockItem = Some(blockItem))*/
 
 			def renderType(renderType: RenderType): FinalStep[B/*, I*/] =
 				copy(renderType = renderType)
 
 			def build: CbBlock[B/*, I*/] =
-				CbBlock(name, () => ctor(props), /*blockItem, */ renderType)
+				CbBlock(name, () => ctor(props), /*blockItem, */renderType)
 		}
 	}
 }
