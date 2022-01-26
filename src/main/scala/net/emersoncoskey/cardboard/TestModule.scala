@@ -10,14 +10,13 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
 import net.minecraft.advancements.critereon.InventoryChangeTrigger.TriggerInstance._
-import net.emersoncoskey.cardboard.recipe.craftingtable.CbShapedRecipe.IngredientKey.Empty
 
 
 object TestModule extends CbModule {
 	lazy val items : Seq[CbItem[Item]]                    = Seq(Amongus)
-	lazy val blocks: Seq[CbBlock[Block /*, BlockItem*/ ]] = Seq(AmongusBlock)
+	lazy val blocks: Seq[CbBlock[Block]] = Seq(AmongusBlock)
 
-	val AmongusBlock: CbBlock[TestBlock /*, BlockItem*/ ] =
+	val AmongusBlock: CbBlock[TestBlock] =
 		CbBlock.named("amongus2_block")
 		       .custom(new TestBlock(_))
 		       .properties(BlockBehaviour.Properties.of(Material.STONE))
@@ -38,13 +37,9 @@ object TestModule extends CbModule {
 			      CbShapedRecipe(64, Some("better_recipe"))(for {
 				      a <- CbShapedRecipe.define('X', Items.DIAMOND.i)
 				      b <- CbShapedRecipe.define('/', Items.DIRT.i)
-				      _ <- CbShapedRecipe.pattern(
-					      List(b, a, b),
-					      List(a, a, a),
-					      List(b, a, b),
-				      )
+				      _ <- CbShapedRecipe.pattern(List(b, a, b), List(a, a, a), List(b, a, b))
 				      _ <- CbShapedRecipe.group("among")
-				      _ <- CbShapedRecipe.unlockedBy("has_material", hasItems(Items.DIAMOND))
+				      _ <- CbShapedRecipe.unlockedBy("has_material", hasItems(Items.DIAMOND, Items.DIRT))
 			      } yield ())
 		      )
 		      .build
