@@ -1,15 +1,14 @@
 package net.emersoncoskey.cardboard.recipe.craftingtable
 
-import cats.{Monad, Traverse}
-import cats.data.{NonEmptyList, Reader, State}
-import cats.implicits.{catsSyntaxFlatMapOps, toTraverseOps}
+import cats.data.{Reader, State}
+import cats.implicits.toTraverseOps
 import net.emersoncoskey.cardboard.CbMod
-import net.emersoncoskey.cardboard.recipe.RecipeHaver
+import net.emersoncoskey.cardboard.recipe.{CbRecipe, CbRecipeBuilderRecipe}
+import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.data.recipes.{FinishedRecipe, ShapelessRecipeBuilder}
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraftforge.fml.common.Mod
 
 import java.util.function.Consumer
 
@@ -51,28 +50,29 @@ object CbShapelessRecipe {
 	}
 }*/
 
-case class CbShapelessRecipe private(
-	private val internal: ShapelessRecipeBuilder,
-	private val id: Option[String] = None
-) {
-	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit = id match {
-		case Some(s) => internal.save(consumer, new ResourceLocation(mod.ModId, s))
-		case None => internal.save(consumer)
-	}
-}
+class CbShapelessRecipe private(
+	internal: ShapelessRecipeBuilder,
+	id      : Option[String] = None,
+) extends CbRecipeBuilderRecipe(internal, id)
 
 object CbShapelessRecipe {
+	def apply(
+		act: State[ShapelessRecipeBuilder, _],
+		id: Option[String] = None,
+		count: Int
+	)(result: Item): CbShapelessRecipe =
+		new CbShapelessRecipe(act.runS(new ShapelessRecipeBuilder(result, count)).value, id)
+
 	def ingredients(
 		first: (Ingredient, Int),
-		rest: (Ingredient,Int)*
-	): Reader[ShapelessRecipeBuilder, Unit] = {
-		val ingredients = first :: rest.toList
-		val singleIngredients = ingredients >>= { case (i, n) => List.fill(n)(i) }
-		singleIngredients
-		  .traverse(i => Reader { b: ShapelessRecipeBuilder => b.requires(i) } )
+		rest : (Ingredient, Int)*
+	): State[ShapelessRecipeBuilder, Unit] =
+		(first :: rest.toList)
+		  .flatMap { case (i, n) => List.fill(n)(i) }
+		  .traverse(i => State.modify[ShapelessRecipeBuilder](_.requires(i)))
 		  .map(_ => ())
-	}
 
-	def build: Reader[ShapelessRecipeBuilder, CbShapelessRecipe] = Reader(CbShapelessRecipe(_))
-	def build(id: String): Reader[ShapelessRecipeBuilder, CbShapelessRecipe] = Reader(CbShapelessRecipe(_, Some(id)))
+	def group(name: String): State[ShapelessRecipeBuilder, Unit] = State.modify(_.group(name))
+	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[ShapelessRecipeBuilder, Unit] =
+		State.modify(_.unlockedBy(criterionName, trigger))
 }

@@ -27,12 +27,15 @@ object TestModule extends CbModule {
 		      .custom(new BlockItem(Cardboard(AmongusBlock).get, _))
 		      .properties(new Item.Properties().tab(CreativeModeTab.TAB_MISC))
 		      .recipes(
-			      for {
-				      _ <- CbShapelessRecipe.ingredients(
-					      Items.DIAMOND.i -> 2
-				      )
-				      recipe <- CbShapelessRecipe.build
-			      } yield recipe
+			      CbShapelessRecipe(
+				      for {
+					      _ <- CbShapelessRecipe.ingredients(
+						      Items.DIRT.i -> 4
+					      )
+				      } yield (),
+				      None,
+				      5
+			      )
 		      )
 		      .build
 }

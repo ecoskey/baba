@@ -2,7 +2,7 @@ package net.emersoncoskey.cardboard.item
 
 import net.emersoncoskey.cardboard.CbMod
 import net.emersoncoskey.cardboard.Syntax.ItemOps
-import net.emersoncoskey.cardboard.recipe.RecipeHaver
+import net.emersoncoskey.cardboard.recipe.CbRecipe
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.item.crafting.Ingredient
@@ -11,7 +11,7 @@ case class CbItem[+I <: Item] private(
 	name: String,
 	item: () => I,
 
-	recipes: List[Item => RecipeHaver]
+	recipes: List[Item => CbRecipe]
 ) {
 	def i(implicit mod: CbMod): Ingredient = mod(this).get.i
 }
@@ -40,10 +40,10 @@ object CbItem {
 			private val ctor : Properties => I,
 			private val props: Properties,
 
-			private val recipes: List[Item => RecipeHaver] = Nil
+			private val recipes: List[Item => CbRecipe] = Nil
 		) extends Builder[I] {
 			//todo: recipe providers, item model providers(generated and custom),
-			def recipes(first: Item => RecipeHaver, rest: (Item => RecipeHaver)*): FinalStep[I] =
+			def recipes(first: Item => CbRecipe, rest: (Item => CbRecipe)*): FinalStep[I] =
 				copy(recipes = first :: rest.toList ::: recipes)
 
 			def build: CbItem[I] = CbItem(name, () => ctor(props), recipes)

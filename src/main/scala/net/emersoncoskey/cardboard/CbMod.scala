@@ -2,9 +2,9 @@ package net.emersoncoskey.cardboard
 
 import net.emersoncoskey.cardboard.block.CbBlock
 import net.emersoncoskey.cardboard.item.CbItem
-import net.emersoncoskey.cardboard.recipe.{CbRecipeProvider, RecipeHaver}
+import net.emersoncoskey.cardboard.recipe.{CbRecipe, CbRecipeProvider}
 import net.minecraft.client.renderer.ItemBlockRenderTypes
-import net.minecraft.world.item.{BlockItem, Item}
+import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.eventbus.api.{IEventBus, SubscribeEvent}
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
@@ -58,7 +58,7 @@ abstract class CbMod {
 	@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
 		val generator = event.getGenerator
 
-		val recipes: List[RecipeHaver] = for {
+		val recipes: List[CbRecipe] = for {
 			(i, reg) <- items.toList
 			r <- i.recipes
 		} yield r(reg.get)
