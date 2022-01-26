@@ -1,16 +1,12 @@
 package net.emersoncoskey.cardboard.recipe.craftingtable
 
-import cats.data.{Reader, State}
+import cats.data.State
 import cats.implicits.toTraverseOps
-import net.emersoncoskey.cardboard.CbMod
-import net.emersoncoskey.cardboard.recipe.{CbRecipe, CbRecipeBuilderRecipe}
+import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe
 import net.minecraft.advancements.CriterionTriggerInstance
-import net.minecraft.data.recipes.{FinishedRecipe, ShapelessRecipeBuilder}
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.data.recipes.ShapelessRecipeBuilder
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
-
-import java.util.function.Consumer
 
 //import scala.language.implicitConversions
 
@@ -56,11 +52,9 @@ class CbShapelessRecipe private(
 ) extends CbRecipeBuilderRecipe(internal, id)
 
 object CbShapelessRecipe {
-	def apply(
-		act: State[ShapelessRecipeBuilder, _],
-		id: Option[String] = None,
-		count: Int
-	)(result: Item): CbShapelessRecipe =
+	def apply(count: Int = 1, id: Option[String] = None)
+	         (act: State[ShapelessRecipeBuilder, _])
+	         (result: Item): CbShapelessRecipe =
 		new CbShapelessRecipe(act.runS(new ShapelessRecipeBuilder(result, count)).value, id)
 
 	def ingredients(
@@ -73,6 +67,7 @@ object CbShapelessRecipe {
 		  .map(_ => ())
 
 	def group(name: String): State[ShapelessRecipeBuilder, Unit] = State.modify(_.group(name))
+
 	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[ShapelessRecipeBuilder, Unit] =
 		State.modify(_.unlockedBy(criterionName, trigger))
 }
