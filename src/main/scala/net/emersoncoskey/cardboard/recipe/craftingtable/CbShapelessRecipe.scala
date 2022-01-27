@@ -1,7 +1,7 @@
 package net.emersoncoskey.cardboard.recipe.craftingtable
 
 import cats.data.State
-import cats.implicits.toTraverseOps
+import cats.implicits.{toFunctorOps, toTraverseOps}
 import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe
 import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.data.recipes.ShapelessRecipeBuilder
@@ -62,12 +62,15 @@ object CbShapelessRecipe {
 		rest : (Ingredient, Int)*
 	): State[ShapelessRecipeBuilder, Unit] =
 		(first :: rest.toList)
-		  .flatMap { case (i, n) => List.fill(n)(i) }
-		  .traverse(i => State.modify[ShapelessRecipeBuilder](_.requires(i)))
-		  .map(_ => ())
+		  .traverse{ case (i, n) => State.modify[ShapelessRecipeBuilder](_.requires(i, n)) }
+		  .void
 
 	def group(name: String): State[ShapelessRecipeBuilder, Unit] = State.modify(_.group(name))
 
 	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[ShapelessRecipeBuilder, Unit] =
 		State.modify(_.unlockedBy(criterionName, trigger))
+
+	/* [UTILITY METHODS] **********************************************************************************************/
+
+	def conversion(initial: Ingredient, result: Item, group: Option[String] = None) =
 }

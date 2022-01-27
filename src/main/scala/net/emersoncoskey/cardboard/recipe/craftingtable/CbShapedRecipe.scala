@@ -1,7 +1,7 @@
 package net.emersoncoskey.cardboard.recipe.craftingtable
 
 import cats.data.State
-import cats.implicits.toTraverseOps
+import cats.implicits.{toFunctorOps, toTraverseOps}
 import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe
 import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.data.recipes.ShapedRecipeBuilder
@@ -35,12 +35,14 @@ object CbShapedRecipe {
 		val stringRows = charRows.map(_.mkString)
 		stringRows
 		  .traverse(s => State.modify((b: ShapedRecipeBuilder) => b.pattern(s)))
-		  .map(_ => ())
+		  .void
 	}
-
 
 	def group(name: String): State[ShapedRecipeBuilder, Unit] = State.modify(_.group(name))
 
 	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[ShapedRecipeBuilder, Unit] =
 		State.modify(_.unlockedBy(criterionName, trigger))
+
+
+	/******************************************************************************************************************/
 }

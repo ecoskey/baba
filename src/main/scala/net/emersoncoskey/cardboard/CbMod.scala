@@ -12,7 +12,6 @@ import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 import org.apache.logging.log4j.Logger
 
-import scala.collection.immutable
 
 abstract class CbMod {
 	protected val _modId: String
