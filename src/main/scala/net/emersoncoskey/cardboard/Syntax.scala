@@ -8,6 +8,7 @@ object Syntax {
 	implicit class ItemOps(item: Item) {
 		def i: Ingredient = Ingredient.of(item)
 	}
+
 	implicit class TagOps(tag: Tag[Item]) {
 		def i: Ingredient = Ingredient.of(tag)
 	}

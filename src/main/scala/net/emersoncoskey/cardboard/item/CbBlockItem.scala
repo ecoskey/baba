@@ -1,6 +1,5 @@
 package net.emersoncoskey.cardboard.item
 
-import net.emersoncoskey.cardboard.block.CbBlock.Builder.FirstStep
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.level.block.Block

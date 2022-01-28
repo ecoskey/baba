@@ -11,7 +11,9 @@ import net.minecraft.world.level.block.state.BlockState
 
 class TestBlock(props: Properties) extends Block(props) {
 	override def stepOn(pLevel: Level, pPos: BlockPos, pState: BlockState, pEntity: Entity): Unit =
-		if (!pLevel.isClientSide) pEntity match {
-			case entity: LivingEntity => entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 200, 200))
+		if (!pLevel.isClientSide) {
+			pEntity match {
+				case entity: LivingEntity => entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 200, 200))
+			}
 		}
 }

@@ -48,7 +48,7 @@ abstract class CbMod {
 
 	final def apply(i: CbItem[Item]): RegistryObject[Item] = items(i)
 
-	final def apply(b: CbBlock[Block/*, BlockItem*/]): RegistryObject[Block] = blocks(b)
+	final def apply(b: CbBlock[Block /*, BlockItem*/ ]): RegistryObject[Block] = blocks(b)
 
 	/* [EVENT BUS THINGS] *********************************************************************************************/
 
@@ -62,7 +62,7 @@ abstract class CbMod {
 			r <- i.recipes
 		} yield r(reg.get)
 
-		generator.addProvider(CbRecipeProvider(generator, recipes:_*))
+		generator.addProvider(CbRecipeProvider(generator, recipes: _*))
 	}
 
 	@SubscribeEvent final def commonSetup(event: FMLCommonSetupEvent): Unit =

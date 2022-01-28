@@ -10,7 +10,7 @@ import java.util.function.Consumer
 
 abstract class CbRecipeBuilderRecipe[B <: RecipeBuilder](
 	internal: B,
-	id: Option[String],
+	id      : Option[String],
 ) extends CbRecipe {
 	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit = id match {
 		case Some(s) => internal.save(consumer, new ResourceLocation(mod.ModId, s))

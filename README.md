@@ -1,4 +1,5 @@
 # Cardboard
+
 Template repository of Minecraft mod with Scala
 
 1. Clone this repository.

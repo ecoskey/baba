@@ -8,8 +8,8 @@ import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.item.crafting.Ingredient
 
 case class CbItem[+I <: Item] private(
-	name: String,
-	item: () => I,
+	name   : String,
+	item   : () => I,
 
 	recipes: List[Item => CbRecipe]
 ) {
@@ -36,9 +36,9 @@ object CbItem {
 		}
 
 		case class FinalStep[+I <: Item] private(
-			private val name : String,
-			private val ctor : Properties => I,
-			private val props: Properties,
+			private val name   : String,
+			private val ctor   : Properties => I,
+			private val props  : Properties,
 
 			private val recipes: List[Item => CbRecipe] = Nil
 		) extends Builder[I] {
