@@ -2,11 +2,16 @@ package net.emersoncoskey.cardboard.recipe.craftingtable
 
 import cats.data.State
 import cats.implicits.{toFunctorOps, toTraverseOps}
+import net.emersoncoskey.cardboard.Syntax.ItemOps
 import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe
 import net.minecraft.advancements.CriterionTriggerInstance
+import net.minecraft.advancements.critereon.{EnterBlockTrigger, EntityPredicate, InventoryChangeTrigger, ItemPredicate, MinMaxBounds}
+import net.minecraft.core.Registry
 import net.minecraft.data.recipes.ShapelessRecipeBuilder
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.block.Block
 
 //import scala.language.implicitConversions
 
@@ -52,9 +57,8 @@ class CbShapelessRecipe private(
 ) extends CbRecipeBuilderRecipe(internal, id)
 
 object CbShapelessRecipe {
-	def apply(count: Int = 1, id: Option[String] = None)
-	         (act: State[ShapelessRecipeBuilder, _])
-	         (result: Item): CbShapelessRecipe =
+	def apply(result: Item, count: Int = 1, id: Option[String] = None)
+	         (act: State[ShapelessRecipeBuilder, _]): CbShapelessRecipe =
 		new CbShapelessRecipe(act.runS(new ShapelessRecipeBuilder(result, count)).value, id)
 
 	def ingredients(
@@ -65,12 +69,36 @@ object CbShapelessRecipe {
 		  .traverse{ case (i, n) => State.modify[ShapelessRecipeBuilder](_.requires(i, n)) }
 		  .void
 
-	def group(name: String): State[ShapelessRecipeBuilder, Unit] = State.modify(_.group(name))
-
 	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[ShapelessRecipeBuilder, Unit] =
 		State.modify(_.unlockedBy(criterionName, trigger))
 
+	def group(name: String): State[ShapelessRecipeBuilder, Unit] = State.modify(_.group(name))
+
 	/* [UTILITY METHODS] **********************************************************************************************/
 
-	def conversion(initial: Ingredient, result: Item, group: Option[String] = None) =
+	def itemPredicateTrigger(
+		firstPred: ItemPredicate,
+		restPred: ItemPredicate*
+	): InventoryChangeTrigger.TriggerInstance =
+		new InventoryChangeTrigger.TriggerInstance(
+			EntityPredicate.Composite.ANY,
+			MinMaxBounds.Ints.ANY,
+			MinMaxBounds.Ints.ANY,
+			MinMaxBounds.Ints.ANY,
+			(firstPred :: restPred.toList).toArray
+		)
+
+	private def itemName(item: Item): ResourceLocation = Registry.ITEM.getKey(item)
+
+	def unlockedByItem(item: Item): State[ShapelessRecipeBuilder, Unit] =
+		unlockedBy(s"has_${itemName(item).getPath}", itemPredicateTrigger(item.i))
+
+	def unlockedByInsideBlock(name: String, block: Block): State[ShapelessRecipeBuilder, Unit] =
+		unlockedBy(name, EnterBlockTrigger.TriggerInstance.entersBlock(block))
+
+	def conversion(initial: Ingredient, result: Item, id: Option[String] = None): CbShapelessRecipe =
+		CbShapelessRecipe(result, 1, id)(for {
+			_ <- ingredients(initial -> 1)
+			_ <- unlockedBy()
+		} yield ())
 }

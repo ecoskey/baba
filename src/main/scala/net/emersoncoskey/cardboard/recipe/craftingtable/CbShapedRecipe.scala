@@ -21,9 +21,8 @@ object CbShapedRecipe {
 		val Empty: IngredientKey = IngredientKey(' ')
 	}
 
-	def apply(count: Int = 1, id: Option[String] = None)
-	         (act: State[ShapedRecipeBuilder, _])
-	         (result: Item): CbShapedRecipe =
+	def apply(result: Item, count: Int = 1, id: Option[String] = None)
+	         (act: State[ShapedRecipeBuilder, _]): CbShapedRecipe =
 		new CbShapedRecipe(act.runS(new ShapedRecipeBuilder(result, count)).value, id)
 
 	def define(c: Char, i: Ingredient): State[ShapedRecipeBuilder, IngredientKey] =

@@ -50,7 +50,7 @@ abstract class CbMod {
 
 	final def apply(b: CbBlock[Block/*, BlockItem*/]): RegistryObject[Block] = blocks(b)
 
-	/* [EVENT BUS THINGS] --------------------------------------------------------------------------------------------*/
+	/* [EVENT BUS THINGS] *********************************************************************************************/
 
 	EventBus.register(this)
 

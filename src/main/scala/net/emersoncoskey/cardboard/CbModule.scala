@@ -13,7 +13,7 @@ import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, Registr
 
 trait CbModule {
 	val items : Seq[CbItem[Item]]
-	val blocks: Seq[CbBlock[Block/*, BlockItem*/]]
+	val blocks: Seq[CbBlock[Block]]
 
 /*	lazy val itemsMap: Map[CardboardItem[Item], RegistryObject[Item]] = Map(
 		Items.map(i =>

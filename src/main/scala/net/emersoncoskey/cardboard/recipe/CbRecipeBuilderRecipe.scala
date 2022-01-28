@@ -1,7 +1,9 @@
 package net.emersoncoskey.cardboard.recipe
 
+import cats.data.State
 import net.emersoncoskey.cardboard.CbMod
-import net.minecraft.data.recipes.{FinishedRecipe, RecipeBuilder}
+import net.minecraft.advancements.CriterionTriggerInstance
+import net.minecraft.data.recipes.{FinishedRecipe, RecipeBuilder, ShapelessRecipeBuilder}
 import net.minecraft.resources.ResourceLocation
 
 import java.util.function.Consumer
