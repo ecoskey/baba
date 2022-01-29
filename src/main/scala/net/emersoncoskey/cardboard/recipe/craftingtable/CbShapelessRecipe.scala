@@ -12,11 +12,11 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Block
 
 class CbShapelessRecipe private(
-	val internal: ShapelessRecipeBuilder,
-	val id      : Option[String] = None,
+	internal: ShapelessRecipeBuilder,
+	id      : Option[String] = None,
 ) extends CbRecipeBuilderRecipe(internal, id)
 
-object CbShapelessRecipe {
+object CbShapelessRecipe extends CbRecipeBuilderRecipe.Ops[ShapelessRecipeBuilder] {
 	def apply(result: Item, count: Int = 1, id: Option[String] = None)
 	  (act: State[ShapelessRecipeBuilder, _]): CbShapelessRecipe =
 		new CbShapelessRecipe(act.runS(new ShapelessRecipeBuilder(result, count)).value, id)
@@ -28,28 +28,6 @@ object CbShapelessRecipe {
 		(first :: rest.toList)
 		  .traverse { case (i, n) => State.modify[ShapelessRecipeBuilder](_.requires(i, n)) }
 		  .void
-
-	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[ShapelessRecipeBuilder, Unit] =
-		State.modify(_.unlockedBy(criterionName, trigger))
-
-	def group(name: String): State[ShapelessRecipeBuilder, Unit] = State.modify(_.group(name))
-
-	/* [UTILITY METHODS] **********************************************************************************************/
-
-	def unlockedByItem(item: Item): State[ShapelessRecipeBuilder, Unit] =
-		unlockedBy(
-			s"has_${ item.getRegistryName.getPath }",
-			CbRecipe.inventoryTrigger(ItemPredicate.Builder.item.of(item).build)
-		)
-
-	def unlockedByInBlock(block: Block): State[ShapelessRecipeBuilder, Unit] =
-		unlockedBy(
-			s"inside_of_${block.getRegistryName.getPath}",
-			new EnterBlockTrigger.TriggerInstance(
-				EntityPredicate.Composite.ANY,
-				block, StatePropertiesPredicate.ANY
-			)
-		)
 
 	/* ["SHORTCUT" RECIPE METHODS] ************************************************************************************/
 

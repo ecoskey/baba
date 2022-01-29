@@ -13,11 +13,11 @@ import net.minecraft.world.level.block.Block
 
 
 class CbShapedRecipe private(
-	val internal: ShapedRecipeBuilder,
-	val id      : Option[String] = None,
+	internal: ShapedRecipeBuilder,
+	id      : Option[String] = None,
 ) extends CbRecipeBuilderRecipe(internal, id)
 
-object CbShapedRecipe {
+object CbShapedRecipe extends CbRecipeBuilderRecipe.Ops[ShapedRecipeBuilder] {
 	case class IngredientKey private(c: Char) extends AnyVal
 
 	object IngredientKey {
@@ -39,29 +39,6 @@ object CbShapedRecipe {
 		  .traverse(s => State.modify((b: ShapedRecipeBuilder) => b.pattern(s)))
 		  .void
 	}
-
-	def group(name: String): State[ShapedRecipeBuilder, Unit] = State.modify(_.group(name))
-
-	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[ShapedRecipeBuilder, Unit] =
-		State.modify(_.unlockedBy(criterionName, trigger))
-
-
-	/* [UTILITY METHODS] **********************************************************************************************/
-
-	def unlockedByItem(item: Item): State[ShapedRecipeBuilder, Unit] =
-		unlockedBy(
-			s"has_${ item.getRegistryName.getPath }",
-			CbRecipe.inventoryTrigger(ItemPredicate.Builder.item.of(item).build)
-		)
-
-	def unlockedByInBlock(block: Block): State[ShapedRecipeBuilder, Unit] =
-		unlockedBy(
-			s"inside_of_${ block.getRegistryName.getPath }",
-			new EnterBlockTrigger.TriggerInstance(
-				EntityPredicate.Composite.ANY,
-				block, StatePropertiesPredicate.ANY
-			)
-		)
 
 	/* ["SHORTCUT" RECIPE METHODS] ************************************************************************************/
 

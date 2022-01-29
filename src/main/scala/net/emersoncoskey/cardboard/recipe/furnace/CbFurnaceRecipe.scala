@@ -15,7 +15,7 @@ class CbFurnaceRecipe private(
 	id      : Option[String] = None,
 ) extends CbRecipeBuilderRecipe[SimpleCookingRecipeBuilder](internal, id)
 
-object CbFurnaceRecipe {
+object CbFurnaceRecipe extends CbRecipeBuilderRecipe.Ops[SimpleCookingRecipeBuilder] {
 	def campfire(ingredient: Ingredient, result: Item, exp: Float, time: Int, id: Option[String] = None)
 	            (act: State[SimpleCookingRecipeBuilder, _]): CbFurnaceRecipe = {
 		new CbFurnaceRecipe(
@@ -51,27 +51,5 @@ object CbFurnaceRecipe {
 				ingredient, result, exp, time, RecipeSerializer.SMOKING_RECIPE
 			)).value,
 			id
-		)
-
-	def group(name: String): State[SimpleCookingRecipeBuilder, Unit] = State.modify(_.group(name))
-
-	def unlockedBy(criterionName: String, trigger: CriterionTriggerInstance): State[SimpleCookingRecipeBuilder, Unit] =
-		State.modify(_.unlockedBy(criterionName, trigger))
-
-	/* [UTILITY METHODS] **********************************************************************************************/
-
-	def unlockedByItem(item: Item): State[SimpleCookingRecipeBuilder, Unit] =
-		unlockedBy(
-			s"has_${ item.getRegistryName.getPath }",
-			CbRecipe.inventoryTrigger(ItemPredicate.Builder.item.of(item).build)
-		)
-
-	def unlockedByInBlock(block: Block): State[SimpleCookingRecipeBuilder, Unit] =
-		unlockedBy(
-			s"inside_of_${ block.getRegistryName.getPath }",
-			new EnterBlockTrigger.TriggerInstance(
-				EntityPredicate.Composite.ANY,
-				block, StatePropertiesPredicate.ANY
-			)
 		)
 }
