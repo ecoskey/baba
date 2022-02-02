@@ -7,10 +7,11 @@ import net.emersoncoskey.cardboard.recipe.CbRecipe
 import net.emersoncoskey.cardboard.recipe.craftingtable.{CbShapedRecipe, CbShapelessRecipe}
 import net.emersoncoskey.cardboard.recipe.furnace.CbFurnaceRecipe
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.world.item.{BlockItem, CreativeModeTab, Item, Items}
+import net.minecraft.world.item.{BlockItem, Item, Items}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
+import net.minecraftforge.common.Tags
 
 
 object TestModule extends CbModule {
@@ -18,16 +19,18 @@ object TestModule extends CbModule {
 	lazy val blocks: Seq[CbBlock[Block]] = Seq(AmongusBlock)
 
 	val AmongusBlock: CbBlock[TestBlock] =
-		CbBlock.named("amongus2_block")
+		CbBlock.named("amongus_block")
 		       .custom(new TestBlock(_))
 		       .properties(BlockBehaviour.Properties.of(Material.STONE))
+		       .tags(Tags.Blocks.ORES)
 		       .renderType(RenderType.cutout)
 		       .build
 
 	val Amongus: CbItem[BlockItem] =
-		CbItem.named("amongus2")
+		CbItem.named("amongus")
 		      .custom(new BlockItem(Cardboard(AmongusBlock).get, _))
-		      .properties(new Item.Properties().tab(CreativeModeTab.TAB_MISC))
+		      .properties(new Item.Properties().tab(TestCreativeTab))
+		      .tags(Tags.Items.INGOTS_NETHERITE)
 		      .recipes(
 			      CbShapelessRecipe(_, 5, Some("cringe_recipe"))(for {
 				      _ <- CbShapelessRecipe.ingredients(Items.DIRT.i -> 4)

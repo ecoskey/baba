@@ -6,7 +6,7 @@ import net.minecraft.data.recipes.{FinishedRecipe, RecipeProvider}
 
 import java.util.function.Consumer
 
-case class CbRecipeProvider(gen: DataGenerator, recipes: CbRecipe*)(implicit mod: CbMod) extends RecipeProvider(gen) {
+case class CbRecipeProvider(mod: CbMod,gen: DataGenerator, recipes: Seq[CbRecipe]) extends RecipeProvider(gen) {
 	override def buildCraftingRecipes(finishedRecipeConsumer: Consumer[FinishedRecipe]): Unit =
 		recipes.foreach(_.save(finishedRecipeConsumer, mod))
 }

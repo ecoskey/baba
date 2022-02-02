@@ -12,44 +12,41 @@ import net.minecraft.world.level.block.Block
 
 class CbFurnaceRecipe private(
 	internal: SimpleCookingRecipeBuilder,
+	act: State[SimpleCookingRecipeBuilder, _],
 	id      : Option[String] = None,
-) extends CbRecipeBuilderRecipe[SimpleCookingRecipeBuilder](internal, id)
+) extends CbRecipeBuilderRecipe[SimpleCookingRecipeBuilder](internal, act, id)
 
 object CbFurnaceRecipe extends CbRecipeBuilderRecipe.Ops[SimpleCookingRecipeBuilder] {
 	def campfire(ingredient: Ingredient, result: Item, exp: Float, time: Int, id: Option[String] = None)
 	            (act: State[SimpleCookingRecipeBuilder, _]): CbFurnaceRecipe = {
 		new CbFurnaceRecipe(
-			act.runS(SimpleCookingRecipeBuilder.cooking(
+			SimpleCookingRecipeBuilder.cooking(
 				ingredient, result, exp, time, RecipeSerializer.CAMPFIRE_COOKING_RECIPE
-			)).value,
-			id
+			), act, id
 		)
 	}
 
 	def blasting(ingredient: Ingredient, result: Item, exp: Float, time: Int, id: Option[String] = None)
 	            (act: State[SimpleCookingRecipeBuilder, _]): CbFurnaceRecipe =
 		new CbFurnaceRecipe(
-			act.runS(SimpleCookingRecipeBuilder.cooking(
+			SimpleCookingRecipeBuilder.cooking(
 				ingredient, result, exp, time, RecipeSerializer.BLASTING_RECIPE
-			)).value,
-			id
+			), act, id
 		)
 
 	def smelting(ingredient: Ingredient, result: Item, exp: Float, time: Int, id: Option[String] = None)
 	            (act: State[SimpleCookingRecipeBuilder, _]): CbFurnaceRecipe =
 		new CbFurnaceRecipe(
-			act.runS(SimpleCookingRecipeBuilder.cooking(
+			SimpleCookingRecipeBuilder.cooking(
 				ingredient, result, exp, time, RecipeSerializer.SMELTING_RECIPE
-			)).value,
-			id
+			), act, id
 		)
 
 	def smoking(ingredient: Ingredient, result: Item, exp: Float, time: Int, id: Option[String] = None)
 		       (act: State[SimpleCookingRecipeBuilder, _]): CbFurnaceRecipe =
 		new CbFurnaceRecipe(
-			act.runS(SimpleCookingRecipeBuilder.cooking(
+			SimpleCookingRecipeBuilder.cooking(
 				ingredient, result, exp, time, RecipeSerializer.SMOKING_RECIPE
-			)).value,
-			id
+			), act, id
 		)
 }

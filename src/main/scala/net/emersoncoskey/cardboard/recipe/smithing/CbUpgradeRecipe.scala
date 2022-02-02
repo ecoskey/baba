@@ -13,24 +13,23 @@ import java.util.function.Consumer
 
 class CbUpgradeRecipe private(
 	internal: UpgradeRecipeBuilder,
+	act: State[UpgradeRecipeBuilder, _],
 	id: String,
 ) extends CbRecipe {
 	private[cardboard] override def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit =
-		internal.save(consumer, new ResourceLocation(mod.ModId, id))
+		act.runS(internal).value.save(consumer, new ResourceLocation(mod.ModId, id))
 }
 
 object CbUpgradeRecipe {
 	def apply(base: Ingredient, addition: Ingredient, result: Item, id: String)
 	         (act: State[UpgradeRecipeBuilder, Unit]): CbUpgradeRecipe =
-		new CbUpgradeRecipe(
-			act.runS(UpgradeRecipeBuilder.smithing(base, addition, result)).value,
-			id
-		)
+		new CbUpgradeRecipe(UpgradeRecipeBuilder.smithing(base, addition, result), act, id)
 
 	def apply(base: Item, addition: Item, result: Item, id: Option[String] = None)
 	  (act: State[UpgradeRecipeBuilder, Unit]): CbUpgradeRecipe =
 		new CbUpgradeRecipe(
-			act.runS(UpgradeRecipeBuilder.smithing(base.i, addition.i, result)).value,
+			UpgradeRecipeBuilder.smithing(base.i, addition.i, result),
+			act,
 			id.getOrElse(s"upgrade_${base.getRegistryName.getPath}_with_${addition.getRegistryName.getPath}")
 		)
 }
