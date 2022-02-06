@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.recipe.smithing
+package net.emersoncoskey.cardboard.datagen.recipe.smithing
 
 import cats.data.State
 import net.emersoncoskey.cardboard.CbMod

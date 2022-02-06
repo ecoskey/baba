@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.recipe
+package net.emersoncoskey.cardboard.datagen.recipe
 
 import net.emersoncoskey.cardboard.CbMod
 import net.minecraft.data.DataGenerator

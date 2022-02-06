@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.recipe
+package net.emersoncoskey.cardboard.datagen.recipe
 
 import cats.data.State
 import net.emersoncoskey.cardboard.CbMod

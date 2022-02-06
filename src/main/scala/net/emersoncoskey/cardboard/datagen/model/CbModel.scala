@@ -1,9 +1,11 @@
-package net.emersoncoskey.cardboard.model
+package net.emersoncoskey.cardboard.datagen.model
 
 import cats.data.State
+import cats.implicits.catsSyntaxFlatMapOps
 import net.minecraft.client.renderer.block.model.BlockModel.GuiLight
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.client.model.generators.{ModelBuilder, ModelFile, ModelProvider}
+import net.minecraftforge.common.data.ExistingFileHelper
 
 case class CbModel[A <: ModelBuilder[A]](name: String, act: State[A, _])
 
@@ -29,7 +31,15 @@ object CbModel {
 
 	/* [UTILITY METHODS] **********************************************************************************************/
 
-	def getExistingModel(path: ResourceLocation): ModelFile.ExistingModelFile = ???
+	def getExistingModel(
+		path: ResourceLocation,
+		folder: String,
+		helper: ExistingFileHelper
+	): ModelFile.ExistingModelFile =
+		new ModelFile.ExistingModelFile(
+			new ResourceLocation(path.getNamespace, s"$folder/${path.getPath}"),
+			helper
+		)
 
 	/* ["SHORTCUT" METHODS] *******************************************************************************************/
 
@@ -77,11 +87,7 @@ object CbModel {
 		parent    : ResourceLocation,
 		textureKey: String,
 		texture   : ResourceLocation
-	): CbModel[A] =
-		CbModel(name, for {
-			_ <- this.parent(parent)
-			_ <- this.texture(textureKey, texture)
-		} yield ())
+	): CbModel[A] = CbModel(name, this.parent(parent) >> this.texture(textureKey, texture))
 
 	def cubeAll[A <: ModelBuilder[A]](name: String, texture: ResourceLocation): CbModel[A] =
 		singleTexture(name, s"$BlockFolder/cube_all", "all", texture)

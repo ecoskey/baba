@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.recipe.craftingtable
+package net.emersoncoskey.cardboard.datagen.recipe.craftingtable
 
 import cats.data.State
 import cats.implicits.{toFunctorOps, toTraverseOps}

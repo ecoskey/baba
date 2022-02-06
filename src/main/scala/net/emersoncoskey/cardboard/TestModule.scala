@@ -1,24 +1,25 @@
 package net.emersoncoskey.cardboard
 
-import net.emersoncoskey.cardboard.Syntax.ItemOps
-import net.emersoncoskey.cardboard.block.CbBlock
-import net.emersoncoskey.cardboard.item.CbItem
-import net.emersoncoskey.cardboard.recipe.CbRecipe
-import net.emersoncoskey.cardboard.recipe.craftingtable.{CbShapedRecipe, CbShapelessRecipe}
-import net.emersoncoskey.cardboard.recipe.furnace.CbFurnaceRecipe
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.world.item.{BlockItem, Item, Items}
+import net.emersoncoskey.cardboard.data./~\
+import net.emersoncoskey.cardboard.registry.block.CbBlock
+import net.emersoncoskey.cardboard.registry.item.CbItem
+import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
-import net.minecraftforge.common.Tags
+import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistry}
 
 
 object TestModule extends CbModule {
 	lazy val items : Seq[CbItem[Item]]   = Seq(Amongus)
 	lazy val blocks: Seq[CbBlock[Block]] = Seq(AmongusBlock)
 
-	val AmongusBlock: CbBlock[TestBlock] =
+	lazy val reg: Seq[IForgeRegistry /~\ TestModule.RegSeq] = Seq(
+		/~\(ForgeRegistries.ITEMS, Seq(AmongusBlock)),
+		/~\(ForgeRegistries.ITEMS, Seq(Amongus)),
+	)
+
+	/*val AmongusBlock: CbBlock[TestBlock] =
 		CbBlock.named("amongus_block")
 		       .custom(new TestBlock(_))
 		       .properties(BlockBehaviour.Properties.of(Material.STONE))
@@ -56,5 +57,8 @@ object TestModule extends CbModule {
 
 			      CbShapedRecipe.packing3x3(Items.DIRT)
 		      )
-		      .build
+		      .build*/
+
+	val AmongusBlock: CbBlock[TestBlock] = CbBlock("amongus_block", BlockBehaviour.Properties.of(Material.STONE), new TestBlock(_))()
+	val Amongus     : CbItem[BlockItem]  = CbItem("amongus", new Item.Properties().tab(TestCreativeTab), new BlockItem(Cardboard(AmongusBlock).get, _))()
 }

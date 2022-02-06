@@ -1,8 +1,9 @@
-package net.emersoncoskey.cardboard.recipe.craftingtable
+package net.emersoncoskey.cardboard.datagen.recipe.craftingtable
 
 import cats.data.State
 import cats.implicits.{toFunctorOps, toTraverseOps}
 import net.emersoncoskey.cardboard.Syntax.ItemOps
+import net.emersoncoskey.cardboard.datagen.recipe.CbRecipeBuilderRecipe.Ops
 import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe
 import net.minecraft.data.recipes.ShapelessRecipeBuilder
 import net.minecraft.world.item.Item
@@ -14,7 +15,7 @@ class CbShapelessRecipe private(
 	id      : Option[String] = None,
 ) extends CbRecipeBuilderRecipe(internal, act, id)
 
-object CbShapelessRecipe extends CbRecipeBuilderRecipe.Ops[ShapelessRecipeBuilder] {
+object CbShapelessRecipe extends Ops[ShapelessRecipeBuilder] {
 	def apply(result: Item, count: Int = 1, id: Option[String] = None)
 	  (act: State[ShapelessRecipeBuilder, _]): CbShapelessRecipe =
 		new CbShapelessRecipe(new ShapelessRecipeBuilder(result, count), act, id)

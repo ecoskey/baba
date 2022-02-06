@@ -1,6 +1,7 @@
-package net.emersoncoskey.cardboard.tag.item
+package net.emersoncoskey.cardboard.datagen.tag.item
 
 import net.emersoncoskey.cardboard.CbMod
+import net.emersoncoskey.cardboard.datagen.tag.TagAssignment
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.tags.{BlockTagsProvider, ItemTagsProvider}
 import net.minecraft.tags.Tag
@@ -12,10 +13,10 @@ case class CbItemTagsProvider(
 	gen      : DataGenerator,
 	blockTags: BlockTagsProvider,
 	helper   : ExistingFileHelper,
-	tagPairs : Seq[(Item, Seq[Tag.Named[Item]])]
+	tagPairs : Seq[TagAssignment[Item]]
 ) extends ItemTagsProvider(gen, blockTags, mod.ModId, helper) {
 	override def addTags(): Unit = for {
-		(i, tags) <- tagPairs
+		TagAssignment(i, tags) <- tagPairs
 		t <- tags
 	} tag(t).add(i)
 }

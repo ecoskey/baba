@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.recipe.stonecutting
+package net.emersoncoskey.cardboard.datagen.recipe.stonecutting
 
 import cats.data.State
 import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe

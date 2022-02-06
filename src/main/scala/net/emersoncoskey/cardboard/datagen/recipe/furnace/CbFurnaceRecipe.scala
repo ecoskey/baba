@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.recipe.furnace
+package net.emersoncoskey.cardboard.datagen.recipe.furnace
 
 import cats.data.State
 import net.emersoncoskey.cardboard.recipe.{CbRecipe, CbRecipeBuilderRecipe}

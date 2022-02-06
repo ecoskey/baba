@@ -1,16 +1,13 @@
-package net.emersoncoskey.cardboard.item
+package net.emersoncoskey.cardboard.registry.item
 
-import net.emersoncoskey.cardboard.CbMod
-import net.emersoncoskey.cardboard.Syntax.ItemOps
-import net.emersoncoskey.cardboard.model.CbModel
-import net.emersoncoskey.cardboard.recipe.CbRecipe
-import net.minecraft.tags.Tag
+import cats.Eval
+import net.emersoncoskey.cardboard.data.DecMod
+import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraftforge.client.model.generators.ItemModelBuilder
+import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistry}
 
-case class CbItem[+I <: Item] private(
+/*case class CbItem[+I <: Item] private(
 	name   : String,
 	item   : () => I,
 
@@ -61,4 +58,30 @@ object CbItem {
 			def build: CbItem[I] = CbItem(name, () => ctor(props), recipes, tags, model)
 		}
 	}
+
+	implicit val DataGenInstance: DataGen[CbItem, Item] = new DataGen[CbItem, Item] {
+		override val registry: IForgeRegistry[Item] = ForgeRegistries.ITEMS
+
+		override def reg(r: CbItem[Item]): (String, () => Item) = (r.name, r.item)
+	}
+}*/
+
+case class CbItem[+I <: Item] private(
+	name : String,
+	props: Eval[Properties],
+	ctor : Properties => I,
+)
+
+object CbItem {
+	implicit val r: Reg[CbItem, Item] = new Reg[CbItem, Item] {
+		override val registry: IForgeRegistry[Item] = ForgeRegistries.ITEMS
+
+		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, () => r.ctor(r.props.value))
+	}
+
+	def apply(name: String, properties: => Properties)(mods: DecMod[CbItem, Item]*): CbItem[Item] =
+		new CbItem(name, Eval.later(properties), new Item(_))
+
+	def apply[I <: Item](name: String, properties: => Properties, ctor: Properties => I)(mods: DecMod[CbItem, Item]*): CbItem[I] =
+		new CbItem(name, Eval.later(properties), ctor)
 }

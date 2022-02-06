@@ -1,21 +1,14 @@
 package net.emersoncoskey.cardboard
 
-import net.emersoncoskey.cardboard.block.CbBlock
-import net.emersoncoskey.cardboard.item.CbItem
-import net.emersoncoskey.cardboard.model.item.CbItemModelProvider
-import net.emersoncoskey.cardboard.recipe.{CbRecipe, CbRecipeProvider}
-import net.emersoncoskey.cardboard.tag.block.CbBlockTagsProvider
-import net.minecraft.client.renderer.ItemBlockRenderTypes
+import net.emersoncoskey.cardboard.data./~\
+import net.emersoncoskey.cardboard.registry.block.CbBlock
+import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
-import net.minecraftforge.eventbus.api.{IEventBus, SubscribeEvent}
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
-import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
+import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, IForgeRegistry, RegistryObject}
 import org.apache.logging.log4j.Logger
-import net.emersoncoskey.cardboard.tag.item.CbItemTagsProvider
-import net.minecraft.tags.Tag
 
 
 trait CbMod {
@@ -26,9 +19,14 @@ trait CbMod {
 
 	val EventBus: IEventBus
 	val Logger  : Logger
-	val Modules : Seq[CbModule]
+	val Modules: Seq[CbModule]
 
-	/* [REGISTRY STUFF] ***********************************************************************************************/
+	/* [REGISTRY STUFF] ***************************************************************************************************************************************/
+
+	private val registers: Seq[IForgeRegistry /~\ DeferredRegister] = for {
+		m <- Modules
+		r <- m.reg
+	} yield /~\(r.a, DeferredRegister.create(r.a, ModId))
 
 	private val itemReg : DeferredRegister[Item]  = DeferredRegister.create(ForgeRegistries.ITEMS, ModId)
 	private val blockReg: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, ModId)
@@ -51,20 +49,20 @@ trait CbMod {
 	)
 
 	final def apply(i: CbItem[Item]): RegistryObject[Item] =
-		items.getOrElse(i, throw new IllegalArgumentException(s"CbItem with name ${i.name} has not been registered"))
+		items.getOrElse(i, throw new IllegalArgumentException(s"CbItem with name ${ i.name } has not been registered"))
 
 	final def apply(b: CbBlock[Block]): RegistryObject[Block] =
-		blocks.getOrElse(b, throw new IllegalArgumentException(s"CbBlock with name ${b.name} has not been registered"))
+		blocks.getOrElse(b, throw new IllegalArgumentException(s"CbBlock with name ${ b.name } has not been registered"))
 
-	/* [EVENT BUS THINGS] *********************************************************************************************/
+	/* [EVENT BUS THINGS] *************************************************************************************************************************************/
 
 	EventBus.register(this)
 
-	@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
+	/*@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
 		val generator = event.getGenerator
-		val helper = event.getExistingFileHelper
+		val helper    = event.getExistingFileHelper
 
-		val itemsList = items.toList
+		val itemsList  = items.toList
 		val blocksList = blocks.toList
 
 		val recipes: List[CbRecipe] = for {
@@ -74,19 +72,20 @@ trait CbMod {
 		generator.addProvider(CbRecipeProvider(this, generator, recipes))
 
 		val blockTags: List[(Block, List[Tag.Named[Block]])] = blocksList.map { case (b, reg) => reg.get -> b.tags }
-		val blockTagsProvider = CbBlockTagsProvider(this, generator, helper, blockTags)
+		val blockTagsProvider                                = CbBlockTagsProvider(this, generator, helper, blockTags)
 		generator.addProvider(blockTagsProvider)
 
 		val itemTags: List[(Item, List[Tag.Named[Item]])] = itemsList.map { case (i, reg) => reg.get -> i.tags }
 		generator.addProvider(CbItemTagsProvider(this, generator, blockTagsProvider, helper, itemTags))
-	}
+	}*/
 
-	@SubscribeEvent final def commonSetup(event: FMLCommonSetupEvent): Unit =
-		blocks.foreach { case (b, reg) => ItemBlockRenderTypes.setRenderLayer(reg.get, b.renderType) }
+	/*@SubscribeEvent final def commonSetup(event: FMLCommonSetupEvent): Unit =
+		blocks.foreach { case (b, reg) => ItemBlockRenderTypes.setRenderLayer(reg.get, b.renderType) }*/
 
-	/* [UTIL METHODS] *************************************************************************************************/
+	/* [UTIL METHODS] *****************************************************************************************************************************************/
 
 	def modLoc(path: String): ResourceLocation = new ResourceLocation(ModId, path)
+
 	def mcLoc(path: String): ResourceLocation = new ResourceLocation(path)
 }
 

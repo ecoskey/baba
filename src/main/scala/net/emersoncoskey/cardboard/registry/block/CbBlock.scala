@@ -1,12 +1,13 @@
-package net.emersoncoskey.cardboard.block
+package net.emersoncoskey.cardboard.registry.block
 
-import net.emersoncoskey.cardboard.model.CbModel
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.tags.Tag
+import cats.Eval
+import net.emersoncoskey.cardboard.data.DecMod
+import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
-import net.minecraftforge.client.model.generators.BlockModelBuilder
+import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistry}
 
+/*
 case class CbBlock[+B <: Block] private(
 	name      : String,
 	block     : () => B,
@@ -58,4 +59,24 @@ object CbBlock {
 				CbBlock(name, () => ctor(props), renderType, tags)
 		}
 	}
+}*/
+
+case class CbBlock[+B <: Block] private(
+	name : String,
+	props: Eval[Properties],
+	ctor : Properties => B,
+)
+
+object CbBlock {
+	implicit val r: Reg[CbBlock, Block] = new Reg[CbBlock, Block] {
+		override val registry: IForgeRegistry[Block] = ForgeRegistries.BLOCKS
+
+		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props.value))
+	}
+
+	def apply(name: String, properties: => Properties)(mods: DecMod[CbBlock, Block]*): CbBlock[Block] =
+		new CbBlock(name, Eval.later(properties), new Block(_))
+
+	def apply[B <: Block](name: String, properties: => Properties, ctor: Properties => B)(mods: DecMod[CbBlock, Block]*): CbBlock[B] =
+		new CbBlock(name, Eval.later(properties), ctor)
 }

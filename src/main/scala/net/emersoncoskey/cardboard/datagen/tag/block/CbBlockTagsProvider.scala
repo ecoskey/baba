@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.tag.block
+package net.emersoncoskey.cardboard.datagen.tag.block
 
 import net.emersoncoskey.cardboard.CbMod
 import net.minecraft.data.DataGenerator
