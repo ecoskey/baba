@@ -1,6 +1,7 @@
 package net.emersoncoskey.cardboard
 
 import net.emersoncoskey.cardboard.data./~\
+import net.emersoncoskey.cardboard.registry.Reg.Ops
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.minecraft.resources.ResourceLocation
@@ -23,11 +24,6 @@ trait CbMod {
 
 	/* [REGISTRY STUFF] ***************************************************************************************************************************************/
 
-	private val registers: Seq[IForgeRegistry /~\ DeferredRegister] = for {
-		m <- Modules
-		r <- m.reg
-	} yield /~\(r.a, DeferredRegister.create(r.a, ModId))
-
 	private val itemReg : DeferredRegister[Item]  = DeferredRegister.create(ForgeRegistries.ITEMS, ModId)
 	private val blockReg: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, ModId)
 
@@ -38,14 +34,16 @@ trait CbMod {
 		(for {
 			m <- Modules
 			i <- m.items
-		} yield i -> itemReg.register(i.name, () => i.item())): _*
+			reg = i.reg
+		} yield i -> itemReg.register(reg.name, reg.sup)): _*
 	)
 
 	private val blocks: Map[CbBlock[Block], RegistryObject[Block]] = Map(
 		(for {
 			m <- Modules
 			b <- m.blocks
-		} yield b -> blockReg.register(b.name, () => b.block())): _*
+			reg = b.reg
+		} yield b -> blockReg.register(reg.name, reg.sup)): _*
 	)
 
 	final def apply(i: CbItem[Item]): RegistryObject[Item] =

@@ -1,10 +1,11 @@
 package net.emersoncoskey.cardboard
 
-import net.emersoncoskey.cardboard.data./~\
-import net.emersoncoskey.cardboard.registry.RegistryDec
-import net.minecraftforge.registries.{IForgeRegistry, IForgeRegistryEntry}
+import net.emersoncoskey.cardboard.registry.block.CbBlock
+import net.emersoncoskey.cardboard.registry.item.CbItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
 
 trait CbModule {
-	type RegSeq[A <: IForgeRegistryEntry[A]] = Seq[RegistryDec[A]]
-	val reg: Seq[IForgeRegistry /~\ RegSeq]
+	val items : Seq[CbItem[Item]]
+	val blocks: Seq[CbBlock[Block]]
 }

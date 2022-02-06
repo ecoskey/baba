@@ -14,11 +14,6 @@ object TestModule extends CbModule {
 	lazy val items : Seq[CbItem[Item]]   = Seq(Amongus)
 	lazy val blocks: Seq[CbBlock[Block]] = Seq(AmongusBlock)
 
-	lazy val reg: Seq[IForgeRegistry /~\ TestModule.RegSeq] = Seq(
-		/~\(ForgeRegistries.ITEMS, Seq(AmongusBlock)),
-		/~\(ForgeRegistries.ITEMS, Seq(Amongus)),
-	)
-
 	/*val AmongusBlock: CbBlock[TestBlock] =
 		CbBlock.named("amongus_block")
 		       .custom(new TestBlock(_))
