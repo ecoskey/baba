@@ -1,7 +1,6 @@
 package net.emersoncoskey.cardboard.registry.block
 
 import cats.Eval
-import net.emersoncoskey.cardboard.data.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
