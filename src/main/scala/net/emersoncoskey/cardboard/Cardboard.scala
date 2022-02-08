@@ -12,5 +12,5 @@ object Cardboard extends CbMod {
 
 	lazy val EventBus: IEventBus     = FMLJavaModLoadingContext.get.getModEventBus
 	lazy val Logger  : Logger        = LogManager.getLogger
-	lazy val Modules : Seq[CbModule] = Seq(TestModule)
+	lazy val Modules : Seq[CbModule] = TestModule :: Nil
 }

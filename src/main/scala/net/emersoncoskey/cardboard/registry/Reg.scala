@@ -14,5 +14,4 @@ object Reg {
 	implicit class Ops[-F[+_ <: R], R <: IForgeRegistryEntry[R]](fa: F[R])(implicit r: Reg[F, R]) {
 		private[cardboard] def reg: RegistryDec[R] = r.reg(fa)
 	}
-
 }

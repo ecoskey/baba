@@ -1,13 +1,11 @@
 package net.emersoncoskey.cardboard
 
-import net.emersoncoskey.cardboard.data./~\
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
-import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistry}
 
 
 object TestModule extends CbModule {

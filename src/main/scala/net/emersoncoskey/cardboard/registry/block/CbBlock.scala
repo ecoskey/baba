@@ -1,6 +1,7 @@
 package net.emersoncoskey.cardboard.registry.block
 
 import cats.Eval
+import net.emersoncoskey.cardboard.datagen.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
@@ -73,9 +74,9 @@ object CbBlock {
 		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props.value))
 	}
 
-	def apply(name: String, properties: => Properties)(mods: DecMod[CbBlock, Block]*): CbBlock[Block] =
-		new CbBlock(name, Eval.later(properties), new Block(_))
+	def apply(name: String, props: => Properties)(mods: DecMod[Block]*): CbBlock[Block] =
+		new CbBlock(name, Eval.later(props), new Block(_))
 
-	def apply[B <: Block](name: String, properties: => Properties, ctor: Properties => B)(mods: DecMod[CbBlock, Block]*): CbBlock[B] =
-		new CbBlock(name, Eval.later(properties), ctor)
+	def apply[B <: Block](name: String, props: => Properties, ctor: Properties => B)(mods: DecMod[Block]*): CbBlock[B] =
+		new CbBlock(name, Eval.later(props), ctor)
 }

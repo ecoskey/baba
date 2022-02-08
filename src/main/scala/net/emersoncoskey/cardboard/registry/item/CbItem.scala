@@ -1,6 +1,7 @@
 package net.emersoncoskey.cardboard.registry.item
 
 import cats.Eval
+import net.emersoncoskey.cardboard.datagen.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
@@ -69,18 +70,19 @@ case class CbItem[+I <: Item] private(
 	name : String,
 	props: Eval[Properties],
 	ctor : Properties => I,
+	mods : Seq[DecMod[Item]]
 )
 
 object CbItem {
 	implicit val r: Reg[CbItem, Item] = new Reg[CbItem, Item] {
 		override val registry: IForgeRegistry[Item] = ForgeRegistries.ITEMS
 
-		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, () => r.ctor(r.props.value))
+		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, () => r.ctor(r.props.value), r.mods)
 	}
 
 	def apply(name: String, properties: => Properties)(mods: DecMod[Item]*): CbItem[Item] =
-		new CbItem(name, Eval.later(properties), new Item(_))
+		new CbItem(name, Eval.later(properties), new Item(_), mods)
 
 	def apply[I <: Item](name: String, properties: => Properties, ctor: Properties => I)(mods: DecMod[Item]*): CbItem[I] =
-		new CbItem(name, Eval.later(properties), ctor)
+		new CbItem(name, Eval.later(properties), ctor, mods)
 }
