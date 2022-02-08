@@ -65,18 +65,19 @@ case class CbBlock[+B <: Block] private(
 	name : String,
 	props: Eval[Properties],
 	ctor : Properties => B,
+	mods: Seq[DecMod[Block]]
 )
 
 object CbBlock {
 	implicit val r: Reg[CbBlock, Block] = new Reg[CbBlock, Block] {
 		override val registry: IForgeRegistry[Block] = ForgeRegistries.BLOCKS
 
-		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props.value))
+		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props.value), r.mods)
 	}
 
 	def apply(name: String, props: => Properties)(mods: DecMod[Block]*): CbBlock[Block] =
-		new CbBlock(name, Eval.later(props), new Block(_))
+		new CbBlock(name, Eval.later(props), new Block(_), mods)
 
 	def apply[B <: Block](name: String, props: => Properties, ctor: Properties => B)(mods: DecMod[Block]*): CbBlock[B] =
-		new CbBlock(name, Eval.later(props), ctor)
+		new CbBlock(name, Eval.later(props), ctor, mods)
 }
