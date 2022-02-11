@@ -3,7 +3,7 @@ package net.emersoncoskey.cardboard.datagen.recipe.craftingtable
 import cats.data.State
 import cats.implicits.{toFunctorOps, toTraverseOps}
 import net.emersoncoskey.cardboard.Syntax.ItemOps
-import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe
+import net.emersoncoskey.cardboard.datagen.recipe.CbRecipeBuilderRecipe
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient

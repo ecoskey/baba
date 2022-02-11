@@ -1,13 +1,13 @@
 package net.emersoncoskey.cardboard
 
-import net.emersoncoskey.cardboard.data./~\
 import net.emersoncoskey.cardboard.registry.Reg.Ops
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
-import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.eventbus.api.{IEventBus, SubscribeEvent}
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, IForgeRegistry, RegistryObject}
 import org.apache.logging.log4j.Logger
 
@@ -56,26 +56,23 @@ trait CbMod {
 
 	EventBus.register(this)
 
-	/*@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
+	@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
 		val generator = event.getGenerator
 		val helper    = event.getExistingFileHelper
 
 		val itemsList  = items.toList
 		val blocksList = blocks.toList
 
-		val recipes: List[CbRecipe] = for {
-			(i, reg) <- itemsList
-			r <- i.recipes
-		} yield r(reg.get)
-		generator.addProvider(CbRecipeProvider(this, generator, recipes))
+		val itemData = itemsList.flatMap{ case (i, r) => i.mods.map(_(this, generator, r.get)) }
+		itemData.foreach(generator.addProvider)
 
-		val blockTags: List[(Block, List[Tag.Named[Block]])] = blocksList.map { case (b, reg) => reg.get -> b.tags }
+		/*val blockTags: List[(Block, List[Tag.Named[Block]])] = blocksList.map { case (b, reg) => reg.get -> b.tags }
 		val blockTagsProvider                                = CbBlockTagsProvider(this, generator, helper, blockTags)
 		generator.addProvider(blockTagsProvider)
 
 		val itemTags: List[(Item, List[Tag.Named[Item]])] = itemsList.map { case (i, reg) => reg.get -> i.tags }
-		generator.addProvider(CbItemTagsProvider(this, generator, blockTagsProvider, helper, itemTags))
-	}*/
+		generator.addProvider(CbItemTagsProvider(this, generator, blockTagsProvider, helper, itemTags))*/
+	}
 
 	/*@SubscribeEvent final def commonSetup(event: FMLCommonSetupEvent): Unit =
 		blocks.foreach { case (b, reg) => ItemBlockRenderTypes.setRenderLayer(reg.get, b.renderType) }*/

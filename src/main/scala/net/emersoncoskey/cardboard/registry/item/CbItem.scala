@@ -1,7 +1,7 @@
 package net.emersoncoskey.cardboard.registry.item
 
 import cats.Eval
-import net.emersoncoskey.cardboard.datagen.DecMod
+import net.emersoncoskey.cardboard.datagen.decmod.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
@@ -70,7 +70,7 @@ case class CbItem[+I <: Item] private(
 	name : String,
 	props: Eval[Properties],
 	ctor : Properties => I,
-	mods : Seq[DecMod[Item]]
+	mods : List[DecMod[Item]]
 )
 
 object CbItem {
@@ -81,8 +81,8 @@ object CbItem {
 	}
 
 	def apply(name: String, properties: => Properties)(mods: DecMod[Item]*): CbItem[Item] =
-		new CbItem(name, Eval.later(properties), new Item(_), mods)
+		new CbItem(name, Eval.later(properties), new Item(_), mods.toList)
 
 	def apply[I <: Item](name: String, properties: => Properties, ctor: Properties => I)(mods: DecMod[Item]*): CbItem[I] =
-		new CbItem(name, Eval.later(properties), ctor, mods)
+		new CbItem(name, Eval.later(properties), ctor, mods.toList)
 }

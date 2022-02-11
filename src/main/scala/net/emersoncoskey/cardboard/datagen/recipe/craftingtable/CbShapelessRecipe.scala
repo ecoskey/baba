@@ -4,7 +4,7 @@ import cats.data.State
 import cats.implicits.{toFunctorOps, toTraverseOps}
 import net.emersoncoskey.cardboard.Syntax.ItemOps
 import net.emersoncoskey.cardboard.datagen.recipe.CbRecipeBuilderRecipe.Ops
-import net.emersoncoskey.cardboard.recipe.CbRecipeBuilderRecipe
+import net.emersoncoskey.cardboard.datagen.recipe.CbRecipeBuilderRecipe
 import net.minecraft.data.recipes.ShapelessRecipeBuilder
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
@@ -32,7 +32,7 @@ object CbShapelessRecipe extends Ops[ShapelessRecipeBuilder] {
 
 	def conversion(ingredient: Item, id: Option[String] = None, groupName: Option[String] = None)
 	  (result: Item): CbShapelessRecipe = {
-		val actualId = id.getOrElse(s"${ result.getRegistryName.getPath }_from_${ result.getRegistryName.getPath }")
+		val actualId = id.getOrElse(s"${ result.getRegistryName.getPath }_from_${ ingredient.getRegistryName.getPath }")
 		CbShapelessRecipe(result, 1, Some(actualId))(for {
 			_ <- ingredients(ingredient.i -> 1)
 			_ <- unlockedByItem(ingredient)

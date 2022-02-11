@@ -13,7 +13,7 @@ case class CbItemTagsProvider(
 	gen      : DataGenerator,
 	blockTags: BlockTagsProvider,
 	helper   : ExistingFileHelper,
-	tagPairs : Seq[TagAssignment[Item]]
+	tagPairs : List[TagAssignment[Item]]
 ) extends ItemTagsProvider(gen, blockTags, mod.ModId, helper) {
 	override def addTags(): Unit = for {
 		TagAssignment(i, tags) <- tagPairs

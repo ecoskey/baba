@@ -1,7 +1,7 @@
 package net.emersoncoskey.cardboard.registry.block
 
 import cats.Eval
-import net.emersoncoskey.cardboard.datagen.DecMod
+import net.emersoncoskey.cardboard.datagen.decmod.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
@@ -65,7 +65,7 @@ case class CbBlock[+B <: Block] private(
 	name : String,
 	props: Eval[Properties],
 	ctor : Properties => B,
-	mods: Seq[DecMod[Block]]
+	mods: List[DecMod[Block]]
 )
 
 object CbBlock {
@@ -76,8 +76,8 @@ object CbBlock {
 	}
 
 	def apply(name: String, props: => Properties)(mods: DecMod[Block]*): CbBlock[Block] =
-		new CbBlock(name, Eval.later(props), new Block(_), mods)
+		new CbBlock(name, Eval.later(props), new Block(_), mods.toList)
 
 	def apply[B <: Block](name: String, props: => Properties, ctor: Properties => B)(mods: DecMod[Block]*): CbBlock[B] =
-		new CbBlock(name, Eval.later(props), ctor, mods)
+		new CbBlock(name, Eval.later(props), ctor, mods.toList)
 }
