@@ -1,14 +1,18 @@
 package net.emersoncoskey.cardboard
 
+import cats.implicits._
+import net.emersoncoskey.cardboard.datagen.decmod.BlockMods._
 import net.emersoncoskey.cardboard.datagen.decmod._
 import net.emersoncoskey.cardboard.datagen.recipe.craftingtable.{CbShapedRecipe, CbShapelessRecipe}
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.item.CbItem
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.data.DataProvider
 import net.minecraft.world.item.{BlockItem, Item, Items}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
+import net.minecraftforge.common.Tags
 
 
 object TestModule extends CbModule {
@@ -56,8 +60,12 @@ object TestModule extends CbModule {
 		      )
 		      .build*/
 
-	val AmongusBlock: CbBlock[TestBlock] = CbBlock("amongus_block", BlockBehaviour.Properties.of(Material.STONE), new TestBlock(_))()
-	val Amongus     : CbItem[BlockItem]  = CbItem("amongus", new Item.Properties().tab(TestCreativeTab), new BlockItem(Cardboard(AmongusBlock).get, _))(
-		I.Recipes(CbShapedRecipe.packing3x3(Items.DIRT), CbShapelessRecipe.conversion(Items.BONE)(_))
+	val AmongusBlock: CbBlock[TestBlock] = CbBlock(
+		"amongus_block",
+		BlockBehaviour.Properties.of(Material.STONE),
+		new TestBlock(_),
+		renderType := RenderType.solid()
 	)
+
+	val Amongus: CbItem[BlockItem] = CbItem("amongus", new Item.Properties().tab(TestCreativeTab), new BlockItem(Cardboard(AmongusBlock).get, _))
 }

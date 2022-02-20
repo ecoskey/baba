@@ -65,7 +65,7 @@ case class CbBlock[+B <: Block] private(
 	name : String,
 	props: Eval[Properties],
 	ctor : Properties => B,
-	mods: List[DecMod[Block]]
+	mods: DecMod[Block, Unit]
 )
 
 object CbBlock {
@@ -75,9 +75,12 @@ object CbBlock {
 		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props.value), r.mods)
 	}
 
-	def apply(name: String, props: => Properties)(mods: DecMod[Block]*): CbBlock[Block] =
-		new CbBlock(name, Eval.later(props), new Block(_), mods.toList)
+	def apply(name: String, props: => Properties): CbBlock[Block] =
+		new CbBlock(name, Eval.later(props), new Block(_), DecMod.none)
 
-	def apply[B <: Block](name: String, props: => Properties, ctor: Properties => B)(mods: DecMod[Block]*): CbBlock[B] =
-		new CbBlock(name, Eval.later(props), ctor, mods.toList)
+	def apply(name: String, props: => Properties, mods: DecMod[Block, Unit]): CbBlock[Block] =
+		new CbBlock(name, Eval.later(props), new Block(_), mods)
+
+	def apply[B <: Block](name: String, props: => Properties, ctor: Properties => B, mods: DecMod[Block, Unit] = DecMod.none): CbBlock[B] =
+		new CbBlock(name, Eval.later(props), ctor, mods)
 }

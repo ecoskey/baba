@@ -1,6 +1,7 @@
 package net.emersoncoskey.cardboard.registry.item
 
 import cats.Eval
+import net.emersoncoskey.cardboard.Syntax.AllOps
 import net.emersoncoskey.cardboard.datagen.decmod.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.item.Item
@@ -70,19 +71,22 @@ case class CbItem[+I <: Item] private(
 	name : String,
 	props: Eval[Properties],
 	ctor : Properties => I,
-	mods : List[DecMod[Item]]
+	mods : DecMod[Item, Unit]
 )
 
 object CbItem {
 	implicit val r: Reg[CbItem, Item] = new Reg[CbItem, Item] {
 		override val registry: IForgeRegistry[Item] = ForgeRegistries.ITEMS
 
-		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, () => r.ctor(r.props.value), r.mods)
+		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, r.ctor(r.props.value).supply, r.mods)
 	}
 
-	def apply(name: String, properties: => Properties)(mods: DecMod[Item]*): CbItem[Item] =
-		new CbItem(name, Eval.later(properties), new Item(_), mods.toList)
+	def apply(name: String, properties: => Properties): CbItem[Item] =
+		new CbItem(name, Eval.later(properties), new Item(_), DecMod.none)
 
-	def apply[I <: Item](name: String, properties: => Properties, ctor: Properties => I)(mods: DecMod[Item]*): CbItem[I] =
-		new CbItem(name, Eval.later(properties), ctor, mods.toList)
+	def apply(name: String, properties: => Properties, mods: DecMod[Item, Unit]): CbItem[Item] =
+		new CbItem(name, Eval.later(properties), new Item(_), mods)
+
+	def apply[I <: Item](name: String, properties: => Properties, ctor: Properties => I, mods: DecMod[Item, Unit] = DecMod.none): CbItem[I] =
+		new CbItem(name, Eval.later(properties), ctor, mods)
 }

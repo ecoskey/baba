@@ -6,11 +6,24 @@ import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
-import net.minecraftforge.eventbus.api.{IEventBus, SubscribeEvent}
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
-import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, IForgeRegistry, RegistryObject}
+import net.minecraftforge.eventbus.api.{Event, IEventBus}
+import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 import org.apache.logging.log4j.Logger
 
+object CbMod {
+	trait EventListener {
+		type E <: Event
+		final def register(eventBus: IEventBus, mod: CbMod): Unit = eventBus.addListener[E](e => handleEvent(e, mod))
+		def handleEvent(event: E, mod: CbMod): Unit
+	}
+
+	object EventListener {
+		def apply[e <: Event](f: (e, CbMod) => Unit): EventListener = new EventListener {
+			type E = e
+			override def handleEvent(event: E, mod: CbMod): Unit = f(event, mod)
+		}
+	}
+}
 
 trait CbMod {
 	/** note: used because a constant value is necessary when using it as the Mod() annotation parameter */
@@ -21,7 +34,7 @@ trait CbMod {
 	val EventBus: IEventBus
 	val Logger  : Logger
 	val Modules: Seq[CbModule]
-
+	
 	/* [REGISTRY STUFF] ***************************************************************************************************************************************/
 
 	private val itemReg : DeferredRegister[Item]  = DeferredRegister.create(ForgeRegistries.ITEMS, ModId)
@@ -54,9 +67,12 @@ trait CbMod {
 
 	/* [EVENT BUS THINGS] *************************************************************************************************************************************/
 
-	EventBus.register(this)
+	/*val itemMods: List[(Item, DecMod[Item, Unit])] = items.toList.map { case (cbItem, reg) => (reg.get, cbItem.reg.mods) }
+	val blockMods: List[(Block, DecMod[Block, Unit])] = blocks.toList.map { case (cbBlock, reg) => (reg.get, cbBlock.reg.mods) }
 
-	@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
+	itemMods.foreach { case (item, mod) => mod.run(item)._1.map(_.register(EventBus, this))}
+	blockMods.foreach { case (block, mod) => mod.run(block)._1.map(_.register(EventBus, this))}*/
+	/*@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
 		val generator = event.getGenerator
 		val helper    = event.getExistingFileHelper
 
@@ -72,7 +88,7 @@ trait CbMod {
 
 		val itemTags: List[(Item, List[Tag.Named[Item]])] = itemsList.map { case (i, reg) => reg.get -> i.tags }
 		generator.addProvider(CbItemTagsProvider(this, generator, blockTagsProvider, helper, itemTags))*/
-	}
+	}*/
 
 	/*@SubscribeEvent final def commonSetup(event: FMLCommonSetupEvent): Unit =
 		blocks.foreach { case (b, reg) => ItemBlockRenderTypes.setRenderLayer(reg.get, b.renderType) }*/
@@ -83,4 +99,6 @@ trait CbMod {
 
 	def mcLoc(path: String): ResourceLocation = new ResourceLocation(path)
 }
+
+
 
