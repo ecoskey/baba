@@ -1,5 +1,7 @@
 package net.emersoncoskey.cardboard
 
+import cats.Eval
+import net.emersoncoskey.cardboard.datagen.decmod.DecMod
 import net.emersoncoskey.cardboard.registry.Reg.Ops
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.item.CbItem
@@ -67,11 +69,12 @@ trait CbMod {
 
 	/* [EVENT BUS THINGS] *************************************************************************************************************************************/
 
-	/*val itemMods: List[(Item, DecMod[Item, Unit])] = items.toList.map { case (cbItem, reg) => (reg.get, cbItem.reg.mods) }
-	val blockMods: List[(Block, DecMod[Block, Unit])] = blocks.toList.map { case (cbBlock, reg) => (reg.get, cbBlock.reg.mods) }
+	val itemMods: List[(RegistryObject[Item], DecMod[Item, Unit])] = items.toList.map { case (cbItem, reg) => (reg, cbItem.reg.mods) }
+	val blockMods: List[(RegistryObject[Block], DecMod[Block, Unit])] = blocks.toList.map { case (cbBlock, reg) => (reg, cbBlock.reg.mods) }
 
-	itemMods.foreach { case (item, mod) => mod.run(item)._1.map(_.register(EventBus, this))}
-	blockMods.foreach { case (block, mod) => mod.run(block)._1.map(_.register(EventBus, this))}*/
+	itemMods.foreach { case (item, mod) => mod.run(Eval.later(item.get))._1.map(_.register(EventBus, this)) }
+	blockMods.foreach { case (block, mod) => mod.run(Eval.later(block.get))._1.map(_.register(EventBus, this)) }
+
 	/*@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
 		val generator = event.getGenerator
 		val helper    = event.getExistingFileHelper

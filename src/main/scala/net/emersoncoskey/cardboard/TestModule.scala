@@ -64,7 +64,7 @@ object TestModule extends CbModule {
 		"amongus_block",
 		BlockBehaviour.Properties.of(Material.STONE),
 		new TestBlock(_),
-		renderType := RenderType.solid()
+		/*(renderType := RenderType.solid()) >> */tags(Tags.Blocks.STONE)
 	)
 
 	val Amongus: CbItem[BlockItem] = CbItem("amongus", new Item.Properties().tab(TestCreativeTab), new BlockItem(Cardboard(AmongusBlock).get, _))

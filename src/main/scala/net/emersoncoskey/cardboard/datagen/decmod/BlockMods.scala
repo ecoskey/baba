@@ -16,12 +16,12 @@ object BlockMods {
 		CbMod.EventListener[GatherDataEvent]((e, mod) => {
 			val generator = e.getGenerator
 			val helper = e.getExistingFileHelper
-			generator.addProvider(new CbBlockTagsProvider(mod, generator, helper, TagAssignment(r, first :: rest.toList) :: Nil))
+			generator.addProvider(new CbBlockTagsProvider(mod, generator, helper, TagAssignment[Block](r.value, first :: rest.toList) :: Nil))
 		})
 	)
 
 	val renderType: Attr[Block, RenderType, Unit] =
-		rType => DecMod.listener(r => new RenderTypeSetupListener(RenderTypeAssignment(r, rType) :: Nil))
+		rType => DecMod.listener(r => new RenderTypeSetupListener(RenderTypeAssignment[Block](r.value, rType) :: Nil))
 
 	//val props: DecMod[Block, BlockBehaviour.Properties] = DecMod(r => (None, r.))
 }

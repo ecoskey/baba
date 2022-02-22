@@ -78,7 +78,7 @@ object CbItem {
 	implicit val r: Reg[CbItem, Item] = new Reg[CbItem, Item] {
 		override val registry: IForgeRegistry[Item] = ForgeRegistries.ITEMS
 
-		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, r.ctor(r.props.value).supply, r.mods)
+		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, () => r.ctor(r.props.value), r.mods)
 	}
 
 	def apply(name: String, properties: => Properties): CbItem[Item] =
