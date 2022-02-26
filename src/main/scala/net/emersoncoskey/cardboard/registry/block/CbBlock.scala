@@ -1,7 +1,7 @@
 package net.emersoncoskey.cardboard.registry.block
 
 import cats.Eval
-import net.emersoncoskey.cardboard.datagen.decmod.DecMod
+import net.emersoncoskey.cardboard.registry.dsl.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
@@ -61,26 +61,23 @@ object CbBlock {
 	}
 }*/
 
-case class CbBlock[+B <: Block] private(
-	name : String,
-	props: Eval[Properties],
-	ctor : Properties => B,
-	mods: DecMod[Block, Unit]
+class CbBlock[+B <: Block] private(
+	val name : String,
+	val props: Properties,
+	val ctor : Properties => B,
+	val mods : Seq[DecMod[Block]]
 )
 
 object CbBlock {
 	implicit val r: Reg[CbBlock, Block] = new Reg[CbBlock, Block] {
 		override val registry: IForgeRegistry[Block] = ForgeRegistries.BLOCKS
 
-		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props.value), r.mods)
+		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props), r.mods)
 	}
 
-	def apply(name: String, props: => Properties): CbBlock[Block] =
-		new CbBlock(name, Eval.later(props), new Block(_), DecMod.none)
+	def apply(name: String, props: Properties)(mods: DecMod[Block]*): CbBlock[Block] =
+		new CbBlock(name, props, new Block(_), mods)
 
-	def apply(name: String, props: => Properties, mods: DecMod[Block, Unit]): CbBlock[Block] =
-		new CbBlock(name, Eval.later(props), new Block(_), mods)
-
-	def apply[B <: Block](name: String, props: => Properties, ctor: Properties => B, mods: DecMod[Block, Unit] = DecMod.none): CbBlock[B] =
-		new CbBlock(name, Eval.later(props), ctor, mods)
+	def apply[B <: Block](name: String, props: Properties, ctor: Properties => B)(mods: DecMod[Block]*): CbBlock[B] =
+		new CbBlock(name, props, ctor, mods)
 }

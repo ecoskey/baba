@@ -1,12 +1,12 @@
 package net.emersoncoskey.cardboard
 
-import cats.implicits._
-import net.emersoncoskey.cardboard.datagen.decmod.BlockMods._
-import net.emersoncoskey.cardboard.datagen.decmod._
+import net.emersoncoskey.cardboard.registry.dsl._
+import net.emersoncoskey.cardboard.datagen.recipe.CbRecipe
 import net.emersoncoskey.cardboard.datagen.recipe.craftingtable.{CbShapedRecipe, CbShapelessRecipe}
+import net.emersoncoskey.cardboard.datagen.recipe.furnace.CbFurnaceRecipe
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.item.CbItem
-import net.minecraft.client.renderer.RenderType
+import net.emersoncoskey.cardboard.Syntax._
 import net.minecraft.data.DataProvider
 import net.minecraft.world.item.{BlockItem, Item, Items}
 import net.minecraft.world.level.block.Block
@@ -60,12 +60,32 @@ object TestModule extends CbModule {
 		      )
 		      .build*/
 
-	val AmongusBlock: CbBlock[TestBlock] = CbBlock(
-		"amongus_block",
-		BlockBehaviour.Properties.of(Material.STONE),
-		new TestBlock(_),
-		renderType := RenderType.solid()
+	val AmongusBlock: CbBlock[Block] = CbBlock("amongus_block", BlockBehaviour.Properties.of(Material.STONE), new TestBlock(_))(
+		B.tags(Tags.Blocks.ORES_DIAMOND)
 	)
 
-	val Amongus: CbItem[BlockItem] = CbItem("amongus", new Item.Properties().tab(TestCreativeTab), new BlockItem(Cardboard(AmongusBlock).get, _))
+	val Amongus: CbItem[BlockItem] = CbItem("amongus", new Item.Properties().tab(TestCreativeTab), new BlockItem(Cardboard(AmongusBlock).get, _))(
+		I.recipes(
+			CbShapelessRecipe(_, 5, Some("cringe_recipe"))(for {
+				_ <- CbShapelessRecipe.ingredients(Items.DIRT.i -> 4)
+				_ <- CbShapelessRecipe.group("among")
+				_ <- CbShapelessRecipe.unlockedByItem(Items.DIRT)
+			} yield ()),
+
+			CbShapedRecipe(_, 64, Some("better_recipe"))(for {
+				a <- CbShapedRecipe.define('X', Items.DIAMOND.i)
+				b <- CbShapedRecipe.define('/', Items.DIRT.i)
+				_ <- CbShapedRecipe.pattern(List(b, a, b), List(a, a, a), List(b, a, b))
+				_ <- CbShapedRecipe.group("among")
+				_ <- CbShapedRecipe.unlockedBy("has_diamonds_and_dirt", CbRecipe.has(Items.DIAMOND, Items.DIRT))
+			} yield ()),
+
+			CbFurnaceRecipe.smelting(Items.DIAMOND.i, _, 1000000f, 100)(for {
+				_ <- CbFurnaceRecipe.group("among")
+				_ <- CbFurnaceRecipe.unlockedByItem(Items.DIAMOND)
+			} yield ()),
+
+			CbShapedRecipe.packing3x3(Items.DIRT)
+		)
+	)
 }

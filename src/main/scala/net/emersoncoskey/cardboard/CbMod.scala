@@ -2,15 +2,20 @@ package net.emersoncoskey.cardboard
 
 import net.emersoncoskey.cardboard.registry.Reg.Ops
 import net.emersoncoskey.cardboard.registry.block.CbBlock
+import net.emersoncoskey.cardboard.registry.dsl.{DecMod, ForgeDecMod, ModDecMod}
 import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.Item
+import net.minecraft.world.item.{Item, Items}
 import net.minecraft.world.level.block.Block
-import net.minecraftforge.eventbus.api.{Event, IEventBus}
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.event.TickEvent
+import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 import org.apache.logging.log4j.Logger
 
-object CbMod {
+/*object CbMod {
 	trait EventListener {
 		type E <: Event
 		final def register(eventBus: IEventBus, mod: CbMod): Unit = eventBus.addListener[E](e => handleEvent(e, mod))
@@ -23,7 +28,7 @@ object CbMod {
 			override def handleEvent(event: E, mod: CbMod): Unit = f(event, mod)
 		}
 	}
-}
+}*/
 
 trait CbMod {
 	/** note: used because a constant value is necessary when using it as the Mod() annotation parameter */
@@ -33,8 +38,8 @@ trait CbMod {
 
 	val EventBus: IEventBus
 	val Logger  : Logger
-	val Modules: Seq[CbModule]
-	
+	val Modules : Seq[CbModule]
+
 	/* [REGISTRY STUFF] ***************************************************************************************************************************************/
 
 	private val itemReg : DeferredRegister[Item]  = DeferredRegister.create(ForgeRegistries.ITEMS, ModId)
@@ -67,31 +72,18 @@ trait CbMod {
 
 	/* [EVENT BUS THINGS] *************************************************************************************************************************************/
 
-	/*val itemMods: List[(Item, DecMod[Item, Unit])] = items.toList.map { case (cbItem, reg) => (reg.get, cbItem.reg.mods) }
-	val blockMods: List[(Block, DecMod[Block, Unit])] = blocks.toList.map { case (cbBlock, reg) => (reg.get, cbBlock.reg.mods) }
+	val itemMods: List[(RegistryObject[Item], List[DecMod[Item]])] = items.toList.map { case (cbItem, reg) => (reg, cbItem.reg.mods.toList) }
+	val blockMods: List[(RegistryObject[Block], List[DecMod[Block]])] = blocks.toList.map { case (cbBlock, reg) => (reg, cbBlock.reg.mods.toList) }
 
-	itemMods.foreach { case (item, mod) => mod.run(item)._1.map(_.register(EventBus, this))}
-	blockMods.foreach { case (block, mod) => mod.run(block)._1.map(_.register(EventBus, this))}*/
-	/*@SubscribeEvent final def gatherData(event: GatherDataEvent): Unit = {
-		val generator = event.getGenerator
-		val helper    = event.getExistingFileHelper
+	itemMods.foreach { case (item, mods) => mods.foreach {
+		case m: ForgeDecMod[Item] => m.busRegister(item.get, this)
+		case m: ModDecMod[Item] => m.busRegister(item.get, EventBus, this)
+	}}
 
-		val itemsList  = items.toList
-		val blocksList = blocks.toList
-
-		val itemData = itemsList.flatMap{ case (i, r) => i.mods.map(_(this, generator, r.get)) }
-		itemData.foreach(generator.addProvider)
-
-		/*val blockTags: List[(Block, List[Tag.Named[Block]])] = blocksList.map { case (b, reg) => reg.get -> b.tags }
-		val blockTagsProvider                                = CbBlockTagsProvider(this, generator, helper, blockTags)
-		generator.addProvider(blockTagsProvider)
-
-		val itemTags: List[(Item, List[Tag.Named[Item]])] = itemsList.map { case (i, reg) => reg.get -> i.tags }
-		generator.addProvider(CbItemTagsProvider(this, generator, blockTagsProvider, helper, itemTags))*/
-	}*/
-
-	/*@SubscribeEvent final def commonSetup(event: FMLCommonSetupEvent): Unit =
-		blocks.foreach { case (b, reg) => ItemBlockRenderTypes.setRenderLayer(reg.get, b.renderType) }*/
+	blockMods.foreach { case (block, mods) => mods.foreach {
+		case m: ForgeDecMod[Block] => m.busRegister(block.get, this)
+		case m: ModDecMod[Block] => m.busRegister(block.get, EventBus, this)
+	}}
 
 	/* [UTIL METHODS] *****************************************************************************************************************************************/
 

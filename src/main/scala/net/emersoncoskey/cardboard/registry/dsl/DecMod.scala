@@ -1,13 +1,11 @@
-package net.emersoncoskey.cardboard.datagen.decmod
+package net.emersoncoskey.cardboard.registry.dsl
 
-import cats.Monad
-import cats.data.Chain
-import cats.implicits._
 import net.emersoncoskey.cardboard.CbMod
-import net.minecraft.world.level.block.Block
-import net.minecraftforge.registries.IForgeRegistryEntry
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.eventbus.api.{Event, EventPriority, IEventBus}
+import net.minecraftforge.fml.event.IModBusEvent
 
-final case class DecMod[R <: IForgeRegistryEntry[R], +O] private(run: R => (Chain[CbMod.EventListener], O)) extends AnyVal
+/*final case class DecMod[R <: IForgeRegistryEntry[R], +O] private(run: R => (Chain[CbMod.EventListener], O)) extends AnyVal
 
 object DecMod {
 	//type MapCtor[R <: IForgeRegistryEntry[R]] = ({type T[+O] = DecMod[R, O]})#T
@@ -38,4 +36,24 @@ object DecMod {
 		}
 		(providers, res)
 	})*/
+}*/
+
+sealed trait DecMod[-A] {
+	type E <: Event
+	val eventClass: Class[E]
+	val priority       : EventPriority = EventPriority.NORMAL
+	val receiveCanceled: Boolean       = false
+	def handleEvent(target: A, event: E, mod: CbMod): Unit
+}
+
+trait ForgeDecMod[-A] extends DecMod[A] {
+	final def busRegister(target: => A, mod: CbMod): Unit =
+		MinecraftForge.EVENT_BUS.addListener[E](priority, receiveCanceled, eventClass, (event: E) => handleEvent(target, event, mod))
+}
+
+trait ModDecMod[-A] extends DecMod[A] {
+	type E <: Event with IModBusEvent
+
+	final def busRegister(target: => A, bus: IEventBus, mod: CbMod): Unit =
+		bus.addListener[E](priority, receiveCanceled, eventClass, (event: E) => handleEvent(target, event, mod))
 }
