@@ -1,6 +1,7 @@
 package net.emersoncoskey.cardboard.registry.item
 
 import cats.Eval
+import net.emersoncoskey.cardboard.CbMod
 import net.emersoncoskey.cardboard.Syntax.AllOps
 import net.emersoncoskey.cardboard.registry.dsl.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
@@ -78,7 +79,7 @@ object CbItem {
 	implicit val regInstance: Reg[CbItem, Item] = new Reg[CbItem, Item] {
 		override val registry: IForgeRegistry[Item] = ForgeRegistries.ITEMS
 
-		override def reg(r: CbItem[Item]): RegistryDec[Item] = RegistryDec(r.name, () => r.ctor(r.props), r.mods)
+		override def reg(r: CbItem[Item], mod: CbMod): RegistryDec[Item] = RegistryDec(r.name, () => r.ctor(r.props), r.mods)
 	}
 
 	def apply(name: String, properties: Properties)(mods: DecMod[Item]*): CbItem[Item] =

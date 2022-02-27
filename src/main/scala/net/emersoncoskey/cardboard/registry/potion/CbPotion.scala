@@ -1,5 +1,6 @@
 package net.emersoncoskey.cardboard.registry.potion
 
+import net.emersoncoskey.cardboard.CbMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.item.alchemy.Potion
@@ -15,7 +16,7 @@ object CbPotion {
 	implicit val regInstance: Reg[CbPotion, Potion] = new Reg[CbPotion, Potion] {
 		override val registry: IForgeRegistry[Potion] = ForgeRegistries.POTIONS
 
-		override def reg(r: CbPotion[Potion]): RegistryDec[Potion] = RegistryDec(r.name, () => r.ctor(r.effects))
+		override def reg(r: CbPotion[Potion], mod: CbMod): RegistryDec[Potion] = RegistryDec(r.name, () => r.ctor(r.effects))
 	}
 
 	def apply(name: String, effects: MobEffectInstance*): CbPotion[Potion] = new CbPotion[Potion](name, new Potion(_:_*), effects)

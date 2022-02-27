@@ -1,6 +1,7 @@
 package net.emersoncoskey.cardboard.registry.block
 
 import cats.Eval
+import net.emersoncoskey.cardboard.CbMod
 import net.emersoncoskey.cardboard.registry.dsl.DecMod
 import net.emersoncoskey.cardboard.registry.{Reg, RegistryDec}
 import net.minecraft.world.level.block.Block
@@ -72,7 +73,7 @@ object CbBlock {
 	implicit val r: Reg[CbBlock, Block] = new Reg[CbBlock, Block] {
 		override val registry: IForgeRegistry[Block] = ForgeRegistries.BLOCKS
 
-		override def reg(r: CbBlock[Block]): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props), r.mods)
+		override def reg(r: CbBlock[Block], mod: CbMod): RegistryDec[Block] = RegistryDec(r.name, () => r.ctor(r.props), r.mods)
 	}
 
 	def apply(name: String, props: Properties)(mods: DecMod[Block]*): CbBlock[Block] =

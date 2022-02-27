@@ -3,10 +3,14 @@ package net.emersoncoskey.cardboard
 import net.emersoncoskey.cardboard.registry.Reg.Ops
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.dsl.{DecMod, ForgeDecMod, ModDecMod}
+import net.emersoncoskey.cardboard.registry.enchantment.CbEnchantment
 import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.emersoncoskey.cardboard.registry.potion.CbPotion
+import net.emersoncoskey.cardboard.registry.soundEvent.CbSoundEvent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.{Item, Items}
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.common.MinecraftForge
@@ -50,7 +54,7 @@ trait CbMod {
 		(for {
 			m <- Modules
 			i <- m.items
-			reg = i.reg
+			reg = i.reg(this)
 		} yield i -> itemReg.register(reg.name, reg.sup)): _*
 	)
 	final def apply(i: CbItem[Item]): RegistryObject[Item] =
@@ -63,7 +67,7 @@ trait CbMod {
 		(for {
 			m <- Modules
 			b <- m.blocks
-			reg = b.reg
+			reg = b.reg(this)
 		} yield b -> blockReg.register(reg.name, reg.sup)): _*
 	)
 	final def apply(b: CbBlock[Block]): RegistryObject[Block] =
@@ -76,21 +80,45 @@ trait CbMod {
 		(for {
 			m <- Modules
 			b <- m.potions
-			reg = b.reg
+			reg = b.reg(this)
 		} yield b -> potionReg.register(reg.name, reg.sup)): _*
 	)
 	final def apply(p: CbPotion[Potion]): RegistryObject[Potion] =
 		potions.getOrElse(p, throw new IllegalArgumentException(s"CbPotion with name ${ p.name } has not been registered"))
 
+	private val soundEventReg: DeferredRegister[SoundEvent] = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ModId)
+	soundEventReg.register(EventBus)
+	private val soundEvents: Map[CbSoundEvent[SoundEvent], RegistryObject[SoundEvent]] = Map(
+		(for {
+			m <- Modules
+			b <- m.soundEvents
+			reg = b.reg(this)
+		} yield b -> soundEventReg.register(reg.name, reg.sup)): _*
+	)
+	final def apply(s: CbSoundEvent[SoundEvent]): RegistryObject[SoundEvent] =
+		soundEvents.getOrElse(s, throw new IllegalArgumentException(s"CbSoundEvent with name ${ s.name } has not been registered"))
+
+	private val enchantmentReg: DeferredRegister[Enchantment] = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ModId)
+	enchantmentReg.register(EventBus)
+	private val enchantments: Map[CbEnchantment[Enchantment], RegistryObject[Enchantment]] = Map(
+		(for {
+			m <- Modules
+			b <- m.enchantments
+			reg = b.reg(this)
+		} yield b -> enchantmentReg.register(reg.name, reg.sup)): _*
+	)
+	final def apply(e: CbEnchantment[Enchantment]): RegistryObject[Enchantment] =
+		enchantments.getOrElse(e, throw new IllegalArgumentException(s"CbEnchantment with name ${ e.name } has not been registered"))
+
 	/* [EVENT BUS THINGS] *************************************************************************************************************************************/
 
-	val itemMods: List[(RegistryObject[Item], List[DecMod[Item]])] = items.toList.map { case (cbItem, reg) => (reg, cbItem.reg.mods.toList) }
+	val itemMods: List[(RegistryObject[Item], List[DecMod[Item]])] = items.toList.map { case (cbItem, reg) => (reg, cbItem.reg(this).mods.toList) }
 	itemMods.foreach { case (item, mods) => mods.foreach {
 		case m: ForgeDecMod[Item] => m.busRegister(item.get, this)
 		case m: ModDecMod[Item] => m.busRegister(item.get, EventBus, this)
 	}}
 
-	val blockMods: List[(RegistryObject[Block], List[DecMod[Block]])] = blocks.toList.map { case (cbBlock, reg) => (reg, cbBlock.reg.mods.toList) }
+	val blockMods: List[(RegistryObject[Block], List[DecMod[Block]])] = blocks.toList.map { case (cbBlock, reg) => (reg, cbBlock.reg(this).mods.toList) }
 	blockMods.foreach { case (block, mods) => mods.foreach {
 		case m: ForgeDecMod[Block] => m.busRegister(block.get, this)
 		case m: ModDecMod[Block] => m.busRegister(block.get, EventBus, this)

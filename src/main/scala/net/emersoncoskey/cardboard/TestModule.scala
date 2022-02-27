@@ -6,10 +6,14 @@ import net.emersoncoskey.cardboard.datagen.recipe.craftingtable.{CbShapedRecipe,
 import net.emersoncoskey.cardboard.datagen.recipe.furnace.CbFurnaceRecipe
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.dsl._
+import net.emersoncoskey.cardboard.registry.enchantment.CbEnchantment
 import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.emersoncoskey.cardboard.registry.potion.CbPotion
+import net.emersoncoskey.cardboard.registry.soundEvent.CbSoundEvent
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.effect.{MobEffectInstance, MobEffects}
 import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.{BlockItem, Item, Items}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
@@ -21,6 +25,9 @@ object TestModule extends CbModule {
 	lazy val items  : Seq[CbItem[Item]]     = Seq(Amongus)
 	lazy val blocks : Seq[CbBlock[Block]]   = Seq(AmongusBlock)
 	lazy val potions: Seq[CbPotion[Potion]] = Seq(SussyPotion)
+	lazy val soundEvents: Seq[CbSoundEvent[SoundEvent]] = Nil
+	lazy val enchantments: Seq[CbEnchantment[Enchantment]] = Nil
+
 
 	/*val AmongusBlock: CbBlock[TestBlock] =
 		CbBlock.named("amongus_block")
@@ -61,6 +68,7 @@ object TestModule extends CbModule {
 			      CbShapedRecipe.packing3x3(Items.DIRT)
 		      )
 		      .build*/
+
 
 	val AmongusBlock: CbBlock[Block] = CbBlock("amongus_block", new TestBlock(_), BlockBehaviour.Properties.of(Material.STONE))(
 		B.tags(Tags.Blocks.ORES_DIAMOND)
