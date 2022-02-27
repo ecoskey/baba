@@ -45,13 +45,7 @@ trait CbMod {
 	/* [REGISTRY STUFF] ***************************************************************************************************************************************/
 
 	private val itemReg : DeferredRegister[Item]  = DeferredRegister.create(ForgeRegistries.ITEMS, ModId)
-	private val blockReg: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, ModId)
-	private val potionReg: DeferredRegister[Potion] = DeferredRegister.create(ForgeRegistries.POTIONS, ModId)
-
 	itemReg.register(EventBus)
-	blockReg.register(EventBus)
-	potionReg.register(EventBus)
-
 	private val items: Map[CbItem[Item], RegistryObject[Item]] = Map(
 		(for {
 			m <- Modules
@@ -59,7 +53,12 @@ trait CbMod {
 			reg = i.reg
 		} yield i -> itemReg.register(reg.name, reg.sup)): _*
 	)
+	final def apply(i: CbItem[Item]): RegistryObject[Item] =
+		items.getOrElse(i, throw new IllegalArgumentException(s"CbItem with name ${ i.name } has not been registered"))
 
+
+	private val blockReg: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, ModId)
+	blockReg.register(EventBus)
 	private val blocks: Map[CbBlock[Block], RegistryObject[Block]] = Map(
 		(for {
 			m <- Modules
@@ -67,7 +66,12 @@ trait CbMod {
 			reg = b.reg
 		} yield b -> blockReg.register(reg.name, reg.sup)): _*
 	)
+	final def apply(b: CbBlock[Block]): RegistryObject[Block] =
+		blocks.getOrElse(b, throw new IllegalArgumentException(s"CbBlock with name ${ b.name } has not been registered"))
 
+
+	private val potionReg: DeferredRegister[Potion] = DeferredRegister.create(ForgeRegistries.POTIONS, ModId)
+	potionReg.register(EventBus)
 	private val potions: Map[CbPotion[Potion], RegistryObject[Potion]] = Map(
 		(for {
 			m <- Modules
@@ -75,26 +79,18 @@ trait CbMod {
 			reg = b.reg
 		} yield b -> potionReg.register(reg.name, reg.sup)): _*
 	)
-
-	final def apply(i: CbItem[Item]): RegistryObject[Item] =
-		items.getOrElse(i, throw new IllegalArgumentException(s"CbItem with name ${ i.name } has not been registered"))
-
-	final def apply(b: CbBlock[Block]): RegistryObject[Block] =
-		blocks.getOrElse(b, throw new IllegalArgumentException(s"CbBlock with name ${ b.name } has not been registered"))
-
 	final def apply(p: CbPotion[Potion]): RegistryObject[Potion] =
 		potions.getOrElse(p, throw new IllegalArgumentException(s"CbPotion with name ${ p.name } has not been registered"))
 
 	/* [EVENT BUS THINGS] *************************************************************************************************************************************/
 
 	val itemMods: List[(RegistryObject[Item], List[DecMod[Item]])] = items.toList.map { case (cbItem, reg) => (reg, cbItem.reg.mods.toList) }
-	val blockMods: List[(RegistryObject[Block], List[DecMod[Block]])] = blocks.toList.map { case (cbBlock, reg) => (reg, cbBlock.reg.mods.toList) }
-
 	itemMods.foreach { case (item, mods) => mods.foreach {
 		case m: ForgeDecMod[Item] => m.busRegister(item.get, this)
 		case m: ModDecMod[Item] => m.busRegister(item.get, EventBus, this)
 	}}
 
+	val blockMods: List[(RegistryObject[Block], List[DecMod[Block]])] = blocks.toList.map { case (cbBlock, reg) => (reg, cbBlock.reg.mods.toList) }
 	blockMods.foreach { case (block, mods) => mods.foreach {
 		case m: ForgeDecMod[Block] => m.busRegister(block.get, this)
 		case m: ModDecMod[Block] => m.busRegister(block.get, EventBus, this)

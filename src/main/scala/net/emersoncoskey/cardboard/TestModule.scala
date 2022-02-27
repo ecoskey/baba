@@ -1,17 +1,16 @@
 package net.emersoncoskey.cardboard
 
-import net.emersoncoskey.cardboard.registry.dsl._
+import net.emersoncoskey.cardboard.Syntax._
 import net.emersoncoskey.cardboard.datagen.recipe.CbRecipe
 import net.emersoncoskey.cardboard.datagen.recipe.craftingtable.{CbShapedRecipe, CbShapelessRecipe}
 import net.emersoncoskey.cardboard.datagen.recipe.furnace.CbFurnaceRecipe
 import net.emersoncoskey.cardboard.registry.block.CbBlock
+import net.emersoncoskey.cardboard.registry.dsl._
 import net.emersoncoskey.cardboard.registry.item.CbItem
-import net.emersoncoskey.cardboard.Syntax._
 import net.emersoncoskey.cardboard.registry.potion.CbPotion
-import net.minecraft.data.DataProvider
 import net.minecraft.world.effect.{MobEffectInstance, MobEffects}
 import net.minecraft.world.item.alchemy.Potion
-import net.minecraft.world.item.{BlockItem, Item, Items, PotionItem}
+import net.minecraft.world.item.{BlockItem, Item, Items}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
@@ -19,8 +18,8 @@ import net.minecraftforge.common.Tags
 
 
 object TestModule extends CbModule {
-	lazy val items : Seq[CbItem[Item]]   = Seq(Amongus)
-	lazy val blocks: Seq[CbBlock[Block]] = Seq(AmongusBlock)
+	lazy val items  : Seq[CbItem[Item]]     = Seq(Amongus)
+	lazy val blocks : Seq[CbBlock[Block]]   = Seq(AmongusBlock)
 	lazy val potions: Seq[CbPotion[Potion]] = Seq(SussyPotion)
 
 	/*val AmongusBlock: CbBlock[TestBlock] =
