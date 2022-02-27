@@ -7,8 +7,8 @@ import net.minecraft.world.level.block.Block
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
 class RenderTypeMod(rType: RenderType) extends ModDecMod[Block] {
-	override type E = FMLClientSetupEvent
-	override val eventClass: Class[FMLClientSetupEvent] = classOf[FMLClientSetupEvent]
+	type E = FMLClientSetupEvent
+	val eventClass: Class[FMLClientSetupEvent] = classOf[FMLClientSetupEvent]
 
-	override def handleEvent(target: Block, event: FMLClientSetupEvent, mod: CbMod): Unit = ItemBlockRenderTypes.setRenderLayer(target, rType)
+	def handleEvent(target: Block, event: FMLClientSetupEvent, mod: CbMod): Unit = ItemBlockRenderTypes.setRenderLayer(target, rType)
 }

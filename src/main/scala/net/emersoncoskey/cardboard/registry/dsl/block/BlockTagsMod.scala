@@ -9,11 +9,11 @@ import net.minecraft.world.level.block.Block
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 
 class BlockTagsMod(tags: Seq[Tag.Named[Block]]) extends ModDecMod[Block] {
-	override type E = GatherDataEvent
+	type E = GatherDataEvent
 
-	override val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
+	val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
 
-	override def handleEvent(target: Block, event: E, mod: CbMod): Unit = {
+	def handleEvent(target: Block, event: GatherDataEvent, mod: CbMod): Unit = {
 		val gen    = event.getGenerator
 		val helper = event.getExistingFileHelper
 		gen.addProvider(new CbBlockTagsProvider(mod, gen, helper, TagAssignment(target, tags) :: Nil))

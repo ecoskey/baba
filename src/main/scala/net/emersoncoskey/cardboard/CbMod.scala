@@ -4,7 +4,9 @@ import net.emersoncoskey.cardboard.registry.Reg.Ops
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.dsl.{DecMod, ForgeDecMod, ModDecMod}
 import net.emersoncoskey.cardboard.registry.item.CbItem
+import net.emersoncoskey.cardboard.registry.potion.CbPotion
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.{Item, Items}
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.common.MinecraftForge
@@ -44,9 +46,11 @@ trait CbMod {
 
 	private val itemReg : DeferredRegister[Item]  = DeferredRegister.create(ForgeRegistries.ITEMS, ModId)
 	private val blockReg: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, ModId)
+	private val potionReg: DeferredRegister[Potion] = DeferredRegister.create(ForgeRegistries.POTIONS, ModId)
 
 	itemReg.register(EventBus)
 	blockReg.register(EventBus)
+	potionReg.register(EventBus)
 
 	private val items: Map[CbItem[Item], RegistryObject[Item]] = Map(
 		(for {
@@ -64,11 +68,22 @@ trait CbMod {
 		} yield b -> blockReg.register(reg.name, reg.sup)): _*
 	)
 
+	private val potions: Map[CbPotion[Potion], RegistryObject[Potion]] = Map(
+		(for {
+			m <- Modules
+			b <- m.potions
+			reg = b.reg
+		} yield b -> potionReg.register(reg.name, reg.sup)): _*
+	)
+
 	final def apply(i: CbItem[Item]): RegistryObject[Item] =
 		items.getOrElse(i, throw new IllegalArgumentException(s"CbItem with name ${ i.name } has not been registered"))
 
 	final def apply(b: CbBlock[Block]): RegistryObject[Block] =
 		blocks.getOrElse(b, throw new IllegalArgumentException(s"CbBlock with name ${ b.name } has not been registered"))
+
+	final def apply(p: CbPotion[Potion]): RegistryObject[Potion] =
+		potions.getOrElse(p, throw new IllegalArgumentException(s"CbPotion with name ${ p.name } has not been registered"))
 
 	/* [EVENT BUS THINGS] *************************************************************************************************************************************/
 

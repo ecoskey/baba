@@ -78,6 +78,6 @@ object CbBlock {
 	def apply(name: String, props: Properties)(mods: DecMod[Block]*): CbBlock[Block] =
 		new CbBlock(name, props, new Block(_), mods)
 
-	def apply[B <: Block](name: String, props: Properties, ctor: Properties => B)(mods: DecMod[Block]*): CbBlock[B] =
+	def apply[B <: Block](name: String, ctor: Properties => B, props: Properties)(mods: DecMod[Block]*): CbBlock[B] =
 		new CbBlock(name, props, ctor, mods)
 }

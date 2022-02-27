@@ -84,6 +84,6 @@ object CbItem {
 	def apply(name: String, properties: Properties)(mods: DecMod[Item]*): CbItem[Item] =
 		new CbItem(name, properties, new Item(_), mods)
 
-	def apply[I <: Item](name: String, properties: Properties, ctor: Properties => I)(mods: DecMod[Item]*): CbItem[I] =
+	def apply[I <: Item](name: String, ctor: Properties => I, properties: Properties)(mods: DecMod[Item]*): CbItem[I] =
 		new CbItem(name, properties, ctor, mods)
 }

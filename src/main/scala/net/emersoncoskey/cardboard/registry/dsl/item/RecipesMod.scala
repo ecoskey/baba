@@ -7,10 +7,10 @@ import net.minecraft.world.item.Item
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 
 class RecipesMod(recipeFns: Seq[Item => CbRecipe]) extends ModDecMod[Item] {
-	override type E = GatherDataEvent
-	override val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
+	type E = GatherDataEvent
+	val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
 
-	override def handleEvent(target: Item, event: GatherDataEvent, mod: CbMod): Unit = {
+	def handleEvent(target: Item, event: GatherDataEvent, mod: CbMod): Unit = {
 		val gen     = event.getGenerator
 		val recipes = recipeFns.map(_(target))
 		gen.addProvider(new CbRecipeProvider(mod, gen, recipes))

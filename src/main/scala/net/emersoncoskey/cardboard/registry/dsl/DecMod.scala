@@ -38,7 +38,7 @@ object DecMod {
 	})*/
 }*/
 
-sealed trait DecMod[-A] {
+trait DecMod[-A] {
 	type E <: Event
 	val eventClass: Class[E]
 	val priority       : EventPriority = EventPriority.NORMAL
@@ -46,14 +46,6 @@ sealed trait DecMod[-A] {
 	def handleEvent(target: A, event: E, mod: CbMod): Unit
 }
 
-trait ForgeDecMod[-A] extends DecMod[A] {
-	final def busRegister(target: => A, mod: CbMod): Unit =
-		MinecraftForge.EVENT_BUS.addListener[E](priority, receiveCanceled, eventClass, (event: E) => handleEvent(target, event, mod))
-}
 
-trait ModDecMod[-A] extends DecMod[A] {
-	type E <: Event with IModBusEvent
 
-	final def busRegister(target: => A, bus: IEventBus, mod: CbMod): Unit =
-		bus.addListener[E](priority, receiveCanceled, eventClass, (event: E) => handleEvent(target, event, mod))
-}
+

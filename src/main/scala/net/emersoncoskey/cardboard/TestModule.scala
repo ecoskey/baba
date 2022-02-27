@@ -7,8 +7,11 @@ import net.emersoncoskey.cardboard.datagen.recipe.furnace.CbFurnaceRecipe
 import net.emersoncoskey.cardboard.registry.block.CbBlock
 import net.emersoncoskey.cardboard.registry.item.CbItem
 import net.emersoncoskey.cardboard.Syntax._
+import net.emersoncoskey.cardboard.registry.potion.CbPotion
 import net.minecraft.data.DataProvider
-import net.minecraft.world.item.{BlockItem, Item, Items}
+import net.minecraft.world.effect.{MobEffectInstance, MobEffects}
+import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.item.{BlockItem, Item, Items, PotionItem}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
@@ -18,7 +21,7 @@ import net.minecraftforge.common.Tags
 object TestModule extends CbModule {
 	lazy val items : Seq[CbItem[Item]]   = Seq(Amongus)
 	lazy val blocks: Seq[CbBlock[Block]] = Seq(AmongusBlock)
-	lazy val data  : Seq[DataProvider]   = Nil
+	lazy val potions: Seq[CbPotion[Potion]] = Seq(SussyPotion)
 
 	/*val AmongusBlock: CbBlock[TestBlock] =
 		CbBlock.named("amongus_block")
@@ -60,11 +63,11 @@ object TestModule extends CbModule {
 		      )
 		      .build*/
 
-	val AmongusBlock: CbBlock[Block] = CbBlock("amongus_block", BlockBehaviour.Properties.of(Material.STONE), new TestBlock(_))(
+	val AmongusBlock: CbBlock[Block] = CbBlock("amongus_block", new TestBlock(_), BlockBehaviour.Properties.of(Material.STONE))(
 		B.tags(Tags.Blocks.ORES_DIAMOND)
 	)
 
-	val Amongus: CbItem[BlockItem] = CbItem("amongus", new Item.Properties().tab(TestCreativeTab), new BlockItem(Cardboard(AmongusBlock).get, _))(
+	val Amongus: CbItem[BlockItem] = CbItem("amongus", new BlockItem(Cardboard(AmongusBlock).get, _), new Item.Properties().tab(TestCreativeTab))(
 		I.recipes(
 			CbShapelessRecipe(_, 5, Some("cringe_recipe"))(for {
 				_ <- CbShapelessRecipe.ingredients(Items.DIRT.i -> 4)
@@ -88,4 +91,6 @@ object TestModule extends CbModule {
 			CbShapedRecipe.packing3x3(Items.DIRT)
 		)
 	)
+
+	val SussyPotion: CbPotion[Potion] = CbPotion("sussy", new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, 3600))
 }
