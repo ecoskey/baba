@@ -98,7 +98,7 @@ trait CbMod {
 	final def apply(s: CbSoundEvent[SoundEvent]): RegistryObject[SoundEvent] =
 		soundEvents.getOrElse(s, throw new IllegalArgumentException(s"CbSoundEvent with name ${ s.name } has not been registered"))
 
-	private val enchantmentReg: DeferredRegister[Enchantment] = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ModId)
+	private val enchantmentReg: DeferredRegister[Enchantment] = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, ModId)
 	enchantmentReg.register(EventBus)
 	private val enchantments: Map[CbEnchantment[Enchantment], RegistryObject[Enchantment]] = Map(
 		(for {

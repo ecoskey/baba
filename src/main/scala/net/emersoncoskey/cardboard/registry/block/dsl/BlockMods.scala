@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.registry.dsl.block
+package net.emersoncoskey.cardboard.registry.block.dsl
 
 import net.emersoncoskey.cardboard.CbMod
 import net.emersoncoskey.cardboard.datagen.tag.TagAssignment

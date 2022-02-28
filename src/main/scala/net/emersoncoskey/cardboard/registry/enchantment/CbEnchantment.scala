@@ -6,9 +6,9 @@ import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.enchantment.{Enchantment, EnchantmentCategory}
 import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistry}
 
-case class CbEnchantment[E <: Enchantment](
+case class CbEnchantment[+E <: Enchantment](
 	name    : String,
-	ctor    : (Enchantment.Rarity, EnchantmentCategory, Seq[EquipmentSlot]) => E,
+	ctor    : (Enchantment.Rarity, EnchantmentCategory, Array[EquipmentSlot]) => E,
 	rarity  : Enchantment.Rarity,
 	category: EnchantmentCategory,
 	slots   : Seq[EquipmentSlot],

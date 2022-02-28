@@ -96,7 +96,8 @@ object TestModule extends CbModule {
 			} yield ()),
 
 			CbShapedRecipe.packing3x3(Items.DIRT)
-		)
+		),
+		I.tags(Tags.Items.ORES_DIAMOND)
 	)
 
 	val SussyPotion: CbPotion[Potion] = CbPotion("sussy", new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, 3600))

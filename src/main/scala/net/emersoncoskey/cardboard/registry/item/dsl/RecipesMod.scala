@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.registry.dsl.item
+package net.emersoncoskey.cardboard.registry.item.dsl
 
 import net.emersoncoskey.cardboard.CbMod
 import net.emersoncoskey.cardboard.datagen.recipe.{CbRecipe, CbRecipeProvider}

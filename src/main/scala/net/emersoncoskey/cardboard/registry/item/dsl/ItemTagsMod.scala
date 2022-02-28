@@ -1,21 +1,21 @@
-package net.emersoncoskey.cardboard.registry.dsl.block
+package net.emersoncoskey.cardboard.registry.item.dsl
 
 import net.emersoncoskey.cardboard.CbMod
 import net.emersoncoskey.cardboard.datagen.tag.TagAssignment
-import net.emersoncoskey.cardboard.datagen.tag.block.CbBlockTagsProvider
+import net.emersoncoskey.cardboard.datagen.tag.item.CbItemTagsProvider
 import net.emersoncoskey.cardboard.registry.dsl.ModDecMod
 import net.minecraft.tags.Tag
-import net.minecraft.world.level.block.Block
+import net.minecraft.world.item.Item
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 
-class BlockTagsMod(tags: Seq[Tag.Named[Block]]) extends ModDecMod[Block] {
+class ItemTagsMod(tags: Seq[Tag.Named[Item]]) extends ModDecMod[Item] {
 	type E = GatherDataEvent
 
 	val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
 
-	def handleEvent(target: Block, event: GatherDataEvent, mod: CbMod): Unit = {
+	def handleEvent(target: Item, event: GatherDataEvent, mod: CbMod): Unit = {
 		val gen    = event.getGenerator
 		val helper = event.getExistingFileHelper
-		gen.addProvider(new CbBlockTagsProvider(mod, gen, helper, TagAssignment(target, tags) :: Nil))
+		gen.addProvider(new CbItemTagsProvider(mod, gen, helper, TagAssignment(target, tags) :: Nil))
 	}
 }
