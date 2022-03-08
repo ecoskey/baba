@@ -3,7 +3,6 @@ package cardboard.registry.item.dsl
 import cardboard.CbMod
 import cardboard.datagen.recipe.{CbRecipe, CbRecipeProvider}
 import cardboard.registry.dsl.ModDecMod
-import net.emersoncoskey.cardboard.datagen.recipe.CbRecipe
 import net.minecraft.world.item.Item
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 

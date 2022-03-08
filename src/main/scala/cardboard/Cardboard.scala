@@ -10,7 +10,7 @@ import org.apache.logging.log4j.{LogManager, Logger}
 object Cardboard extends CbMod {
 	final val _modId = "cardboard"
 
-	lazy val EventBus: IEventBus     = FMLJavaModLoadingContext.get.getModEventBus
-	lazy val Logger  : Logger        = LogManager.getLogger
-	lazy val Modules : Seq[CbModule] = TestModule :: Nil
+	lazy val eventBus: IEventBus     = FMLJavaModLoadingContext.get.getModEventBus
+	lazy val logger: Logger = LogManager.getLogger
+	lazy val modules : Seq[CbModule] = TestModule :: Nil
 }

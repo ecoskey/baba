@@ -1,14 +1,16 @@
 package cardboard.registry
 
+import cardboard.Cardboard.DefaultRegistries
 import cardboard.CbMod
-import net.minecraftforge.registries.{IForgeRegistry, IForgeRegistryEntry}
+import cardboard.data.hlistops.in
+import net.minecraftforge.registries.IForgeRegistryEntry
 
-trait Reg[-F[+_ <: R], R <: IForgeRegistryEntry[R]] {
-	val registry: IForgeRegistry[R]
-
-	def reg(r: F[R], mod: CbMod): RegistryDec[R]
+trait Reg {
+	type A <: IForgeRegistryEntry[A]
+	def reg: RegistryDec[A]
+	//def get(implicit mod: CbMod, in: A in DefaultRegistries): A = mod.get(this)
 }
 
 object Reg {
-	def apply[F[+_ <: R], R <: IForgeRegistryEntry[R]](implicit r: Reg[F, R]): Reg[F, R] = r
+	type Aux[X <: IForgeRegistryEntry[X]] = Reg { type A = X }
 }

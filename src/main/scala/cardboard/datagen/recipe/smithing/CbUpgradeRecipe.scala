@@ -3,11 +3,11 @@ package cardboard.datagen.recipe.smithing
 import cardboard.CbMod
 import cardboard.datagen.recipe.CbRecipe
 import cats.data.State
-import .ItemOps
 import net.minecraft.data.recipes.{FinishedRecipe, UpgradeRecipeBuilder}
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
+import cardboard.syntax.all._
 
 import java.util.function.Consumer
 

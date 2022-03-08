@@ -16,7 +16,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 
 version = '0.1'
-group = 'net.emersoncoskey.cardboard' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'cardboard' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'cardboard'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -35,7 +35,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: '2022.01.23-1.18.1'
+    mappings channel: 'parchment', version: '2022.02.13-1.18.1'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -147,7 +147,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.63'
+    minecraft 'net.minecraftforge:forge:1.18.1-39.1.2'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -163,15 +163,17 @@ dependencies {
 
     //implementation('org.typelevel:cats-free_3:2.7.0')
     //implementation 'com.olegpy:better-monadic-for_2.13:0.3.1'
-    implementation "com.chuusai:shapeless_2.13:2.3.7"
-   //scalaCompilerPlugins "org.typelevel:kind-projector_2.13.7:0.13.2"
+    //implementation "com.chuusai:shapeless_2.13:2.3.7"
+    //scalaCompilerPlugins "org.typelevel:kind-projector_2.13.7:0.13.2"
 
-    String scala_version = "2.13.7"
+    String scala_version = "2.13.8"
 
     // https://mvnrepository.com/artifact/org.scala-lang/scala-library
     compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     // A library of functional programing in Scala
-    compileOnly(group: 'org.typelevel', name: "cats-core_" + scala_version.substring(0, scala_version.lastIndexOf(".")), version: '2.6.2-kotori')
+    implementation('org.typelevel:cats-core_2.13:2.7.0')
+    //implementation('org.typelevel:cats-free_2.13:2.7.0')
+    //compileOnly(group: 'org.typelevel', name: "cats-core_" + scala_version.substring(0, scala_version.lastIndexOf(".")), version: '2.6.2-kotori')
 
     runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "2.13.7-build-1", classifier: "with-library") {
         transitive(false)

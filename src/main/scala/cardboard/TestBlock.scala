@@ -13,6 +13,7 @@ class TestBlock(props: Properties) extends Block(props) {
 		if (!pLevel.isClientSide) {
 			pEntity match {
 				case entity: LivingEntity => entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 200, 200))
+				case _ => ()
 			}
 		}
 }

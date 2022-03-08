@@ -3,10 +3,10 @@ package cardboard.datagen.recipe.craftingtable
 import cardboard.datagen.recipe.CbRecipeBuilderRecipe
 import cats.data.State
 import cats.implicits.{toFunctorOps, toTraverseOps}
-import .ItemOps
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
+import cardboard.syntax.all._
 
 
 class CbShapedRecipe private(
@@ -40,11 +40,8 @@ object CbShapedRecipe extends CbRecipeBuilderRecipe.Ops[ShapedRecipeBuilder] {
 
 	/* ["SHORTCUT" RECIPE METHODS] ************************************************************************************/
 
-	def packing2x2(ingredient: Item, id: Option[String] = None, groupName: Option[String] = None)
-	  (result: Item): CbShapedRecipe = {
-		val actualId = id.getOrElse(
-			s"${ result.getRegistryName.getPath }_from_packing2x2_${ ingredient.getRegistryName.getPath }"
-		)
+	def packing2x2(ingredient: Item, id: Option[String] = None, groupName: Option[String] = None)(result: Item): CbShapedRecipe = {
+		val actualId = id.getOrElse(s"${ result.getRegistryName.getPath }_from_packing2x2_${ ingredient.getRegistryName.getPath }")
 		CbShapedRecipe(result, 1, Some(actualId))(for {
 			x <- define('#', ingredient.i)
 			row = List(x, x)
@@ -54,11 +51,8 @@ object CbShapedRecipe extends CbRecipeBuilderRecipe.Ops[ShapedRecipeBuilder] {
 		} yield ())
 	}
 
-	def packing3x3(ingredient: Item, id: Option[String] = None, groupName: Option[String] = None)
-	  (result: Item): CbShapedRecipe = {
-		val actualId = id.getOrElse(
-			s"${ result.getRegistryName.getPath }_from_packing3x3_${ ingredient.getRegistryName.getPath }"
-		)
+	def packing3x3(ingredient: Item, id: Option[String] = None, groupName: Option[String] = None)(result: Item): CbShapedRecipe = {
+		val actualId = id.getOrElse(s"${ result.getRegistryName.getPath }_from_packing3x3_${ ingredient.getRegistryName.getPath }")
 		CbShapedRecipe(result, 1, Some(actualId))(for {
 			x <- define('#', ingredient.i)
 			row = List(x, x, x)

@@ -2,9 +2,9 @@ package cardboard.datagen.recipe.craftingtable
 
 import cardboard.datagen.recipe.CbRecipeBuilderRecipe
 import cats.data.State
+import cardboard.syntax.all._
 import cats.implicits.{toFunctorOps, toTraverseOps}
-import .ItemOps
-import CbRecipeBuilderRecipe.Ops
+import cardboard.datagen.recipe.CbRecipeBuilderRecipe.Ops
 import net.minecraft.data.recipes.ShapelessRecipeBuilder
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
