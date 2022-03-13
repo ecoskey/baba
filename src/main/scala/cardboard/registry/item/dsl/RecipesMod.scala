@@ -10,7 +10,7 @@ class RecipesMod(recipeFns: Seq[Item => CbRecipe]) extends ModDecMod[Item] {
 	type E = GatherDataEvent
 	val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
 
-	def handleEvent(target: Item, event: GatherDataEvent, mod: CbMod): Unit = {
+	def handleEvent(target: Item, event: GatherDataEvent, mod: CbMod[_]): Unit = {
 		val gen     = event.getGenerator
 		val recipes = recipeFns.map(_(target))
 		gen.addProvider(new CbRecipeProvider(mod, gen, recipes))

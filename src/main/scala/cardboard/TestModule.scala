@@ -10,13 +10,17 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
 import net.minecraftforge.common.Tags
-import cardboard.Cardboard.defaultRegs._
 import cardboard.syntax.all._
 import cardboard.dsl.mods._
-import cardboard.registry.Reg
+import shapeless.HNil
 
-object TestModule extends CbModule {
-	lazy val registryDecs: Seq[Reg[_]] = Seq(Amongus, AmongusBlock)
+object TestModule extends CbModule[Cardboard.RegistryDeclarations] {
+	override lazy val decs: Cardboard.RegistryDeclarations =
+		Seq(Amongus) ::
+		Seq(AmongusBlock) ::
+		Nil ::
+		Nil ::
+		HNil
 
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -24,7 +28,7 @@ object TestModule extends CbModule {
 		B.tags(Tags.Blocks.ORES_DIAMOND, Tags.Blocks.BARRELS, Tags.Blocks.GLASS, Tags.Blocks.COBBLESTONE)
 	)
 
-	val Amongus: ItemDec[BlockItem] = ItemDec("amongus", new BlockItem(AmongusBlock.get, _), new Item.Properties().tab(TestCreativeTab))(
+	val Amongus: ItemDec[BlockItem] = ItemDec("amongus", new BlockItem(Cardboard(AmongusBlock), _), new Item.Properties().tab(TestCreativeTab))(
 		I.recipes(
 			CbShapelessRecipe(_, 5, Some("cringe_recipe"))(for {
 				_ <- CbShapelessRecipe.ingredients(Items.DIRT.i -> 4)

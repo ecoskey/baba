@@ -13,7 +13,7 @@ class ItemTagsMod(tags: Seq[Tag.Named[Item]]) extends ModDecMod[Item] {
 
 	val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
 
-	def handleEvent(target: Item, event: GatherDataEvent, mod: CbMod): Unit = {
+	def handleEvent(target: Item, event: GatherDataEvent, mod: CbMod[_]): Unit = {
 		val gen    = event.getGenerator
 		val helper = event.getExistingFileHelper
 		gen.addProvider(new CbItemTagsProvider(mod, gen, helper, TagAssignment(target, tags) :: Nil))

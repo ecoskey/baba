@@ -5,4 +5,8 @@ import net.minecraftforge.registries.IForgeRegistryEntry
 
 import java.util.function.Supplier
 
-case class RegistryDec[A <: IForgeRegistryEntry[A]](name: String, sup: Supplier[A], mods: Seq[DecMod[A]] = Nil)
+trait RegDec[A <: IForgeRegistryEntry[A]] {
+	val name: String
+	def sup: Supplier[A]
+	val mods: Seq[DecMod[A]] = Nil
+}

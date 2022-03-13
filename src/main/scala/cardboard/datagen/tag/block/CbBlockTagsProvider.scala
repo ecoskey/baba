@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraftforge.common.data.ExistingFileHelper
 
 class CbBlockTagsProvider(
-	mod     : CbMod,
+	mod     : CbMod[_],
 	gen     : DataGenerator,
 	helper  : ExistingFileHelper,
 	assignments: Seq[TagAssignment[Block]]

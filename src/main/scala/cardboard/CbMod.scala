@@ -1,51 +1,101 @@
 package cardboard
 
-import cardboard.data.hlistops._
-import cardboard.data.{::, HNil}
-import cardboard.registry.{CbRegistry, Reg}
-import cardboard.syntax.all._
+import cardboard.CbMod.DefaultRegistries
+import cardboard.registry.{CbRegistry, RegDec}
+import cardboard.shapelesscompat.hlist.contraints.FConstraint
+import cardboard.shapelesscompat.hlist.ops.FBoundMapped
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.registries.ForgeRegistries
-import org.apache.logging.log4j.Logger
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistryEntry}
+import shapeless.ops.hlist.Selector
+import shapeless.{::, HList, HNil, IsDistinctConstraint}
 
-trait CbMod {
+import scala.annotation.implicitNotFound
+
+abstract class CbMod[R <: HList: IsDistinctConstraint](
+	implicit
+	registryEntryConstraint: FConstraint[R, IForgeRegistryEntry],
+	toRegistryMap: FBoundMapped[R, CbRegistry, IForgeRegistryEntry],
+) {
 	/** note: used because a constant value is necessary when using it as the Mod() annotation parameter */
-	protected val _modId: String
+	protected val modId: String
 
-	final lazy val ModId: String = _modId
+	final lazy val ModId: String = modId
 
-	val eventBus: IEventBus
-	val logger  : Logger
-	val modules : Seq[CbModule]
+	val EventBus: IEventBus = FMLJavaModLoadingContext.get.getModEventBus
 
-	/* [REGISTRY STUFF] ***************************************************************************************************************************************/
+	protected def modules : Seq[CbModule[R]]
+	private val _modules: Seq[CbModule[R]] = modules
 
-	type DefaultRegistries = Item :: Block :: Enchantment :: Potion :: SoundEvent :: HNil
-	private val DefaultRegistries: DefaultRegistries =
-		new CbRegistry[Item](this, ForgeRegistries.ITEMS)               ::
-		new CbRegistry[Block](this, ForgeRegistries.BLOCKS)             ::
-		new CbRegistry[Enchantment](this, ForgeRegistries.ENCHANTMENTS) ::
-		new CbRegistry[Potion](this, ForgeRegistries.POTIONS)           ::
-		new CbRegistry[SoundEvent](this, ForgeRegistries.SOUND_EVENTS)  ::
-		HNil
+	// REGISTRY STUFF ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-	private val totalRegistries = DefaultRegistries //todo: custom registry support
+	type RegistryTypes = R
+	type Registries = toRegistryMap.Out
 
-	def get(dec: Reg)(implicit in: dec.A in DefaultRegistries): dec.A = in.get(totalRegistries).get(dec.reg).get
+	protected val registries: Registries
 
-	def apply(dec: Reg)(implicit in: dec.A in DefaultRegistries): dec.A = get(dec)
+	protected def defaultRegistries: DefaultRegistries = getItemReg :: getBlockReg :: getEnchantmentReg :: getPotionReg :: HNil
 
-	/* [EVENT BUS STUFF] */
+	protected def getItemReg = new CbRegistry[Item](this, ForgeRegistries.ITEMS)
+	protected def getBlockReg = new CbRegistry[Block](this, ForgeRegistries.BLOCKS)
+	protected def getEnchantmentReg = new CbRegistry[Enchantment](this, ForgeRegistries.ENCHANTMENTS)
+	protected def getPotionReg = new CbRegistry[Potion](this, ForgeRegistries.POTIONS)
 
-	/* [UTIL METHODS] *****************************************************************************************************************************************/
+	def get[A <: IForgeRegistryEntry[A]](dec: RegDec[A])(
+		implicit
+		@implicitNotFound("No registry for ${A}s available in this mod")
+		ev: Selector[Registries, CbRegistry[A]]
+	): A = ev(registries).get(dec).get
+
+	def apply[A <: IForgeRegistryEntry[A]](dec: RegDec[A])(
+		implicit
+		@implicitNotFound("No registry for ${A}s available in this mod")
+		ev: Selector[Registries, CbRegistry[A]]
+	): A = get(dec)
+
+	// register all declarations
+
+	/*private def registerDec(reg: Reg): Unit = {
+		def withRegistry[A <: IForgeRegistryEntry[A]](registry: CbRegistry[A], reg: Reg.Aux[A]): Unit = {
+			val registryDec = reg.reg
+			registry.register(registryDec)
+
+			val mods = registryDec.mods
+			mods.foreach {
+				case m: ModDecMod[reg.A] => m.register(registry(registryDec).get, eventBus, this)
+				case m: ForgeDecMod[reg.A] => m.register(registry(registryDec).get, this)
+			}
+		}
+
+		reg match {
+			case r: Reg.Aux[Item] => withRegistry[Item](totalRegistries.get[Item], r)
+			case r: Reg.Aux[Block] => withRegistry[Block](totalRegistries.get[Block], r)
+			case r: Reg.Aux[Enchantment] => withRegistry[Enchantment](totalRegistries.get[Enchantment], r)
+			case r: Reg.Aux[Potion] => withRegistry[Potion](totalRegistries.get[Potion], r)
+		}
+	}*/
+
+	//modules.flatMap(_.registryDecs).foreach(registerDec)
+
+	// UTIL METHODS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 	def modLoc(path: String): ResourceLocation = new ResourceLocation(ModId, path)
 
 	def mcLoc(path: String): ResourceLocation = new ResourceLocation(path)
+}
+
+object CbMod {
+	type DefaultRegistryTypes = Item :: Block :: Enchantment :: Potion :: HNil
+
+	implicit val defaultRegistriesMapped: FBoundMapped.Aux[
+	  DefaultRegistryTypes, CbRegistry, IForgeRegistryEntry,
+	  CbRegistry[Item] :: CbRegistry[Block] :: CbRegistry[Enchantment] :: CbRegistry[Potion] :: HNil
+	] = FBoundMapped[DefaultRegistryTypes, CbRegistry, IForgeRegistryEntry]
+
+	protected type DefaultRegistries = defaultRegistriesMapped.Out
 }

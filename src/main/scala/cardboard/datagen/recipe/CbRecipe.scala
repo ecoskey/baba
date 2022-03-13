@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item
 import java.util.function.Consumer
 
 trait CbRecipe {
-	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit
+	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod[_]): Unit
 }
 
 object CbRecipe {

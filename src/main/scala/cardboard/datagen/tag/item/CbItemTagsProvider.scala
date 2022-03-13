@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item
 import net.minecraftforge.common.data.ExistingFileHelper
 
 class CbItemTagsProvider(
-	mod      : CbMod,
+	mod      : CbMod[_],
 	gen      : DataGenerator,
 	helper   : ExistingFileHelper,
 	tagPairs : Seq[TagAssignment[Item]]

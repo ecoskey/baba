@@ -1,7 +1,7 @@
 package cardboard
 
-import net.minecraft.world.item.{CreativeModeTab, ItemStack}
+import net.minecraft.world.item.{CreativeModeTab, ItemStack, Items}
 
 object TestCreativeTab extends CreativeModeTab("cardboard_items") {
-	override def makeIcon: ItemStack = new ItemStack(TestModule.Amongus.get)
+	def makeIcon: ItemStack = new ItemStack(Items.DIRT)
 }
