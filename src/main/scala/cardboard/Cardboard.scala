@@ -1,12 +1,14 @@
 package cardboard
 
+import cardboard.CbMod.DefaultRegistries
 import net.minecraftforge.fml.common.Mod
 
-@Mod(Cardboard._modId)
-object Cardboard extends CbMod[CbMod.DefaultRegistryTypes] {
-	final val _modId = "cardboard"
+@Mod(Cardboard.modId)
+object Cardboard extends CbMod {
+	protected final val modId = "cardboard"
 
-	protected def modules: Seq[CbModule[RegistryTypes]] = TestModule :: Nil
+	protected def modules: Seq[CbModule] = TestModule :: Nil
 
+	override type Registries = DefaultRegistries
 	lazy val registries: Registries = defaultRegistries
 }

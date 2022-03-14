@@ -16,7 +16,7 @@ abstract class CbRecipeBuilderRecipe[B <: RecipeBuilder](
 	val act     : State[B, _],
 	val id      : Option[String],
 ) extends CbRecipe {
-	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod[_]): Unit = id match {
+	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit = id match {
 		case Some(s) => act.runS(internal).value.save(consumer, new ResourceLocation(mod.ModId, s))
 		case None => act.runS(internal).value.save(consumer)
 	}

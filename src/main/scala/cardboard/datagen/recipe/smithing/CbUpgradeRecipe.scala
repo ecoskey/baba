@@ -16,7 +16,7 @@ class CbUpgradeRecipe private(
 	act     : State[UpgradeRecipeBuilder, _],
 	id      : String,
 ) extends CbRecipe {
-	private[cardboard] override def save(consumer: Consumer[FinishedRecipe], mod: CbMod[_]): Unit =
+	private[cardboard] override def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit =
 		act.runS(internal).value.save(consumer, new ResourceLocation(mod.ModId, id))
 }
 
