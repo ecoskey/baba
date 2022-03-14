@@ -2,4 +2,5 @@ package cardboard.syntax
 
 trait AllSyntax
   extends ToIngredientSyntax
-  with HListSyntax
+  with RegListSyntax
+  with DecListSyntax

@@ -1,5 +1,6 @@
 package cardboard
 
+import cardboard.data.{%:, DNil}
 import cardboard.datagen.recipe.CbRecipe
 import cardboard.datagen.recipe.craftingtable.{CbShapedRecipe, CbShapelessRecipe}
 import cardboard.datagen.recipe.furnace.CbFurnaceRecipe
@@ -12,15 +13,9 @@ import net.minecraft.world.level.material.Material
 import net.minecraftforge.common.Tags
 import cardboard.syntax.all._
 import cardboard.dsl.mods._
-import shapeless.HNil
 
-object TestModule extends CbModule[Cardboard.RegistryDeclarations] {
-	override lazy val decs: Cardboard.RegistryDeclarations =
-		Seq(Amongus) ::
-		Seq(AmongusBlock) ::
-		Nil ::
-		Nil ::
-		HNil
+object TestModule extends Cardboard.Module[Item %: Block %: DNil]  {
+	protected lazy val declarations: Item %: Block %: DNil = Seq(Amongus) %: Seq(AmongusBlock) %: DNil
 
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

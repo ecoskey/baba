@@ -3,5 +3,6 @@ package cardboard
 package object syntax {
 	object all extends AllSyntax
 	object ingredient extends ToIngredientSyntax
-	object hlist extends HListSyntax
+	object reglist extends RegListSyntax
+	object declist extends DecListSyntax
 }
