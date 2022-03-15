@@ -6,11 +6,10 @@ import net.minecraftforge.registries.{DeferredRegister, IForgeRegistry, IForgeRe
 import scala.collection.mutable
 
 class CbRegistry[A <: IForgeRegistryEntry[A]](mod: CbMod, registry: IForgeRegistry[A]) {
-	private val _registry: DeferredRegister[A] = DeferredRegister.create(registry, mod.ModId)
+	private val _registry: DeferredRegister[A] = DeferredRegister.create[A](registry, mod.ModId)
 	private val map: mutable.Map[RegDec[A], RegistryObject[A]] = mutable.Map[RegDec[A], RegistryObject[A]]()
 
-	private [cardboard] def register(dec: RegDec[A]): Unit =
-		map.addOne(dec -> _registry.register(dec.name, dec.sup))
+	private[CbMod] def register(dec: RegDec[A]): Unit = map.addOne(dec -> _registry.register(dec.name, dec.sup))
 
 	def get(dec: RegDec[A]): RegistryObject[A] =
 		map.getOrElse(dec, throw new IllegalAccessException(s"registry declaration ${dec.name} has not been registered yet."))

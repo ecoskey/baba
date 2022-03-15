@@ -1,6 +1,6 @@
 package cardboard
 
-import cardboard.data.{%:, DNil}
+import cardboard.data.{#:, %:, DNil}
 import cardboard.datagen.recipe.CbRecipe
 import cardboard.datagen.recipe.craftingtable.{CbShapedRecipe, CbShapelessRecipe}
 import cardboard.datagen.recipe.furnace.CbFurnaceRecipe
