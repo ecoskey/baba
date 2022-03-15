@@ -1,4 +1,4 @@
-package cardboard.util
+package foam.util
 
 case class Lang private(str: String) extends AnyVal
 

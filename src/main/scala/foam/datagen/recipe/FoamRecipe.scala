@@ -1,4 +1,4 @@
-package cardboard.datagen.recipe
+package foam.datagen.recipe
 
 import cardboard.CbMod
 import net.minecraft.advancements.critereon.{EntityPredicate, InventoryChangeTrigger, ItemPredicate, MinMaxBounds}
@@ -8,11 +8,11 @@ import net.minecraft.world.item.Item
 
 import java.util.function.Consumer
 
-trait CbRecipe {
+trait FoamRecipe {
 	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit
 }
 
-object CbRecipe {
+object FoamRecipe {
 	def inventoryTrigger(firstPred: ItemPredicate, restPred: ItemPredicate*): InventoryChangeTrigger.TriggerInstance =
 		new InventoryChangeTrigger.TriggerInstance(
 			EntityPredicate.Composite.ANY,

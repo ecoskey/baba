@@ -1,5 +1,6 @@
 package foam
 
+import foam.BaseMod.DefaultRegistries
 import foam.data.RNil
 import net.minecraftforge.fml.common.Mod
 
@@ -7,8 +8,8 @@ import net.minecraftforge.fml.common.Mod
 object Foam extends BaseMod {
 	final val _modId = "foam"
 
-	type Registries = RNil
-	lazy val registries: Registries = RNil
+	type Registries = DefaultRegistries
+	lazy val registries: Registries = defaultRegistries
 
-	lazy val modules: Seq[Foam.Module[_]] = Nil
+	lazy val modules: Seq[Foam.Module[_]] = TestModule :: Nil
 }

@@ -1,4 +1,4 @@
-package cardboard
+package foam
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.effect.{MobEffectInstance, MobEffects}

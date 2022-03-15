@@ -1,6 +1,6 @@
 package foam.registry.block
 
-import foam.registry.{RegDec}
+import foam.registry.RegDec
 import foam.registry.dsl.DecMod
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties

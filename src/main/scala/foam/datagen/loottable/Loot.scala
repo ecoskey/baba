@@ -1,4 +1,4 @@
-package cardboard.datagen.loottable
+package foam.datagen.loottable
 
 case class Loot(
 	lootType: LootContextType,
