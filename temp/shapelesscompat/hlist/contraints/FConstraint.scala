@@ -1,4 +1,4 @@
-package cardboard.shapelesscompat.hlist.contraints
+package foam.shapelesscompat.hlist.contraints
 
 import shapeless.{::, HList, HNil}
 
