@@ -1,5 +1,5 @@
 package foam.datagen.tag
 
-import net.minecraft.tags.Tag
+import net.minecraft.tags.TagKey
 
-case class TagAssignment[A](obj: A, target: Seq[Tag.Named[A]])
+case class TagAssignment[A](obj: A, target: Seq[TagKey[A]])
