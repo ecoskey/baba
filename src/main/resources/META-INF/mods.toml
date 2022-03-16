@@ -12,17 +12,17 @@ loaderVersion="[2.13.8,2.14.0)" #mandatory
 license="All Rights Reserved"
 [[mods]] #mandatory
 # The modid of the mod
-modId="cardboard" #mandatory
+modId="foam" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 version="${file.jarVersion}" #mandatory
  # A display name for the mod
-displayName="Cardboard" #mandatory
+displayName="Foam" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 # updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 # displayURL="http://example.com/" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="cardboard.png" #optional
+logoFile="foam.png" #optional
 # A text field displayed in the mod UI
 credits="Thanks for this example mod goes to Java" #optional
 # A text field displayed in the mod UI
@@ -32,7 +32,7 @@ description='''
 AMONG
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.cardboard]] #optional
+[[dependencies.foam]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -44,7 +44,7 @@ AMONG
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.cardboard]]
+[[dependencies.foam]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.18.2,1.19)"

@@ -16,7 +16,7 @@ abstract class FoamRecipeBuilderRecipe[B <: RecipeBuilder](
 	val act     : State[B, _],
 	val id      : Option[String],
 ) extends FoamRecipe {
-	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit = id match {
+	private[foam] def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit = id match {
 		case Some(s) => act.runS(internal).value.save(consumer, new ResourceLocation(mod.ModId, s))
 		case None => act.runS(internal).value.save(consumer)
 	}

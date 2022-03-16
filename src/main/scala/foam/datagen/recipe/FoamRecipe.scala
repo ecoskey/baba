@@ -3,13 +3,13 @@ package foam.datagen.recipe
 import foam.BaseMod
 import net.minecraft.advancements.critereon.{EntityPredicate, InventoryChangeTrigger, ItemPredicate, MinMaxBounds}
 import net.minecraft.data.recipes.FinishedRecipe
-import net.minecraft.tags.Tag
+import net.minecraft.tags.{Tag, TagKey}
 import net.minecraft.world.item.Item
 
 import java.util.function.Consumer
 
 trait FoamRecipe {
-	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit
+	private[foam] def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit
 }
 
 object FoamRecipe {
@@ -28,7 +28,7 @@ object FoamRecipe {
 			restItems.map(ItemPredicate.Builder.item.of(_).build): _*
 		)
 
-	def has(firstTag: Tag[Item], restTags: Tag[Item]*): InventoryChangeTrigger.TriggerInstance =
+	def has(firstTag: TagKey[Item], restTags: TagKey[Item]*): InventoryChangeTrigger.TriggerInstance =
 		inventoryTrigger(
 			ItemPredicate.Builder.item.of(firstTag).build,
 			restTags.map(ItemPredicate.Builder.item.of(_).build): _*

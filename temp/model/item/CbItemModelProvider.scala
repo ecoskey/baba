@@ -1,7 +1,7 @@
-package net.emersoncoskey.cardboard.datagen.model.item
+package net.emersoncoskey.foam.datagen.model.item
 
-import net.emersoncoskey.cardboard.CbMod
-import net.emersoncoskey.cardboard.datagen.model.CbModel
+import net.emersoncoskey.foam.CbMod
+import net.emersoncoskey.foam.datagen.model.CbModel
 import net.minecraft.data.DataGenerator
 import net.minecraftforge.client.model.generators.{ItemModelBuilder, ItemModelProvider}
 import net.minecraftforge.common.data.ExistingFileHelper

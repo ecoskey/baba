@@ -1,4 +1,4 @@
-package net.emersoncoskey.cardboard.datagen.model
+package net.emersoncoskey.foam.datagen.model
 
 import cats.data.State
 import cats.implicits.catsSyntaxFlatMapOps

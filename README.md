@@ -1,4 +1,4 @@
-# Cardboard
+# foam
 
 Template repository of Minecraft mod with Scala
 

@@ -16,8 +16,8 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 
 version = '0.1'
-group = 'cardboard' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'cardboard'
+group = 'foam' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'foam'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -80,7 +80,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                cardboard {
+                foam {
                     source sourceSets.main
                 }
             }
@@ -103,10 +103,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'cardboard', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'foam', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                cardboard {
+                foam {
                     source sourceSets.main
                 }
             }
@@ -184,7 +184,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "cardboard",
+                "Specification-Title"     : "foam",
                 "Specification-Vendor"    : "emersoncoskey",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,

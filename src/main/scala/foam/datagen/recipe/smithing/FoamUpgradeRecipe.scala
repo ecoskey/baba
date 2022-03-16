@@ -17,7 +17,7 @@ class FoamUpgradeRecipe private(
 	act     : State[UpgradeRecipeBuilder, _],
 	id      : String,
 ) extends FoamRecipe {
-	private[cardboard] override def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit =
+	private[foam] override def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit =
 		act.runS(internal).value.save(consumer, new ResourceLocation(mod.ModId, id))
 }
 
