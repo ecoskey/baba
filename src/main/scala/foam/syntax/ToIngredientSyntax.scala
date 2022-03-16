@@ -1,6 +1,6 @@
 package foam.syntax
 
-import net.minecraft.tags.Tag
+import net.minecraft.tags.{Tag, TagKey}
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
 
@@ -9,7 +9,7 @@ trait ToIngredientSyntax {
 		def i: Ingredient = Ingredient.of(item)
 	}
 
-	implicit class FromTag(tag: Tag[Item]) {
+	implicit class FromTag(tag: TagKey[Item]) {
 		def i: Ingredient = Ingredient.of(tag)
 	}
 }

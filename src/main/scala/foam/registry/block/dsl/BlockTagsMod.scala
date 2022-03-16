@@ -4,11 +4,11 @@ import foam.BaseMod
 import foam.datagen.tag.TagAssignment
 import foam.datagen.tag.block.FoamBlockTagsProvider
 import foam.registry.dsl.ModDecMod
-import net.minecraft.tags.Tag
+import net.minecraft.tags.{Tag, TagKey}
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent
 
-class BlockTagsMod(tags: Seq[Tag.Named[Block]]) extends ModDecMod[Block] {
+class BlockTagsMod(tags: Seq[TagKey[Block]]) extends ModDecMod[Block] {
 	type E = GatherDataEvent
 
 	val eventClass: Class[GatherDataEvent] = classOf[GatherDataEvent]
