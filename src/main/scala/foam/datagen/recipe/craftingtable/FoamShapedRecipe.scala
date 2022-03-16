@@ -6,7 +6,7 @@ import cats.implicits.{toFunctorOps, toTraverseOps}
 import net.minecraft.data.recipes.ShapedRecipeBuilder
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Ingredient
-import cardboard.syntax.all._
+import foam.syntax.all._
 
 
 class FoamShapedRecipe private(

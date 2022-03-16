@@ -1,7 +1,7 @@
 package foam.datagen.recipe
 
-import cardboard.CbMod
 import cats.data.State
+import foam.BaseMod
 import net.minecraft.advancements.CriterionTriggerInstance
 import net.minecraft.advancements.critereon.{EnterBlockTrigger, EntityPredicate, ItemPredicate, StatePropertiesPredicate}
 import net.minecraft.data.recipes.{FinishedRecipe, RecipeBuilder}
@@ -16,7 +16,7 @@ abstract class FoamRecipeBuilderRecipe[B <: RecipeBuilder](
 	val act     : State[B, _],
 	val id      : Option[String],
 ) extends FoamRecipe {
-	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit = id match {
+	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit = id match {
 		case Some(s) => act.runS(internal).value.save(consumer, new ResourceLocation(mod.ModId, s))
 		case None => act.runS(internal).value.save(consumer)
 	}

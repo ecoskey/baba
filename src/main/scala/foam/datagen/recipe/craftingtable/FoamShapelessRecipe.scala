@@ -2,7 +2,7 @@ package foam.datagen.recipe.craftingtable
 
 import foam.datagen.recipe.FoamRecipeBuilderRecipe
 import cats.data.State
-import cardboard.syntax.all._
+import foam.syntax.all._
 import cats.implicits.{toFunctorOps, toTraverseOps}
 import foam.datagen.recipe.FoamRecipeBuilderRecipe.Ops
 import net.minecraft.data.recipes.ShapelessRecipeBuilder

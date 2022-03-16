@@ -1,6 +1,6 @@
 package foam.datagen.recipe
 
-import cardboard.CbMod
+import foam.BaseMod
 import net.minecraft.advancements.critereon.{EntityPredicate, InventoryChangeTrigger, ItemPredicate, MinMaxBounds}
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.tags.Tag
@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item
 import java.util.function.Consumer
 
 trait FoamRecipe {
-	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: CbMod): Unit
+	private[cardboard] def save(consumer: Consumer[FinishedRecipe], mod: BaseMod): Unit
 }
 
 object FoamRecipe {
