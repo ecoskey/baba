@@ -5,7 +5,7 @@
 ### Featuring:
  - Module system for grouping game objects based on their place in the mod, rather than by type.
  - Easy declaration of game objects
-    -> "Declaration Modifiers" for simple datagen
+    - "Declaration Modifiers" for simple datagen
  - Extremely type-safe system to catch bugs early
  - Much more on the way!
 
