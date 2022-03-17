@@ -3,6 +3,7 @@ package foam.data
 import foam.registry.{WrappedRegistry, RegDec}
 import net.minecraftforge.registries.IForgeRegistryEntry
 
+/** A heterogeneous list of declaration lists, used in modules */
 sealed trait DecList
 sealed trait DNil extends DecList {
 	def %:[A <: IForgeRegistryEntry[A]](o: Seq[RegDec[A]]): A %: DNil = new %:(o, this)

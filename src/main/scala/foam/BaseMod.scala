@@ -54,9 +54,9 @@ trait BaseMod {
 	}
 
 	// get registry for type A, get RegistryObject[A] associated with dec, get registered A from the RegistryObject
-	def get[A <: IForgeRegistryEntry[A]](dec: RegDec[A])(implicit ev: A In Registries): A = ev(registries).get(dec).get
+	def get[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = ev(registries).get(declaration).get
 
-	def apply[A <: IForgeRegistryEntry[A]](dec: RegDec[A])(implicit ev: A In Registries): A = get(dec)
+	def apply[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = get(declaration)
 
 	// MODULES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

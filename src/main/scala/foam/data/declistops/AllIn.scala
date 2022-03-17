@@ -6,6 +6,7 @@ import foam.data.{%:, DNil, DecList, RegList}
 import foam.registry.{WrappedRegistry, RegDec}
 import net.minecraftforge.registries.IForgeRegistryEntry
 
+/** A type used to prove that all elements of D are in R */
 trait AllIn[D <: DecList, R <: RegList] extends ((D, R, PolyConsumer) => Unit)
 
 object AllIn {
@@ -20,5 +21,4 @@ object AllIn {
 			fn(l.head, in(r))
 			tailEv(l.tail, r, fn)
 		}
-
 }
