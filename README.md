@@ -1,8 +1,13 @@
-# foam
+# Foam
+### Forge, only abstracted more.
 
-Template repository of Minecraft mod with Scala
+## A relatively "thin" modding framework that aims to be declarative, extensible, and functional without taking power away from the user.
 
-1. Clone this repository.
-2. Add scala code to `src/main/scala`.
-3. Move to the directory and open shell.
-4. run `./gradlew build` to get mod jar.
+### Featuring:
+ - Module system for grouping game objects based on their place in the mod, rather than by type.
+ - Easy declaration of game objects
+    -> "Declaration Modifiers" for simple datagen
+ - Extremely type-safe system to catch bugs early
+ - Much more on the way!
+
+Documentation coming soon!™️
