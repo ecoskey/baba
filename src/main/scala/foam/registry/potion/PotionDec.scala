@@ -11,7 +11,7 @@ class PotionDec[+P <: Potion] private(
 	val ctor   : Seq[MobEffectInstance] => P,
 	val effects: Seq[MobEffectInstance]
 ) extends RegDec[Potion] {
-	lazy val sup: Supplier[Potion] = () => ctor(effects)
+	lazy val supplier: Supplier[Potion] = () => ctor(effects)
 }
 
 object PotionDec {

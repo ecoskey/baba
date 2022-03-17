@@ -13,5 +13,5 @@ case class EnchantmentDec[+E <: Enchantment](
 	category: EnchantmentCategory,
 	slots   : Seq[EquipmentSlot],
 ) extends RegDec[Enchantment] {
-	lazy val sup: Supplier[Enchantment] = () => ctor(rarity, category, slots.toArray)
+	lazy val supplier: Supplier[Enchantment] = () => ctor(rarity, category, slots.toArray)
 }

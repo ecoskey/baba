@@ -8,6 +8,6 @@ import java.util.function.Supplier
 
 trait RegDec[A <: IForgeRegistryEntry[A]] {
 	val name: String
-	def sup: Supplier[A]
-	val mods: Seq[DecMod[A]] = Nil
+	def supplier: Supplier[A]
+	val modifiers: Seq[DecMod[A]] = Nil
 }

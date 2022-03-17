@@ -11,9 +11,9 @@ class ItemDec[+I <: Item] private(
 	val name         : String,
 	val props        : Properties,
 	val ctor         : Properties => I,
-	override val mods: Seq[DecMod[Item]]
+	override val modifiers: Seq[DecMod[Item]]
 ) extends RegDec[Item] {
-	lazy val sup: Supplier[Item] = () => ctor(props)
+	lazy val supplier: Supplier[Item] = () => ctor(props)
 }
 
 object ItemDec {

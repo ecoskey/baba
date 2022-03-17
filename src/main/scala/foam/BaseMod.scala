@@ -43,7 +43,7 @@ trait BaseMod {
 			def apply[A <: IForgeRegistryEntry[A]](decs: Seq[RegDec[A]], registry: WrappedRegistry[A]): Unit = decs.foreach(dec => {
 				registry.register(dec)
 
-				dec.mods.foreach {
+				dec.modifiers.foreach {
 					case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
 					case m: ForgeDecMod[A] => m.register(registry(dec).get, mod)
 				}
