@@ -4,6 +4,6 @@ import foam.registry.block.dsl.BlockMods
 import foam.registry.item.dsl.ItemMods
 
 trait AllDecMods {
-	object I extends ItemMods
-	object B extends BlockMods
+	object item extends ItemMods
+	object block extends BlockMods
 }

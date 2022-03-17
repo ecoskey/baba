@@ -20,17 +20,16 @@ object TestModule extends Foam.Module[Item %: Block %: DNil] {
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 	val AmongusBlock: BlockDec[Block] = BlockDec("amongus_block", new TestBlock(_), BlockBehaviour.Properties.of(Material.STONE))(
-		B.tags(Tags.Blocks.ORES_DIAMOND, Tags.Blocks.BARRELS, Tags.Blocks.GLASS, Tags.Blocks.COBBLESTONE)
+		block.tags(Tags.Blocks.ORES_DIAMOND, Tags.Blocks.BARRELS, Tags.Blocks.GLASS, Tags.Blocks.COBBLESTONE)
 	)
 
 	val Amongus: ItemDec[BlockItem] = ItemDec("amongus", new BlockItem(Foam(AmongusBlock), _), new Item.Properties().tab(TestCreativeTab))(
-		I.recipes(
+		item.recipes(
 			FoamShapelessRecipe(_, 5, Some("cringe_recipe"))(for {
 				_ <- FoamShapelessRecipe.ingredients(Items.DIRT.i -> 4)
 				_ <- FoamShapelessRecipe.group("among")
 				_ <- FoamShapelessRecipe.unlockedByItem(Items.DIRT)
-			} yield ()
-			),
+			} yield ()),
 
 			FoamShapedRecipe(_, 64, Some("better_recipe"))(for {
 				a <- FoamShapedRecipe.define('X', Items.DIAMOND.i)
@@ -38,17 +37,15 @@ object TestModule extends Foam.Module[Item %: Block %: DNil] {
 				_ <- FoamShapedRecipe.pattern(List(b, a, b), List(a, a, a), List(b, a, b))
 				_ <- FoamShapedRecipe.group("among")
 				_ <- FoamShapedRecipe.unlockedBy("has_diamonds_and_dirt", FoamRecipe.has(Items.DIAMOND, Items.DIRT))
-			} yield ()
-			),
+			} yield ()),
 
 			FoamFurnaceRecipe.smelting(Items.DIAMOND.i, _, 1000000f, 100)(for {
 				_ <- FoamFurnaceRecipe.group("among")
 				_ <- FoamFurnaceRecipe.unlockedByItem(Items.DIAMOND)
-			} yield ()
-			),
+			} yield ()),
 
 			FoamShapedRecipe.packing3x3(Items.DIRT)
 		),
-		I.tags(Tags.Items.ORES_DIAMOND)
+		item.tags(Tags.Items.ORES_DIAMOND)
 	)
 }
