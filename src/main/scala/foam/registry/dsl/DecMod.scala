@@ -4,12 +4,12 @@ import foam.BaseMod
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.{Event, EventPriority, IEventBus}
 
-/** NOTE: end users shouldn't extend DecMod */
+/** a Declaration Modifier */
 sealed trait DecMod[-A] {
 	type E <: Event
 	val eventClass: Class[E]
-	val priority       : EventPriority = EventPriority.NORMAL
-	val receiveCanceled: Boolean       = false
+	val priority: EventPriority = EventPriority.NORMAL
+	val receiveCanceled: Boolean = false
 
 	def handleEvent(target: A, event: E, mod: BaseMod): Unit
 }
