@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
 import net.minecraftforge.common.Tags
 import foam.syntax.all._
-import foam.dsl.mods._
+import foam.dsl.decmods._
 
 object TestModule extends Foam.Module[Item %: Block %: DNil] {
 	protected lazy val declarations: Item %: Block %: DNil = Seq(Amongus) %: Seq(AmongusBlock) %: DNil

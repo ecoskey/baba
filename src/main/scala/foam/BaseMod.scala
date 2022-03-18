@@ -6,8 +6,8 @@ import foam.data.reglistops.In
 import foam.data.{#:, DecList, RNil, RegList}
 import foam.registry.dsl.{ForgeDecMod, ModDecMod}
 import foam.registry.{WrappedRegistry, RegDec}
-import foam.syntax.all._
 import net.minecraft.resources.ResourceLocation
+import foam.syntax.all._
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.enchantment.Enchantment
@@ -39,6 +39,7 @@ trait BaseMod {
 
 	/** List of available registry *types* for this mod */
 	type Registries <: RegList
+
 	/** List of available registries for this mod. */
 	protected val registries: Registries
 
