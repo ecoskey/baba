@@ -7,9 +7,9 @@ modLoader="kotori_scala" #mandatory
 # A version range to match for said mod loader - the scala version
 loaderVersion="[2.13.8,2.14.0)" #mandatory
 # A URL to refer people to when problems occur with this mod
-# issueTrackerURL="http://my.issue.tracker/" #optional
+issueTrackerURL="https://github.com/EmersonCoskey/foam/issues" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
-license="All Rights Reserved"
+license="GPL-3.0-or-later"
 [[mods]] #mandatory
 # The modid of the mod
 modId="foam" #mandatory
@@ -20,7 +20,7 @@ displayName="Foam" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 # updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
-# displayURL="http://example.com/" #optional
+displayURL="https://github.com/EmersonCoskey/foam" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="foam.png" #optional
 # A text field displayed in the mod UI
