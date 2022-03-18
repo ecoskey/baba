@@ -9,8 +9,8 @@ import java.util.function.Supplier
 
 class BlockDec[+B <: Block] private (
 	val name : String,
-	val props: Properties,
-	val ctor : Properties => B,
+	props: Properties,
+	ctor : Properties => B,
 	override val modifiers: Seq[DecMod[Block]]
 ) extends RegDec[Block] {
 

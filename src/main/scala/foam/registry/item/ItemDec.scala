@@ -7,10 +7,11 @@ import net.minecraft.world.item.Item.Properties
 
 import java.util.function.Supplier
 
+/** Used to declare an [[Item]] to be added to the game */
 class ItemDec[+I <: Item] private(
-	val name         : String,
-	val props        : Properties,
-	val ctor         : Properties => I,
+	val name: String,
+	props: Properties,
+	ctor: Properties => I,
 	override val modifiers: Seq[DecMod[Item]]
 ) extends RegDec[Item] {
 	lazy val supplier: Supplier[Item] = () => ctor(props)
