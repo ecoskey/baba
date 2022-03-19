@@ -5,7 +5,8 @@ import baba.data.declistops.AllIn
 import baba.data.reglistops.In
 import baba.data.{#:, DecList, RNil, RegList}
 import baba.registry.dsl.{ForgeDecMod, ModDecMod}
-import baba.registry.{WrappedRegistry, RegDec}
+import baba.registry.painting.PaintingDec.PaintingType
+import baba.registry.{RegDec, WrappedRegistry}
 import net.minecraft.resources.ResourceLocation
 import baba.syntax.all._
 import net.minecraft.world.item.Item
@@ -97,6 +98,7 @@ trait BaseMod {
 		getFluidReg       #:
 		getEnchantmentReg #:
 		getPotionReg      #:
+		getPaintingReg    #:
 		RNil
 
 	/** Returns a default [[WrappedRegistry]] for [[Item]]s */
@@ -113,9 +115,12 @@ trait BaseMod {
 
 	/** Returns a default [[WrappedRegistry]] for [[Potion]]s */
 	protected def getPotionReg: WrappedRegistry[Potion] = new WrappedRegistry[Potion](this, ForgeRegistries.POTIONS)
+
+	/** Returns a default [[WrappedRegistry]] for PaintingTypes */
+	protected def getPaintingReg: WrappedRegistry[PaintingType] = new WrappedRegistry[PaintingType](this, ForgeRegistries.PAINTING_TYPES)
 }
 
 object BaseMod {
 	/** The list of default registry types */
-	type DefaultRegistries = Item #: Block #: Fluid #: Enchantment #: Potion #: RNil
+	type DefaultRegistries = Item #: Block #: Fluid #: Enchantment #: Potion #: PaintingType #: RNil
 }

@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.Material
 import net.minecraftforge.common.Tags
 import baba.syntax.all._
 import baba.dsl.decmods._
+import baba.registry.painting.PaintingDec
 
 object TestModule extends Baba.Module[Item %: Block %: DNil] {
 	protected lazy val declarations: Item %: Block %: DNil = Seq(Amongus) %: Seq(AmongusBlock) %: DNil
