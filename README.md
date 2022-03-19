@@ -1,4 +1,4 @@
-# Foam - Forge, only abstracted more.
+# baba
 
 ## A relatively "thin" modding framework that aims to be declarative, extensible, and functional without taking power away from the user.
 
