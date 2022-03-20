@@ -1,20 +1,23 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'scala'
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'maven-publish'
 
-version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+version = '0.1'
+group = 'com.github.EmersonCoskey' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'baba'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -32,7 +35,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.18.1'
+    mappings channel: 'parchment', version: '2022.03.13-1.18.2'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -77,7 +80,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                baba {
                     source sourceSets.main
                 }
             }
@@ -86,6 +89,7 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
+            //among
             // Recommended logging data for a userdev environment
             // The markers can be changed as needed.
             // "SCAN": For mods scan.
@@ -99,10 +103,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'baba', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                baba {
                     source sourceSets.main
                 }
             }
@@ -123,6 +127,7 @@ repositories {
             includeModule("org.typelevel", "cats-kernel_2.13")
         }
     }
+    mavenCentral()
     repositories.stream().filter { it instanceof MavenArtifactRepository }.forEach { repo ->
         repo.content {
             excludeVersionByRegex(".*", ".*", ".*_mapped_snapshot_.*")
@@ -130,6 +135,7 @@ repositories {
     }
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
+
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     // flatDir {
@@ -141,7 +147,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.0'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.17'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -155,14 +161,21 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    String scala_version = "2.13.7"
+    //implementation('org.typelevel:cats-free_3:2.7.0')
+    //implementation 'com.olegpy:better-monadic-for_2.13:0.3.1'
+    //implementation "com.chuusai:shapeless_2.13:2.3.8"
+    //scalaCompilerPlugins "org.typelevel:kind-projector_2.13.7:0.13.2"
+
+    String scala_version = "2.13.8"
 
     // https://mvnrepository.com/artifact/org.scala-lang/scala-library
     compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     // A library of functional programing in Scala
-    compileOnly(group: 'org.typelevel', name: "cats-core_" + scala_version.substring(0, scala_version.lastIndexOf(".")), version: '2.6.2-kotori')
+    implementation('org.typelevel:cats-core_2.13:2.7.0')
+    //implementation('org.typelevel:cats-free_2.13:2.7.0')
+    //compileOnly(group: 'org.typelevel', name: "cats-core_" + scala_version.substring(0, scala_version.lastIndexOf(".")), version: '2.6.2-kotori')
 
-    runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "2.13.7-build-1", classifier: "with-library") {
+    runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "2.13.8-build-1", classifier: "with-library") {
         transitive(false)
     }
 }
@@ -171,13 +184,13 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "examplemod",
-                "Specification-Vendor"    : "examplemodsareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "examplemodsareus",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Specification-Title"     : "baba",
+            "Specification-Vendor"    : "EmersonCoskey",
+            "Specification-Version"   : "1", // We are version 1 of ourselves
+            "Implementation-Title"    : project.name,
+            "Implementation-Version"  : "${version}",
+            "Implementation-Vendor"   : "EmersonCoskey",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
