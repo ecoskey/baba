@@ -14,7 +14,7 @@ object Baba extends BaseMod {
 	type Registries = DefaultRegistries
 	lazy val registries: Registries = defaultRegistries
 
-	lazy val modules: Seq[Module[_]] = TestModule :: AllTheStuff :: Nil
+	lazy val modules: Seq[Module[_]] = AllTheStuff :: Nil
 
 	//doing this as an inner object for compactness
 	object AllTheStuff extends Baba.Module[PaintingType %: DNil] {
