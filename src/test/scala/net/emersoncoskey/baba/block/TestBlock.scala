@@ -1,4 +1,4 @@
-package net.emersoncoskey.baba
+package net.emersoncoskey.baba.block
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.effect.{MobEffectInstance, MobEffects}
