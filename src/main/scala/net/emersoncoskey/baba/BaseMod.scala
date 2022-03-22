@@ -55,8 +55,7 @@ trait BaseMod {
 					case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
 					case m: ForgeDecMod[A] => m.register(registry(dec).get, mod)
 				}
-			}
-			)
+			})
 		}
 
 		declarations.foreach(registries, consumer)
@@ -93,13 +92,13 @@ trait BaseMod {
 
 	/** Returns a [[RegList]] of all default registry types. The usual way to override [[registries]] */
 	protected def defaultRegistries: DefaultRegistries =
-		getItemReg #:
-		  getBlockReg #:
-		  getFluidReg #:
-		  getEnchantmentReg #:
-		  getPotionReg #:
-		  getPaintingReg #:
-		  RNil
+		getItemReg        #:
+		getBlockReg       #:
+		getFluidReg       #:
+		getEnchantmentReg #:
+		getPotionReg      #:
+		getPaintingReg    #:
+		RNil
 
 	/** Returns a default [[WrappedRegistry]] for [[Item]]s */
 	protected def getItemReg: WrappedRegistry[Item] = new WrappedRegistry[Item](this, ForgeRegistries.ITEMS)
