@@ -13,7 +13,6 @@ class BlockDec[+B <: Block] private (
 	ctor : Properties => B,
 	override val modifiers: Seq[DecMod[Block]]
 ) extends RegDec[Block] {
-
 	override def supplier: Supplier[Block] = () => ctor(props)
 }
 

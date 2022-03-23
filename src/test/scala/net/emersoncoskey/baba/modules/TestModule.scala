@@ -9,7 +9,7 @@ import net.emersoncoskey.baba.registry.painting.PaintingDec
 import net.emersoncoskey.baba.syntax.all._
 import net.emersoncoskey.baba.util.PaintingType
 import net.emersoncoskey.baba.{Baba, TestCreativeTab}
-import net.minecraft.world.item.{BlockItem, Item, Items}
+import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
