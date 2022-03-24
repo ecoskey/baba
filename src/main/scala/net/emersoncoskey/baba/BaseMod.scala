@@ -73,11 +73,12 @@ trait BaseMod {
 	 *
 	 *  The implicit [[AllIn]] constraint ensures that all types declared in a given module have an available registry.
 	 */
-	abstract class Module[D <: DecList](implicit ev: D AllIn Registries) {
-		protected def declarations: D
+	class Module[D <: DecList] private(declarations: D)(implicit ev: D AllIn Registries) {
+		private [BaseMod] def init(): Unit = register[D](declarations)
+	}
 
-		/** used to preserve type information in the [[register]] call, even though modules are provided to the mod as Module[_] */
-		private[BaseMod] def init(): Unit = register[D](declarations)
+	object Module {
+		def apply[D <: DecList](declarations: D)(implicit ev: D AllIn Registries) = new Module(declarations)
 	}
 
 	modules.foreach(_.init()) // what actually initializes all mod data

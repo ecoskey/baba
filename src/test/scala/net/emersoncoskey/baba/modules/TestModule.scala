@@ -15,11 +15,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
 import net.minecraftforge.common.Tags
 
-object TestModule extends Baba.Module[Item %: Block %: PaintingType %: DNil] {
-	protected lazy val declarations: Item %: Block %: PaintingType %: DNil = Seq(Amongus) %: Seq(AmongusBlock) %: Seq(BabaPainting) %: DNil
-
-	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+object TestModule {
 	val AmongusBlock: BlockDec[Block] = BlockDec("amongus_block", new TestBlock(_), BlockBehaviour.Properties.of(Material.STONE))(
 		block.tags(Tags.Blocks.ORES_DIAMOND, Tags.Blocks.BARRELS, Tags.Blocks.GLASS, Tags.Blocks.COBBLESTONE)
 	)
@@ -29,4 +25,8 @@ object TestModule extends Baba.Module[Item %: Block %: PaintingType %: DNil] {
 	)
 
 	val BabaPainting: PaintingDec = PaintingDec("baba", 16, 16)
+
+	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+	val Module: Baba.Module[Item %: Block %: PaintingType %: DNil] = Baba.Module(Seq(Amongus) %: Seq(AmongusBlock) %: Seq(BabaPainting) %: DNil)
 }
