@@ -1,8 +1,7 @@
 package net.emersoncoskey.baba.registry.dsl
 
 import net.emersoncoskey.baba.BaseMod
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.eventbus.api.{Event, EventPriority, IEventBus}
+import net.minecraftforge.eventbus.api.{Event, EventPriority}
 
 /** a Declaration Modifier */
 sealed trait DecMod[-A] {
