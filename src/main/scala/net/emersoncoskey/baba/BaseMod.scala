@@ -91,7 +91,7 @@ trait BaseMod {
 		def apply[d <: DecList](declarations: d)(implicit ev: d AllIn Registries): Module = new Module {
 			type D = d
 			val decs: D = declarations
-			val allIn: D AllIn Registries = ev
+			private [BaseMod] val allIn: D AllIn Registries = ev
 		}
 	}
 
