@@ -84,7 +84,7 @@ trait BaseMod {
 	trait Module {
 		type D <: DecList
 		val decs: D
-		val allIn: D AllIn Registries //jank but it needs to survive a path dependent type somehow
+		private [BaseMod] val allIn: D AllIn Registries //jank but it needs to survive a path dependent type somehow
 	}
 
 	object Module {
