@@ -16,5 +16,7 @@ class WrappedRegistry[A <: IForgeRegistryEntry[A]](mod: BaseMod, registry: IForg
 
 	def apply(dec: RegDec[A]): RegistryObject[A] = get(dec)
 
+	def getAll: List[A] = map.values.map(_.get).toList
+
 	_registry.register(mod.EventBus)
 }

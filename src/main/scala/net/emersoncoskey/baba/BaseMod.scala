@@ -67,6 +67,9 @@ trait BaseMod {
 	/** returns the registered object for any [[RegDec]][A] as long as there is an available registry for that type */
 	def apply[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = get(declaration)
 
+	/** returns all objects of a given type in the registries */
+	def getAll[A <: IForgeRegistryEntry[A]](implicit ev: A In Registries): List[A] = ev(registries).getAll
+
 	// MODULES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 	/** Provides declarations and the ability to separate mod data in a modular way.
@@ -122,7 +125,7 @@ trait BaseMod {
 	/** Returns a default [[WrappedRegistry]] for [[Potion]]s */
 	protected def getPotionReg: WrappedRegistry[Potion] = new WrappedRegistry[Potion](this, ForgeRegistries.POTIONS)
 
-	/** Returns a default [[WrappedRegistry]] for PaintingTypes */
+	/** Returns a default [[WrappedRegistry]] for [[PaintingType]]s */
 	protected def getPaintingReg: WrappedRegistry[PaintingType] = new WrappedRegistry[PaintingType](this, ForgeRegistries.PAINTING_TYPES)
 }
 
