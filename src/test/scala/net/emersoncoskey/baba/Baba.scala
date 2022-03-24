@@ -8,11 +8,7 @@ import net.minecraftforge.fml.common.Mod
 
 /** An example implementation of BaseMod, and the entrypoint for this mod. */
 @Mod(Baba._modId)
-object Baba extends BaseMod {
+object Baba extends BaseMod.Default {
 	final val _modId = "baba"
-
-	type Registries = DefaultRegistries
-	lazy val registries: Registries = defaultRegistries
-
 	lazy val modules: Seq[Module] = TestModule.Module :: Nil
 }

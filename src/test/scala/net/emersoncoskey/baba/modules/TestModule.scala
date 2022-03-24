@@ -1,13 +1,12 @@
 package net.emersoncoskey.baba.modules
 
 import net.emersoncoskey.baba.block.TestBlock
-import net.emersoncoskey.baba.data.{%:, DNil}
+import net.emersoncoskey.baba.data.DNil
 import net.emersoncoskey.baba.dsl.decmods._
 import net.emersoncoskey.baba.registry.block.BlockDec
 import net.emersoncoskey.baba.registry.item.ItemDec
 import net.emersoncoskey.baba.registry.painting.PaintingDec
 import net.emersoncoskey.baba.syntax.all._
-import net.emersoncoskey.baba.util.PaintingType
 import net.emersoncoskey.baba.{Baba, TestCreativeTab}
 import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraft.world.level.block.Block
