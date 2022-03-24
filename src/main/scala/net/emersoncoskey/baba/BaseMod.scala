@@ -84,18 +84,18 @@ trait BaseMod {
 	trait Module {
 		type D <: DecList
 		val decs: D
-		val ev: D AllIn Registries //jank but it needs to survive a path dependent type somehow
+		val allIn: D AllIn Registries //jank but it needs to survive a path dependent type somehow
 	}
 
 	object Module {
 		def apply[d <: DecList](declarations: d)(implicit ev: d AllIn Registries): Module = new Module {
 			type D = d
 			val decs: D = declarations
-			val ev: D AllIn Registries = ev
+			val allIn: D AllIn Registries = ev
 		}
 	}
 
-	modules.foreach(m => register[m.D](m.decs)(m.ev))
+	modules.foreach(m => register[m.D](m.decs)(m.allIn))
 
 	// UTIL METHODS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
