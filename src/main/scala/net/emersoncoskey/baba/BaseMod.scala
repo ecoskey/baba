@@ -57,7 +57,6 @@ trait BaseMod {
 				registry.register(dec)
 
 				dec.modifiers.foreach {
-					//case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
 					case m: ModDecMod[A] => EventBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
 					case m: ForgeDecMod[A] => {
 						val forgeBus = MinecraftForge.EVENT_BUS
