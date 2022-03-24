@@ -25,7 +25,7 @@ trait BaseMod {
 	 *
 	 * make sure to NOT add a type annotation, because otherwise it is not considered a "constant value" and will fail
 	 */
-	protected val _modId: String
+	val _modId: String
 
 	/** returns the id string for this mod. */
 	final lazy val ModId: String = _modId
