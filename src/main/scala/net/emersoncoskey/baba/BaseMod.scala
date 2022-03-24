@@ -17,7 +17,6 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistryEntry}
-import org.apache.logging.log4j.LogManager
 
 /** Entrypoint for any Baba mod. Example: [[Baba]] itself. */
 trait BaseMod {
@@ -26,7 +25,7 @@ trait BaseMod {
 	 *
 	 * make sure to NOT add a type annotation, because otherwise it is not considered a "constant value" and will fail
 	 */
-	val _modId: String
+	protected val _modId: String
 
 	/** returns the id string for this mod. */
 	final lazy val ModId: String = _modId
