@@ -17,6 +17,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistryEntry}
+import org.apache.logging.log4j.LogManager
 
 /** Entrypoint for any Baba mod. Example: [[Baba]] itself. */
 trait BaseMod {
@@ -42,7 +43,7 @@ trait BaseMod {
 	type Registries <: RegList
 
 	/** List of available registries for this mod. */
-	protected val registries: Registries
+	protected def registries: Registries
 
 	/** registers all elements of a [[RegList]] to the existing list of registries */
 	private def register[D <: DecList](declarations: D)(implicit ev: D AllIn Registries): Unit = {
@@ -137,6 +138,6 @@ trait BaseMod {
 object BaseMod {
 	trait Default extends BaseMod {
 		final type Registries = DefaultRegistries
-		final val registries: DefaultRegistries = defaultRegistries
+		final lazy val registries: DefaultRegistries = defaultRegistries
 	}
 }
