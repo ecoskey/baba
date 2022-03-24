@@ -15,12 +15,12 @@ sealed trait DecMod[-A] {
 }
 
 trait ForgeDecMod[-A] extends DecMod[A] {
-	def register(target: => A, mod: BaseMod): Unit = MinecraftForge.EVENT_BUS.addListener(priority, receiveCanceled, eventClass, e => handleEvent(target, e, mod))
+	def register(target: => A, mod: BaseMod): Unit = MinecraftForge.EVENT_BUS.addListener(priority, receiveCanceled, eventClass, handleEvent(target, _, mod))
 
 }
 
 trait ModDecMod[-A] extends DecMod[A] {
-	def register(target: => A, bus: IEventBus, mod: BaseMod): Unit = bus.addListener(priority, receiveCanceled, eventClass, e => handleEvent(target, e, mod))
+	def register(target: => A, bus: IEventBus, mod: BaseMod): Unit = bus.addListener(priority, receiveCanceled, eventClass, handleEvent(target, _, mod))
 }
 
 
