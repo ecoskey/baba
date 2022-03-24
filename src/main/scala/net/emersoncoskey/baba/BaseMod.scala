@@ -30,7 +30,7 @@ trait BaseMod {
 	final lazy val ModId: String = _modId
 
 	/** should return the list of modules to be loaded upon startup */
-	protected def modules: Seq[Module[_]]
+	protected def modules: Seq[Module]
 
 	/** the forge event bus for this mod's lifecycle events */
 	val EventBus: IEventBus = FMLJavaModLoadingContext.get.getModEventBus
@@ -73,15 +73,21 @@ trait BaseMod {
 	 *
 	 *  The implicit [[AllIn]] constraint ensures that all types declared in a given module have an available registry.
 	 */
-	class Module[D <: DecList] private(declarations: D)(implicit ev: D AllIn Registries) {
-		private [BaseMod] def init(): Unit = register[D](declarations)
+	trait Module {
+		type D <: DecList
+		val decs: D
+		val ev: D AllIn Registries //jank but it needs to survive a path dependent type somehow
 	}
 
 	object Module {
-		def apply[D <: DecList](declarations: D)(implicit ev: D AllIn Registries) = new Module(declarations)
+		def apply[d <: DecList](declarations: d)(implicit ev: d AllIn Registries): Module = new Module {
+			type D = d
+			val decs: D = declarations
+			val ev: D AllIn Registries = ev
+		}
 	}
 
-	modules.foreach(_.init()) // what actually initializes all mod data
+	modules.foreach(m => register[m.D](m.decs)(m.ev))
 
 	// UTIL METHODS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -122,7 +128,7 @@ trait BaseMod {
 
 object BaseMod {
 	trait Default extends BaseMod {
-		override final type Registries = DefaultRegistries
-		override final val registries: DefaultRegistries = defaultRegistries
+		final type Registries = DefaultRegistries
+		final val registries: DefaultRegistries = defaultRegistries
 	}
 }

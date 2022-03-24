@@ -14,5 +14,5 @@ object Baba extends BaseMod {
 	type Registries = DefaultRegistries
 	lazy val registries: Registries = defaultRegistries
 
-	lazy val modules: Seq[Module[_]] = TestModule.Module :: Nil
+	lazy val modules: Seq[Module] = TestModule.Module :: Nil
 }

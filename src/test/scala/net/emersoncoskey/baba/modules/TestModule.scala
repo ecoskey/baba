@@ -28,5 +28,5 @@ object TestModule {
 
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-	val Module: Baba.Module[Item %: Block %: PaintingType %: DNil] = Baba.Module(Seq(Amongus) %: Seq(AmongusBlock) %: Seq(BabaPainting) %: DNil)
+	val Module: Baba.Module = Baba.Module(Seq(Amongus) %: Seq(AmongusBlock) %: Seq(BabaPainting) %: DNil)
 }
