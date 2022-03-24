@@ -13,6 +13,7 @@ import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.material.Fluid
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistryEntry}
@@ -52,8 +53,12 @@ trait BaseMod {
 				registry.register(dec)
 
 				dec.modifiers.foreach {
-					case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
-					case m: ForgeDecMod[A] => m.register(registry(dec).get, mod)
+					//case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
+					case m: ModDecMod[A] => EventBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
+					case m: ForgeDecMod[A] => {
+						val ForgeBus = MinecraftForge.EVENT_BUS
+						ForgeBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
+					}
 				}
 			})
 		}
