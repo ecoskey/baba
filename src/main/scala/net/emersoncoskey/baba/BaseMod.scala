@@ -13,9 +13,11 @@ import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.material.Fluid
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistryEntry}
+import org.apache.logging.log4j.LogManager
 
 /** Entrypoint for any Baba mod. Example: [[Baba]] itself. */
 trait BaseMod {
@@ -30,7 +32,7 @@ trait BaseMod {
 	final lazy val ModId: String = _modId
 
 	/** should return the list of modules to be loaded upon startup */
-	protected def modules: Seq[Module[_]]
+	protected def modules: Seq[Module]
 
 	/** the forge event bus for this mod's lifecycle events */
 	val EventBus: IEventBus = FMLJavaModLoadingContext.get.getModEventBus
@@ -41,7 +43,7 @@ trait BaseMod {
 	type Registries <: RegList
 
 	/** List of available registries for this mod. */
-	protected val registries: Registries
+	protected def registries: Registries
 
 	/** registers all elements of a [[RegList]] to the existing list of registries */
 	private def register[D <: DecList](declarations: D)(implicit ev: D AllIn Registries): Unit = {
@@ -52,8 +54,12 @@ trait BaseMod {
 				registry.register(dec)
 
 				dec.modifiers.foreach {
-					case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
-					case m: ForgeDecMod[A] => m.register(registry(dec).get, mod)
+					//case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
+					case m: ModDecMod[A] => EventBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
+					case m: ForgeDecMod[A] => {
+						val ForgeBus = MinecraftForge.EVENT_BUS
+						ForgeBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
+					}
 				}
 			})
 		}
@@ -67,21 +73,30 @@ trait BaseMod {
 	/** returns the registered object for any [[RegDec]][A] as long as there is an available registry for that type */
 	def apply[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = get(declaration)
 
+	/** returns all objects of a given type in the registries */
+	def getAll[A <: IForgeRegistryEntry[A]](implicit ev: A In Registries): List[A] = ev(registries).getAll
+
 	// MODULES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 	/** Provides declarations and the ability to separate mod data in a modular way.
 	 *
 	 *  The implicit [[AllIn]] constraint ensures that all types declared in a given module have an available registry.
 	 */
-	class Module[D <: DecList] private(declarations: D)(implicit ev: D AllIn Registries) {
-		private [BaseMod] def init(): Unit = register[D](declarations)
+	trait Module {
+		type D <: DecList
+		val decs: D
+		private [BaseMod] val allIn: D AllIn Registries //jank but it needs to survive a path dependent type somehow
 	}
 
 	object Module {
-		def apply[D <: DecList](declarations: D)(implicit ev: D AllIn Registries) = new Module(declarations)
+		def apply[d <: DecList](declarations: d)(implicit ev: d AllIn Registries): Module = new Module {
+			type D = d
+			val decs: D = declarations
+			private [BaseMod] val allIn: D AllIn Registries = ev
+		}
 	}
 
-	modules.foreach(_.init()) // what actually initializes all mod data
+	modules.foreach(m => register[m.D](m.decs)(m.allIn))
 
 	// UTIL METHODS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -116,6 +131,13 @@ trait BaseMod {
 	/** Returns a default [[WrappedRegistry]] for [[Potion]]s */
 	protected def getPotionReg: WrappedRegistry[Potion] = new WrappedRegistry[Potion](this, ForgeRegistries.POTIONS)
 
-	/** Returns a default [[WrappedRegistry]] for PaintingTypes */
+	/** Returns a default [[WrappedRegistry]] for [[PaintingType]]s */
 	protected def getPaintingReg: WrappedRegistry[PaintingType] = new WrappedRegistry[PaintingType](this, ForgeRegistries.PAINTING_TYPES)
+}
+
+object BaseMod {
+	trait Default extends BaseMod {
+		final type Registries = DefaultRegistries
+		final lazy val registries: DefaultRegistries = defaultRegistries
+	}
 }
