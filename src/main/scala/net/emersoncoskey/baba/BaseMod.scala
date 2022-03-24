@@ -119,3 +119,10 @@ trait BaseMod {
 	/** Returns a default [[WrappedRegistry]] for PaintingTypes */
 	protected def getPaintingReg: WrappedRegistry[PaintingType] = new WrappedRegistry[PaintingType](this, ForgeRegistries.PAINTING_TYPES)
 }
+
+object BaseMod {
+	trait Default extends BaseMod {
+		override final type Registries = DefaultRegistries
+		override final val registries: DefaultRegistries = defaultRegistries
+	}
+}
