@@ -72,9 +72,11 @@ trait BaseMod {
 
 	/** returns the registered object for any [[RegDec]][A] as long as there is an available registry for that type */
 	def get[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = ev(_registries).get(declaration).get
+	def get[A <: IForgeRegistryEntry[A]](declarationName: String)(implicit ev: A In Registries): A = ev(_registries).get(declarationName).get
 
 	/** returns the registered object for any [[RegDec]][A] as long as there is an available registry for that type */
 	def apply[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = get(declaration)
+	def apply[A <: IForgeRegistryEntry[A]](declarationName: String)(implicit ev: A In Registries): A = get(declarationName)
 
 	/** returns all objects of a given type in the registries */
 	def getAll[A <: IForgeRegistryEntry[A]](implicit ev: A In Registries): List[A] = ev(_registries).getAll
