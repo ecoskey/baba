@@ -17,7 +17,6 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistryEntry}
-import org.apache.logging.log4j.LogManager
 
 /** Entrypoint for any Baba mod. Example: [[Baba]] itself. */
 trait BaseMod {
@@ -34,6 +33,8 @@ trait BaseMod {
 	/** should return the list of modules to be loaded upon startup */
 	protected def modules: Seq[Module]
 
+	private val _modules = modules
+
 	/** the forge event bus for this mod's lifecycle events */
 	val EventBus: IEventBus = FMLJavaModLoadingContext.get.getModEventBus
 
@@ -45,6 +46,8 @@ trait BaseMod {
 	/** List of available registries for this mod. */
 	protected def registries: Registries
 
+	private val _registries = registries
+
 	/** registers all elements of a [[RegList]] to the existing list of registries */
 	private def register[D <: DecList](declarations: D)(implicit ev: D AllIn Registries): Unit = {
 		val mod = this //bring outer class instance into scope
@@ -54,27 +57,28 @@ trait BaseMod {
 				registry.register(dec)
 
 				dec.modifiers.foreach {
-					//case m: ModDecMod[A] => m.register(registry(dec).get, EventBus, mod) //"mod" here isn't a DecMod but a CbMod. sorry.
 					case m: ModDecMod[A] => EventBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
 					case m: ForgeDecMod[A] => {
-						val ForgeBus = MinecraftForge.EVENT_BUS
-						ForgeBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
+						val forgeBus = MinecraftForge.EVENT_BUS
+						forgeBus.addListener(m.priority, m.receiveCanceled, m.eventClass, m.handleEvent(registry(dec).get, _, mod))
 					}
 				}
 			})
 		}
 
-		declarations.foreach(registries, consumer)
+		declarations.foreach(_registries, consumer)
 	}
 
 	/** returns the registered object for any [[RegDec]][A] as long as there is an available registry for that type */
-	def get[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = ev(registries).get(declaration).get
+	def get[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = ev(_registries).get(declaration).get
+	def get[A <: IForgeRegistryEntry[A]](declarationName: String)(implicit ev: A In Registries): A = ev(_registries).get(declarationName).get
 
 	/** returns the registered object for any [[RegDec]][A] as long as there is an available registry for that type */
 	def apply[A <: IForgeRegistryEntry[A]](declaration: RegDec[A])(implicit ev: A In Registries): A = get(declaration)
+	def apply[A <: IForgeRegistryEntry[A]](declarationName: String)(implicit ev: A In Registries): A = get(declarationName)
 
 	/** returns all objects of a given type in the registries */
-	def getAll[A <: IForgeRegistryEntry[A]](implicit ev: A In Registries): List[A] = ev(registries).getAll
+	def getAll[A <: IForgeRegistryEntry[A]](implicit ev: A In Registries): List[A] = ev(_registries).getAll
 
 	// MODULES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -96,7 +100,7 @@ trait BaseMod {
 		}
 	}
 
-	modules.foreach(m => register[m.D](m.decs)(m.allIn))
+	_modules.foreach(m => register[m.D](m.decs)(m.allIn))
 
 	// UTIL METHODS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

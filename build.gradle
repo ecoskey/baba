@@ -15,7 +15,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'maven-publish'
 
-version = '0.1a'
+version = "${minecraft_version}-${mod_version}"
 group = 'com.github.emersoncoskey' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'baba'
 
@@ -35,7 +35,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: '2022.03.13-1.18.2'
+    mappings channel: 'parchment', version: "2022.03.13-${minecraft_version}"
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -126,8 +126,8 @@ repositories {
         url = uri("https://pkgs.dev.azure.com/Kotori316/minecraft/_packaging/mods/maven/v1")
         content {
             includeModule("com.kotori316", "ScalableCatsForce".toLowerCase())
-            includeModule("org.typelevel", "cats-core_2.13")
-            includeModule("org.typelevel", "cats-kernel_2.13")
+            includeModule("org.typelevel", "cats-core_${base_scala}")
+            includeModule("org.typelevel", "cats-kernel_${base_scala}}")
         }
     }
     mavenCentral()
@@ -150,7 +150,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.17'
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -169,16 +169,14 @@ dependencies {
     //implementation "com.chuusai:shapeless_2.13:2.3.8"
     //scalaCompilerPlugins "org.typelevel:kind-projector_2.13.7:0.13.2"
 
-    String scala_version = "2.13.8"
-
     // https://mvnrepository.com/artifact/org.scala-lang/scala-library
     compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     // A library of functional programing in Scala
-    implementation('org.typelevel:cats-core_2.13:2.7.0')
+    implementation("org.typelevel:cats-core_${base_scala}:2.7.0")
     //implementation('org.typelevel:cats-free_2.13:2.7.0')
     //compileOnly(group: 'org.typelevel', name: "cats-core_" + scala_version.substring(0, scala_version.lastIndexOf(".")), version: '2.6.2-kotori')
 
-    runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "2.13.8-build-1", classifier: "with-library") {
+    runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "${scala_version}-build-1", classifier: "with-library") {
         transitive(false)
     }
 }
