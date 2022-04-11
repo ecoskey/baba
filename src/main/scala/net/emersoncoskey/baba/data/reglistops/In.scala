@@ -5,8 +5,7 @@ import net.emersoncoskey.baba.registry.WrappedRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
 
 trait In[A <: IForgeRegistryEntry[A], L <: RegList] extends (L => WrappedRegistry[A]) {
-	def get(l: L): WrappedRegistry[A]
-	override def apply(l: L): WrappedRegistry[A] = get(l)
+	def apply(l: L): WrappedRegistry[A]
 }
 
 object In {
@@ -16,7 +15,5 @@ object In {
 		(l: A #: L) => l.head
 
 	implicit def inductive[A <: IForgeRegistryEntry[A], B <: IForgeRegistryEntry[B], L <: RegList](implicit in: A In L): A In (B #: L) =
-		(l: B #: L) => in.get(l.tail)
+		(l: B #: L) => in(l.tail)
 }
-
-

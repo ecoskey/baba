@@ -27,5 +27,5 @@ object TestModule {
 
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-	val Module: Baba.Module = Baba.Module(Seq(Amongus) %: Seq(AmongusBlock) %: Seq(BabaPainting) %: DNil)
+	val module: Baba.Module = Baba.Module(Seq(Amongus) %: Seq(AmongusBlock) %: Seq(BabaPainting) %: DNil)
 }

@@ -7,5 +7,5 @@ import net.minecraftforge.fml.common.Mod
 @Mod(Baba._modId)
 object Baba extends BaseMod.Default {
 	final val _modId = "baba"
-	lazy val modules: Seq[Module] = TestModule.Module :: Nil
+	lazy val modules: Seq[Module] = TestModule.module :: Nil
 }

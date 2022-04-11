@@ -1,10 +1,10 @@
 package net.emersoncoskey.baba
 
+import cats.{Id, ~>}
 import net.emersoncoskey.baba.data.declistops.AllIn
 import net.emersoncoskey.baba.data.reglistops.In
 import net.emersoncoskey.baba.data.{DecList, RNil, RegList}
-import net.emersoncoskey.baba.registry.dsl.{ForgeDecMod, ModDecMod}
-import net.emersoncoskey.baba.registry.{RegDec, WrappedRegistry}
+import net.emersoncoskey.baba.registry._
 import net.emersoncoskey.baba.syntax.all._
 import net.emersoncoskey.baba.util.{DefaultRegistries, PaintingType}
 import net.minecraft.resources.ResourceLocation
@@ -17,6 +17,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{ForgeRegistries, IForgeRegistryEntry}
+
 
 /** Entrypoint for any Baba mod. Example: [[Baba]] itself. */
 trait BaseMod {
@@ -137,6 +138,25 @@ trait BaseMod {
 
 	/** Returns a default [[WrappedRegistry]] for [[PaintingType]]s */
 	protected def getPaintingReg: WrappedRegistry[PaintingType] = new WrappedRegistry[PaintingType](this, ForgeRegistries.PAINTING_TYPES)
+
+	private def compiler: RegisterA ~> Id = {
+		val mod = this
+
+		def addHandlerToBus(bus: IEventBus, handler: EventHandler): Unit = {
+			bus.addListener[handler.E](handler.priority, handler.receiveCancelled, handler.filter, (e: handler.E) => handler.handler(e, mod))
+		}
+
+		new (RegisterA ~> Id) {
+			def apply[A](fa: RegisterA[A]): Id[A] =
+				fa match {
+					case Declare(name, supplier) => () //TODO: FIGURE OUT HOW TO REGISTER THINGS
+					case HandleEvent(handler) => handler match {
+						case _: EventHandler.Mod => addHandlerToBus(EventBus, handler)
+						case _: EventHandler.Forge => addHandlerToBus(MinecraftForge.EVENT_BUS, handler)
+					}
+				}
+		}
+	}
 }
 
 object BaseMod {

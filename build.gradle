@@ -173,7 +173,7 @@ dependencies {
     compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     // A library of functional programing in Scala
     implementation("org.typelevel:cats-core_${base_scala}:2.7.0")
-    //implementation('org.typelevel:cats-free_2.13:2.7.0')
+    implementation("org.typelevel:cats-free_${base_scala}:2.7.0")
     //compileOnly(group: 'org.typelevel', name: "cats-core_" + scala_version.substring(0, scala_version.lastIndexOf(".")), version: '2.6.2-kotori')
 
     runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "${scala_version}-build-1", classifier: "with-library") {

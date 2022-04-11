@@ -1,7 +1,7 @@
 package net.emersoncoskey.baba.registry.item
 
 import net.emersoncoskey.baba.registry.RegDec
-import net.emersoncoskey.baba.registry.dsl.DecMod
+import net.emersoncoskey.baba.registry.DSL.DecMod
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
 

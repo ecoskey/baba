@@ -1,7 +1,7 @@
 package net.emersoncoskey.baba.registry.block.dsl
 
 import net.emersoncoskey.baba.BaseMod
-import net.emersoncoskey.baba.registry.dsl.ModDecMod
+import net.emersoncoskey.baba.registry.DSL.ModDecMod
 import net.minecraft.client.renderer.{ItemBlockRenderTypes, RenderType}
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent

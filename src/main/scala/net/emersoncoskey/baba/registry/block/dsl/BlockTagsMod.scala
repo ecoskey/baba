@@ -3,7 +3,7 @@ package net.emersoncoskey.baba.registry.block.dsl
 import net.emersoncoskey.baba.BaseMod
 import net.emersoncoskey.baba.datagen.tag.TagAssignment
 import net.emersoncoskey.baba.datagen.tag.block.BabaBlockTagsProvider
-import net.emersoncoskey.baba.registry.dsl.ModDecMod
+import net.emersoncoskey.baba.registry.DSL.ModDecMod
 import net.minecraft.tags.{Tag, TagKey}
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent

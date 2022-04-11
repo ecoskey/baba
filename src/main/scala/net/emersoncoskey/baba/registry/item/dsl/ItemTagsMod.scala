@@ -3,7 +3,7 @@ package net.emersoncoskey.baba.registry.item.dsl
 import net.emersoncoskey.baba.BaseMod
 import net.emersoncoskey.baba.datagen.tag.TagAssignment
 import net.emersoncoskey.baba.datagen.tag.item.BabaItemTagsProvider
-import net.emersoncoskey.baba.registry.dsl.ModDecMod
+import net.emersoncoskey.baba.registry.DSL.ModDecMod
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent

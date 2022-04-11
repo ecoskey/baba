@@ -1,7 +1,7 @@
 package net.emersoncoskey.baba.registry.block
 
 import net.emersoncoskey.baba.registry.RegDec
-import net.emersoncoskey.baba.registry.dsl.DecMod
+import net.emersoncoskey.baba.registry.DSL.DecMod
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
 
