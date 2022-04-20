@@ -19,6 +19,8 @@ version = "${minecraft_version}-${mod_version}"
 group = 'com.github.emersoncoskey' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'baba'
 
+String base_scala = scala_version.substring(0, scala_version.lastIndexOf("."))
+
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -126,11 +128,11 @@ repositories {
         url = uri("https://pkgs.dev.azure.com/Kotori316/minecraft/_packaging/mods/maven/v1")
         content {
             includeModule("com.kotori316", "ScalableCatsForce".toLowerCase())
+            includeModule("org.typelevel", "cats-free_${base_scala}")
             includeModule("org.typelevel", "cats-core_${base_scala}")
-            includeModule("org.typelevel", "cats-kernel_${base_scala}}")
+            includeModule("org.typelevel", "cats-kernel_${base_scala}")
         }
     }
-    mavenCentral()
     repositories.stream().filter { it instanceof MavenArtifactRepository }.forEach { repo ->
         repo.content {
             excludeVersionByRegex(".*", ".*", ".*_mapped_snapshot_.*")
@@ -147,36 +149,15 @@ repositories {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
-
-    // Examples using mod jars from ./libs
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-    //implementation('org.typelevel:cats-free_3:2.7.0')
-    //implementation 'com.olegpy:better-monadic-for_2.13:0.3.1'
-    //implementation "com.chuusai:shapeless_2.13:2.3.8"
-    //scalaCompilerPlugins "org.typelevel:kind-projector_2.13.7:0.13.2"
-
-    // https://mvnrepository.com/artifact/org.scala-lang/scala-library
     compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
-    // A library of functional programing in Scala
-    implementation("org.typelevel:cats-core_${base_scala}:2.7.0")
-    implementation("org.typelevel:cats-free_${base_scala}:2.7.0")
-    //compileOnly(group: 'org.typelevel', name: "cats-core_" + scala_version.substring(0, scala_version.lastIndexOf(".")), version: '2.6.2-kotori')
+    testCompileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
 
-    runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "${scala_version}-build-1", classifier: "with-library") {
+    compileOnly(group: 'org.typelevel', name: "cats-free_${base_scala}", version: '2.8.1-kotori')
+    testCompileOnly(group: 'org.typelevel', name: "cats-free_${base_scala}", version: '2.8.1-kotori')
+
+    runtimeOnly(group: 'com.kotori316', name: 'ScalableCatsForce'.toLowerCase(), version: "${scala_version}-build-4", classifier: 'with-library') {
         transitive(false)
     }
 }
