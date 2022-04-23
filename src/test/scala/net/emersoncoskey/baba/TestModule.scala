@@ -7,8 +7,9 @@ import net.minecraft.world.item.{CreativeModeTab, Item}
 
 object TestModule {
 	val module: Register[Unit] = for {
-		_ <- block("amongus_block", new TestBlock(_)) >>=
+		amongus <- block("amongus_block", new TestBlock(_)) >>=
 		        blockItem("amongus", new Item.Properties().tab(CreativeModeTab.TAB_FOOD))
+		(amongusBlock, amongusItem) = amongus
 		_ <- block("cheeseblock") >>=
 		        blockItem("cheese", new Item.Properties().tab(CreativeModeTab.TAB_FOOD))
 	} yield ()

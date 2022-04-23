@@ -1,6 +1,6 @@
 package net.emersoncoskey.baba.registry.declarations
 
-import net.emersoncoskey.baba.registry.{DecMod, Register, SimpleDecMod, declareWithMods}
+import net.emersoncoskey.baba.registry._
 import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.level.block.Block

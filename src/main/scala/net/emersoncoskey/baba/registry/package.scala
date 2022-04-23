@@ -1,3 +1,10 @@
 package net.emersoncoskey.baba
 
-package object registry extends RegisterApi with declarations.AllDecs with mods.AllMods
+import net.emersoncoskey.baba.registry.declarations.AllDecs
+import net.emersoncoskey.baba.registry.mods.AllMods
+
+package object registry
+  extends RegisterApi
+  with RegistrableInstances
+  with AllDecs
+  with AllMods
