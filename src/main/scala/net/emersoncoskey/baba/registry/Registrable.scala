@@ -1,11 +1,19 @@
 package net.emersoncoskey.baba.registry
 
-import net.emersoncoskey.baba.macros.GenRegistrable
+import net.emersoncoskey.baba.util.PaintingType
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraftforge.registries.{ForgeRegistry, IForgeRegistryEntry, RegistryManager}
-
-import scala.language.experimental.macros
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.decoration.Motive
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.alchemy.Potion
+import net.minecraft.world.item.crafting.RecipeSerializer
+import net.minecraft.world.item.enchantment.Enchantment
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.material.Fluid
+import net.minecraftforge.registries.{ForgeRegistries, ForgeRegistry, IForgeRegistryEntry, RegistryManager}
 
 class Registrable[R <: IForgeRegistryEntry[R]] private(val key: ResourceKey[Registry[R]], val objClass: Class[R]) {
 	def getActiveRegistry: ForgeRegistry[R] = RegistryManager.ACTIVE.getRegistry(key)
@@ -14,9 +22,7 @@ class Registrable[R <: IForgeRegistryEntry[R]] private(val key: ResourceKey[Regi
 object Registrable {
 	def apply[R <: IForgeRegistryEntry[R]](implicit registrable: Registrable[R]): Registrable[R] = registrable
 
-	implicit def genRegistrable[R <: IForgeRegistryEntry[R]]: Registrable[R] = macro GenRegistrable.impl[R]
-
-	/*valimplicit val itemRegistrable: Registrable[Item] =
+	private implicit val itemRegistrable: Registrable[Item] =
 		new Registrable(ForgeRegistries.Keys.ITEMS, classOf[Item])
 
 	implicit val blockRegistrable: Registrable[Block] =
@@ -44,6 +50,6 @@ object Registrable {
 		new Registrable(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES, classOf[BlockEntityType[_]])
 
 	implicit val recipeSerializerRegistrable: Registrable[RecipeSerializer[_]] =
-		new Registrable(ForgeRegistries.Keys.RECIPE_SERIALIZERS, classOf[RecipeSerializer[_]])*/
+		new Registrable(ForgeRegistries.Keys.RECIPE_SERIALIZERS, classOf[RecipeSerializer[_]])
 
 }
