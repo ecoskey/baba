@@ -7,5 +7,5 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
 trait FluidMods {
 	val fluidRenderType: SimpleAttr[RenderType, Fluid] = renderType => fluidReg =>
-		EventHandler.Mod[FMLClientSetupEvent](classOf, (_, _) => ItemBlockRenderTypes.setRenderLayer(fluidReg.get, renderType))
+		EventHandler.Mod[FMLClientSetupEvent](classOf[FMLClientSetupEvent], (_, _) => ItemBlockRenderTypes.setRenderLayer(fluidReg.get, renderType))
 }

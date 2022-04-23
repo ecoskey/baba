@@ -1,16 +1,16 @@
 package net.emersoncoskey.baba.registry.declarations
 
-import net.emersoncoskey.baba.registry.{DecMod, Register, declareWithMods}
+import net.emersoncoskey.baba.registry.{DecMod, Register, SimpleDecMod, declareWithMods}
 import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.registries.RegistryObject
 
-trait ItemDeclarations {
-	def item(name: String, mods: DecMod[Item, Item]*): Register[RegistryObject[Item]] =
+trait ItemDecs {
+	def item(name: String, mods: SimpleDecMod[Item]*): Register[RegistryObject[Item]] =
 		item(name, new Item(_), mods:_*)
 
-	def item(name: String, props: Properties, mods: DecMod[Item, Item]*): Register[RegistryObject[Item]] =
+	def item(name: String, props: Properties, mods: SimpleDecMod[Item]*): Register[RegistryObject[Item]] =
 		item(name, new Item(_), props, mods:_*)
 
 	def item[I <: Item](name: String, ctor: Properties => I, mods: DecMod[Item, I]*): Register[RegistryObject[I]] =

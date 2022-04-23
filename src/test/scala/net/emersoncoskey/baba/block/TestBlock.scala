@@ -1,5 +1,6 @@
 package net.emersoncoskey.baba.block
 
+import net.emersoncoskey.baba.BabaMod
 import net.minecraft.core.BlockPos
 import net.minecraft.world.{InteractionHand, InteractionResult}
 import net.minecraft.world.effect.{MobEffectInstance, MobEffects}

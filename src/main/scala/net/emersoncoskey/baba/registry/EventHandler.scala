@@ -94,9 +94,8 @@ object EventHandler {
 			val receiveCancelled: Boolean                = _receiveCancelled
 		}
 
-		def unapply(handler: EventHandler.GenericMod):
-		  Option[(Class[handler.E[handler.A]], Class[handler.A], (handler.E[handler.A], String) => Unit, EventPriority, Boolean)] =
-			Some(handler.eventFilter, handler.paramFilter, handler.handler, handler.priority, handler.receiveCancelled)
+		def unapply(h: EventHandler.GenericMod): Option[(Class[h.E[h.A]], Class[h.A], (h.E[h.A], String) => Unit, EventPriority, Boolean)] =
+			Some(h.eventFilter, h.paramFilter, h.handler, h.priority, h.receiveCancelled)
 	}
 
 	trait GenericForge extends EventHandler.Generic
@@ -123,8 +122,7 @@ object EventHandler {
 			val receiveCancelled: Boolean                = _receiveCancelled
 		}
 
-		def unapply(handler: EventHandler.GenericForge):
-		  Option[(Class[handler.E[handler.A]], Class[handler.A], (handler.E[handler.A], String) => Unit, EventPriority, Boolean)] =
-			Some(handler.eventFilter, handler.paramFilter, handler.handler, handler.priority, handler.receiveCancelled)
+		def unapply(h: EventHandler.GenericForge): Option[(Class[h.E[h.A]], Class[h.A], (h.E[h.A], String) => Unit, EventPriority, Boolean)] =
+			Some(h.eventFilter, h.paramFilter, h.handler, h.priority, h.receiveCancelled)
 	}
 }

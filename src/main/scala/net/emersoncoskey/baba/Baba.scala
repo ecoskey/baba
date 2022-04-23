@@ -1,6 +1,8 @@
 package net.emersoncoskey.baba
 
-import cats.{Id, Monad, ~>}
+import cats.syntax.functor._
+import cats.syntax.traverse._
+import cats.{Id, ~>}
 import net.emersoncoskey.baba.registry.{Declare, EventHandler, HandleEvent, Register, RegisterA}
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.common.MinecraftForge
@@ -9,13 +11,16 @@ import net.minecraftforge.eventbus.api.{EventPriority, IEventBus}
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{IForgeRegistry, IForgeRegistryEntry, RegistryObject}
 
-import scala.collection.mutable
+object Baba {
+	def apply(modId: String, actions: Register[_]*): Baba =
+		new Baba(modId, FMLJavaModLoadingContext.get.getModEventBus, actions.map(_.void).sequence.void)
+}
 
-class Baba private(modId: String, modBus: IEventBus, actions: Register[_]) {
+class Baba private(modId: String, modBus: IEventBus, actions: Register[Unit]) {
 	private val registryObjects: Map[ResourceLocation, RegistryObject[_]] = run(actions)
 
-	private def run[A](prog: Register[_]): Map[ResourceLocation, RegistryObject[_]] = {
-		val tempMap: mutable.Map[ResourceLocation, RegistryObject[_]] = mutable.Map.empty
+	private def run[A](prog: Register[Unit]): Map[ResourceLocation, RegistryObject[_]] = {
+		var tempList: List[(ResourceLocation, RegistryObject[_])] = Nil //eww a var
 
 		@inline def addHandler(bus: IEventBus, h: EventHandler.Normal): Unit =
 			bus.addListener[h.E](h.priority, h.receiveCancelled, h.filter, (e: h.E) => h.handler(e, modId))
@@ -44,7 +49,7 @@ class Baba private(modId: String, modBus: IEventBus, actions: Register[_]) {
 					)
 
 					val regObj: RegistryObject[a] = RegistryObject.of[r, a](resourceLoc, regInfo.key, modId)
-					tempMap.addOne((resourceLoc, regObj))
+					tempList +:= (resourceLoc, regObj) //eww mutation
 					regObj
 				}
 
@@ -56,7 +61,7 @@ class Baba private(modId: String, modBus: IEventBus, actions: Register[_]) {
 		}
 
 		prog.foldMap(interpreter)
-		tempMap.toMap
+		Map.from(tempList)
 	}
 
 	private val getter: RegisterA ~> Id = new (RegisterA ~> Id) {
@@ -68,9 +73,7 @@ class Baba private(modId: String, modBus: IEventBus, actions: Register[_]) {
 
 	def apply[A](action: Register[A]): A = action.foldMap(getter)
 	def apply[A <: IForgeRegistryEntry[A]](loc: ResourceLocation): RegistryObject[A] = registryObjects(loc).asInstanceOf[RegistryObject[A]]
-	def apply[A <: IForgeRegistryEntry[A]](loc: String): RegistryObject[A] = registryObjects(ResourceLocation.tryParse(loc)).asInstanceOf[RegistryObject[A]]
+	def apply[A <: IForgeRegistryEntry[A]](loc: String): RegistryObject[A] = registryObjects(new ResourceLocation(modId, loc)).asInstanceOf[RegistryObject[A]]
 }
 
-object Baba {
-	def apply(modId: String, actions: Register[_]): Baba = new Baba(modId, FMLJavaModLoadingContext.get.getModEventBus, actions)
-}
+

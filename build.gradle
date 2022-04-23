@@ -25,6 +25,17 @@ String base_scala = scala_version.substring(0, scala_version.lastIndexOf("."))
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = ["-Ymacro-annotations"]
+}
+
+configurations {
+    allCompile
+    compileOnly.extendsFrom allCompile
+    testCompileOnly.extendsFrom allCompile
+}
+
 minecraft {
     // The mappings can be changed at any time and must be in the following format.
     // Channel:   Version:
@@ -151,11 +162,9 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
-    testCompileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
-
-    compileOnly(group: 'org.typelevel', name: "cats-free_${base_scala}", version: '2.8.1-kotori')
-    testCompileOnly(group: 'org.typelevel', name: "cats-free_${base_scala}", version: '2.8.1-kotori')
+    allCompile(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
+    allCompile(group: 'org.scala-lang', name: 'scala-reflect', version: scala_version)
+    allCompile(group: 'org.typelevel', name: "cats-free_${base_scala}", version: '2.8.1-kotori')
 
     runtimeOnly(group: 'com.kotori316', name: 'ScalableCatsForce'.toLowerCase(), version: "${scala_version}-build-4", classifier: 'with-library') {
         transitive(false)

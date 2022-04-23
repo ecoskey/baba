@@ -5,6 +5,6 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.item.alchemy.Potion
 import net.minecraftforge.registries.RegistryObject
 
-trait PotionDeclarations {
+trait PotionDecs {
 	def potion(name: String, effects: MobEffectInstance*): Register[RegistryObject[Potion]] = declare(name, new Potion(name, effects:_*))
 }

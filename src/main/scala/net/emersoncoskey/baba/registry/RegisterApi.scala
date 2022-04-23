@@ -7,7 +7,7 @@ import cats.syntax.traverse._
 
 import net.minecraftforge.registries.{IForgeRegistryEntry, RegistryObject}
 
-trait RegisterUtils {
+trait RegisterApi {
 	type Register[A] = Free[RegisterA, A]
 
 	def declare[R <: IForgeRegistryEntry[R]: Registrable, A <: R](name: String, obj: => A): Register[RegistryObject[A]] =
@@ -18,7 +18,7 @@ trait RegisterUtils {
 
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-	type DecMod[R <: IForgeRegistryEntry[R], A <: R] = RegistryObject[A] => EventHandler
+	type DecMod[R <: IForgeRegistryEntry[R], -A <: R] = RegistryObject[_ <: A] => EventHandler
 
 	type SimpleDecMod[R <: IForgeRegistryEntry[R]] = DecMod[R, R]
 

@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties
 import net.minecraft.world.level.material.Material
 import net.minecraftforge.registries.RegistryObject
 
-trait BlockDeclarations {
+trait BlockDecs {
 	def block(name: String, mods: SimpleDecMod[Block]*): Register[RegistryObject[Block]] =
 		block(name, new Block(_), mods:_*)
 

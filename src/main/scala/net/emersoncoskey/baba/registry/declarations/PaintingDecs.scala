@@ -5,7 +5,7 @@ import net.emersoncoskey.baba.util.PaintingType
 import net.minecraftforge.registries.RegistryObject
 
 
-trait PaintingDeclarations {
+trait PaintingDecs {
 	def painting(name: String, width: Int, height: Int): Register[RegistryObject[PaintingType]] =
 		declare(name, new PaintingType(width, height))
 }
