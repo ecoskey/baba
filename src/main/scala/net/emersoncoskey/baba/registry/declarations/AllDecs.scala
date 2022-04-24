@@ -8,3 +8,7 @@ trait AllDecs
   with PaintingDecs
   with PotionDecs
   with SoundEventDecs
+  with EntityTypeDecs
+  with BlockEntityTypeDecs
+  with RecipeSerializerDecs
+  with MenuTypeDecs

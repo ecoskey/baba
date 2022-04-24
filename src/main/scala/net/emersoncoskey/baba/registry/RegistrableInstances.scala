@@ -4,6 +4,7 @@ import net.emersoncoskey.baba.util.PaintingType
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.decoration.Motive
+import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.alchemy.Potion
 import net.minecraft.world.item.crafting.RecipeSerializer
@@ -43,4 +44,7 @@ trait RegistrableInstances {
 
 	implicit val recipeSerializerRegistrable: Registrable[RecipeSerializer[_]] =
 		new Registrable(ForgeRegistries.Keys.RECIPE_SERIALIZERS, classOf[RecipeSerializer[_]])
+
+	implicit val menuTypeRegistrable: Registrable[MenuType[_]] =
+		new Registrable(ForgeRegistries.Keys.CONTAINER_TYPES, classOf[MenuType[_]])
 }

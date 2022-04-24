@@ -23,10 +23,10 @@ class Baba private(modId: String, modBus: IEventBus, actions: Register[Unit]) {
 		var tempList: List[(ResourceLocation, RegistryObject[_])] = Nil //eww a var
 
 		@inline def addHandler(bus: IEventBus, h: EventHandler.Normal): Unit =
-			bus.addListener[h.E](h.priority, h.receiveCancelled, h.filter, (e: h.E) => h.handler(e, modId))
+			bus.addListener[h.E](h.priority, h.receiveCancelled, h.filter, (e: h.E) => h.handler(e))
 
 		@inline def addGenericHandler(bus: IEventBus, h: EventHandler.Generic): Unit =
-			bus.addGenericListener[h.E[h.A], h.A](h.paramFilter, h.priority, h.receiveCancelled, h.eventFilter, (e: h.E[h.A]) => h.handler(e, modId))
+			bus.addGenericListener[h.E[h.A], h.A](h.paramFilter, h.priority, h.receiveCancelled, h.eventFilter, (e: h.E[h.A]) => h.handler(e))
 
 		val interpreter = new (RegisterA ~> Id) {
 			def apply[X](fa: RegisterA[X]): Id[X] = fa match {

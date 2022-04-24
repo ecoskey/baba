@@ -26,6 +26,6 @@ trait RegisterApi {
 
 	type SimpleAttr[-I, R <: IForgeRegistryEntry[R]] = Attr[I, R, R]
 
-	def declareWithMods[R <: IForgeRegistryEntry[R]: Registrable, A <: R](name: String, obj: => A, mods: List[DecMod[R, A]]): Register[RegistryObject[A]] =
+	def declareWithMods[R <: IForgeRegistryEntry[R]: Registrable, A <: R](name: String, obj: => A, mods: DecMod[R, A]*): Register[RegistryObject[A]] =
 		declare[R, A](name, obj).flatTap(reg => mods.map(f => handleEvent(f(reg))).sequence)
 }

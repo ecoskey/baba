@@ -6,5 +6,5 @@ import net.minecraftforge.registries.RegistryObject
 
 trait FluidDecs {
 	def fluid[F <: Fluid](name: String, fluid: => F, mods: DecMod[Fluid, F]*): Register[RegistryObject[F]] =
-		declareWithMods(name, fluid, mods.toList)
+		declareWithMods(name, fluid, mods:_*)
 }

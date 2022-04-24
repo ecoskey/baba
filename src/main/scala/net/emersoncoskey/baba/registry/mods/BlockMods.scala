@@ -7,5 +7,5 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
 trait BlockMods {
 	val blockRenderType: SimpleAttr[RenderType, Block] = renderType => blockReg =>
-		EventHandler.Mod[FMLClientSetupEvent](classOf[FMLClientSetupEvent], (_, _) => ItemBlockRenderTypes.setRenderLayer(blockReg.get, renderType))
+		EventHandler.Mod[FMLClientSetupEvent](classOf[FMLClientSetupEvent], _ => ItemBlockRenderTypes.setRenderLayer(blockReg.get, renderType))
 }

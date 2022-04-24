@@ -17,5 +17,5 @@ trait BlockDecs {
 		block(name, ctor, Properties.of(Material.STONE), mods:_*)
 
 	def block[B <: Block](name: String, ctor: Properties => B, props: => Properties, mods: DecMod[Block, B]*): Register[RegistryObject[B]] =
-		declareWithMods(name, ctor(props), mods.toList)
+		declareWithMods(name, ctor(props), mods:_*)
 }

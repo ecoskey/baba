@@ -17,7 +17,7 @@ trait ItemDecs {
 		item(name, ctor, new Properties, mods:_*)
 
 	def item[I <: Item](name: String, ctor: Properties => I, props: Properties, mods: DecMod[Item, I]*): Register[RegistryObject[I]] =
-		declareWithMods(name, ctor(props), mods.toList)
+		declareWithMods(name, ctor(props), mods:_*)
 
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
