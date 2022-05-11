@@ -12,5 +12,5 @@ trait EnchantmentDecs {
 		rarity  : Enchantment.Rarity,
 		category: EnchantmentCategory,
 		slots   : List[EquipmentSlot]
-	): Register[RegistryObject[E]] = declare[Enchantment, E](name, ctor(rarity, category, slots.toArray))
+	): McAction[RegistryObject[E]] = declare[Enchantment, E](name, ctor(rarity, category, slots.toArray))
 }

@@ -8,13 +8,13 @@ import cats.syntax.traverse._
 import net.minecraftforge.registries.{IForgeRegistryEntry, RegistryObject}
 
 trait RegisterApi {
-	type Register[A] = Free[RegisterA, A]
+	type McAction[A] = Free[McActionA, A]
 
-	def declare[R <: IForgeRegistryEntry[R]: Registrable, A <: R](name: String, obj: => A): Register[RegistryObject[A]] =
-		liftF[RegisterA, RegistryObject[A]](Declare[R, A](name, () => obj))
+	def declare[R <: IForgeRegistryEntry[R]: Registrable, A <: R](name: String, obj: => A): McAction[RegistryObject[A]] =
+		liftF[McActionA, RegistryObject[A]](Declare[R, A](name, () => obj))
 
-	def handleEvent(handler: EventHandler): Register[Unit] =
-		liftF[RegisterA, Unit](HandleEvent(handler))
+	def handleEvent(handler: EventHandler): McAction[Unit] =
+		liftF[McActionA, Unit](HandleEvent(handler))
 
 	// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -26,6 +26,6 @@ trait RegisterApi {
 
 	type SimpleAttr[-I, R <: IForgeRegistryEntry[R]] = Attr[I, R, R]
 
-	def declareWithMods[R <: IForgeRegistryEntry[R]: Registrable, A <: R](name: String, obj: => A, mods: DecMod[R, A]*): Register[RegistryObject[A]] =
+	def declareWithMods[R <: IForgeRegistryEntry[R]: Registrable, A <: R](name: String, obj: => A, mods: DecMod[R, A]*): McAction[RegistryObject[A]] =
 		declare[R, A](name, obj).flatTap(reg => mods.map(f => handleEvent(f(reg))).sequence)
 }

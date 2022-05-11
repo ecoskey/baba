@@ -6,6 +6,6 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraftforge.registries.RegistryObject
 
 trait SoundEventDecs {
-	def soundEvent(modId: String, name: String): Register[RegistryObject[SoundEvent]] =
+	def soundEvent(modId: String, name: String): McAction[RegistryObject[SoundEvent]] =
 		declare(name, new SoundEvent(new ResourceLocation(modId, name)))
 }

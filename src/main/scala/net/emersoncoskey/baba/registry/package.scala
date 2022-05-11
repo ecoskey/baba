@@ -5,6 +5,5 @@ import net.emersoncoskey.baba.registry.mods.AllMods
 
 package object registry
   extends RegisterApi
-  with RegistrableInstances
   with AllDecs
   with AllMods
